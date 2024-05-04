@@ -34,7 +34,12 @@
 
 This project is an my implementation of a basic a Syntactic and lexical SACompiler developed in C using the Clang compiler, designed to construct Abstract Syntax Trees (AST). This project is ideal for students, educators, and developers interested in understanding and applying fundamental concepts of syntactic analysis in compilers.
 
-Using this [grammar](https://github.com/Colgate13/SACompiler/blob/main/utils/Parser/gram.txt):
+Implements this automata/state machine for lexical
+<p align="center">
+   <img src="https://raw.githubusercontent.com/Colgate13/SACompiler/main/utils/Lexical/LexicalAnalizerMachine.png" alt="lexial" width="400"/>
+</p>
+
+For Parser using this [grammar](https://github.com/Colgate13/SACompiler/blob/main/utils/Parser/gram.txt):
 
 ```
 <program>            --> "program" <statement> "end;"
@@ -111,7 +116,7 @@ git clone https://github.com/Colgate13/SACompiler.git
 cd SACompiler
 make
 
-./bin/main ./utils/Parser/exemples/general/exemple.code
+./bin/SACompiler ./utils/Parser/exemples/general/exemple.code ./output.json
 ```
 
 ## License
