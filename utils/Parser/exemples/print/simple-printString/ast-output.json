@@ -1,0 +1,31 @@
+{
+	"Statements":	[{
+			"PrintStatement":	{
+				"Expression":	{
+					"Term":	{
+						"String":	"Hello World",
+						"Location":	{
+							"FileName":	"*file*",
+							"Start":	2,
+							"End":	21
+						}
+					},
+					"Location":	{
+						"FileName":	"*file*",
+						"Start":	2,
+						"End":	21
+					}
+				},
+				"Location":	{
+					"FileName":	"*file*",
+					"Start":	2,
+					"End":	8
+				}
+			}
+		}],
+	"Location":	{
+		"FileName":	"*file*",
+		"Start":	1,
+		"End":	1
+	}
+}

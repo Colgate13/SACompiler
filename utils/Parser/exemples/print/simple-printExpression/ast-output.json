@@ -1,0 +1,111 @@
+{
+	"Statements":	[{
+			"PrintStatement":	{
+				"Expression":	{
+					"Term":	{
+						"Number":	1,
+						"Location":	{
+							"FileName":	"*file*",
+							"Start":	1,
+							"End":	9
+						}
+					},
+					"ExpressionTail":	{
+						"Op":	"+",
+						"Term":	{
+							"Number":	2,
+							"Location":	{
+								"FileName":	"*file*",
+								"Start":	1,
+								"End":	13
+							}
+						},
+						"Next":	{
+							"Op":	"-",
+							"Term":	{
+								"Number":	3,
+								"Location":	{
+									"FileName":	"*file*",
+									"Start":	1,
+									"End":	17
+								}
+							},
+							"Next":	{
+								"Op":	"*",
+								"Term":	{
+									"Number":	4,
+									"Location":	{
+										"FileName":	"*file*",
+										"Start":	1,
+										"End":	21
+									}
+								},
+								"Next":	{
+									"Op":	"/",
+									"Term":	{
+										"Number":	5,
+										"Location":	{
+											"FileName":	"*file*",
+											"Start":	1,
+											"End":	25
+										}
+									},
+									"Next":	{
+										"Op":	"%",
+										"Term":	{
+											"Number":	6,
+											"Location":	{
+												"FileName":	"*file*",
+												"Start":	1,
+												"End":	29
+											}
+										},
+										"Location":	{
+											"FileName":	"*file*",
+											"Start":	1,
+											"End":	29
+										}
+									},
+									"Location":	{
+										"FileName":	"*file*",
+										"Start":	1,
+										"End":	25
+									}
+								},
+								"Location":	{
+									"FileName":	"*file*",
+									"Start":	1,
+									"End":	21
+								}
+							},
+							"Location":	{
+								"FileName":	"*file*",
+								"Start":	1,
+								"End":	17
+							}
+						},
+						"Location":	{
+							"FileName":	"*file*",
+							"Start":	1,
+							"End":	13
+						}
+					},
+					"Location":	{
+						"FileName":	"*file*",
+						"Start":	1,
+						"End":	11
+					}
+				},
+				"Location":	{
+					"FileName":	"*file*",
+					"Start":	1,
+					"End":	8
+				}
+			}
+		}],
+	"Location":	{
+		"FileName":	"*file*",
+		"Start":	1,
+		"End":	1
+	}
+}

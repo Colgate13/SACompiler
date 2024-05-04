@@ -1,0 +1,47 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug_lexical",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/bin/lexical",
+      "args": ["./utils/Lexical/example.code"],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "preLaunchTask": "build_lexical", // name in tasks.json
+      "miDebuggerPath": "/usr/bin/gdb" // path to gdb (or other debugger)
+    },
+    {
+      "name": "Debug_parser",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/bin/parser",
+      "args": ["./utils/Parser/exemples/general/exemple.code", "${workspaceFolder}/bin/parser.json"],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "preLaunchTask": "build_lexical", // name in tasks.json
+      "miDebuggerPath": "/usr/bin/gdb" // path to gdb (or other debugger)
+    }
+  ]
+}

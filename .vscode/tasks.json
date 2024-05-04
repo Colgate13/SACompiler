@@ -1,0 +1,39 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+      {
+          "label": "build_lexical",
+          "type": "shell",
+          "command": "make",
+          "group": {
+              "kind": "build",
+              "isDefault": true
+          },
+          "problemMatcher": {
+              "owner": "cpp",
+              "fileLocation": ["relative", "${workspaceFolder}"]
+          },
+          "presentation": {
+              "reveal": "always",
+              "panel": "new"
+          }
+      },
+      {
+        "label": "build_parser",
+        "type": "shell",
+        "command": "make",
+        "group": {
+            "kind": "build",
+            "isDefault": true
+        },
+        "problemMatcher": {
+            "owner": "cpp",
+            "fileLocation": ["relative", "${workspaceFolder}"]
+        },
+        "presentation": {
+            "reveal": "always",
+            "panel": "new"
+        }
+    }
+  ]
+}

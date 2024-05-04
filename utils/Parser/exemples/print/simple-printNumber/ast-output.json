@@ -1,0 +1,33 @@
+{
+	"Statements": [
+		{
+			"PrintStatement": {
+				"Expression": {
+					"Term": {
+						"Number": 123,
+						"Location": {
+							"FileName": "*file*",
+							"Start": 2,
+							"End": 11
+						}
+					},
+					"Location": {
+						"FileName": "*file*",
+						"Start": 2,
+						"End": 11
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 2,
+					"End": 8
+				}
+			}
+		}
+	],
+	"Location": {
+		"FileName": "*file*",
+		"Start": 1,
+		"End": 1
+	}
+}

@@ -1,0 +1,27 @@
+{
+	"Statements": [
+		{
+			"VariableDeclaration": {
+				"Type": 0,
+				"Identifier": {
+					"Name": "num1",
+					"Location": {
+						"FileName": "*file*",
+						"Start": 1,
+						"End": 14
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 1,
+					"End": 14
+				}
+			}
+		}
+	],
+	"Location": {
+		"FileName": "*file*",
+		"Start": 1,
+		"End": 1
+	}
+}

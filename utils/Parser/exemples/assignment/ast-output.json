@@ -1,0 +1,59 @@
+{
+	"Statements": [
+		{
+			"VariableDeclaration": {
+				"Type": 0,
+				"Identifier": {
+					"Name": "num1",
+					"Location": {
+						"FileName": "*file*",
+						"Start": 1,
+						"End": 14
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 1,
+					"End": 14
+				}
+			}
+		},
+		{
+			"Assignment": {
+				"Identifier": {
+					"Name": "num1",
+					"Location": {
+						"FileName": "*file*",
+						"Start": 2,
+						"End": 6
+					}
+				},
+				"Expression": {
+					"Term": {
+						"Number": 10,
+						"Location": {
+							"FileName": "*file*",
+							"Start": 2,
+							"End": 11
+						}
+					},
+					"Location": {
+						"FileName": "*file*",
+						"Start": 2,
+						"End": 12
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 2,
+					"End": 12
+				}
+			}
+		}
+	],
+	"Location": {
+		"FileName": "*file*",
+		"Start": 1,
+		"End": 1
+	}
+}

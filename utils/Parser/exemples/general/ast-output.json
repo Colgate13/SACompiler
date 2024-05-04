@@ -1,0 +1,539 @@
+{
+	"Statements": [
+		{
+			"VariableDeclaration": {
+				"Type": 0,
+				"Identifier": {
+					"Name": "num1",
+					"Location": {
+						"FileName": "*file*",
+						"Start": 1,
+						"End": 14
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 1,
+					"End": 14
+				}
+			}
+		},
+		{
+			"VariableDeclaration": {
+				"Type": 0,
+				"Identifier": {
+					"Name": "num2",
+					"Location": {
+						"FileName": "*file*",
+						"Start": 2,
+						"End": 14
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 2,
+					"End": 14
+				}
+			}
+		},
+		{
+			"VariableDeclaration": {
+				"Type": 0,
+				"Identifier": {
+					"Name": "num3",
+					"Location": {
+						"FileName": "*file*",
+						"Start": 3,
+						"End": 14
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 3,
+					"End": 14
+				}
+			}
+		},
+		{
+			"VariableDeclaration": {
+				"Type": 2,
+				"Identifier": {
+					"Name": "message",
+					"Location": {
+						"FileName": "*file*",
+						"Start": 5,
+						"End": 20
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 5,
+					"End": 20
+				}
+			}
+		},
+		{
+			"VariableDeclaration": {
+				"Type": 1,
+				"Identifier": {
+					"Name": "points",
+					"Location": {
+						"FileName": "*file*",
+						"Start": 6,
+						"End": 18
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 6,
+					"End": 18
+				}
+			}
+		},
+		{
+			"Assignment": {
+				"Identifier": {
+					"Name": "message",
+					"Location": {
+						"FileName": "*file*",
+						"Start": 8,
+						"End": 9
+					}
+				},
+				"Expression": {
+					"Term": {
+						"String": "Hello World!",
+						"Location": {
+							"FileName": "*file*",
+							"Start": 8,
+							"End": 26
+						}
+					},
+					"Location": {
+						"FileName": "*file*",
+						"Start": 8,
+						"End": 27
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 8,
+					"End": 27
+				}
+			}
+		},
+		{
+			"Assignment": {
+				"Identifier": {
+					"Name": "points",
+					"Location": {
+						"FileName": "*file*",
+						"Start": 9,
+						"End": 8
+					}
+				},
+				"Expression": {
+					"Term": {
+						"Number": 1,
+						"Location": {
+							"FileName": "*file*",
+							"Start": 9,
+							"End": 14
+						}
+					},
+					"Location": {
+						"FileName": "*file*",
+						"Start": 9,
+						"End": 15
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 9,
+					"End": 15
+				}
+			}
+		},
+		{
+			"PrintStatement": {
+				"Expression": {
+					"Term": {
+						"String": "Start!",
+						"Location": {
+							"FileName": "*file*",
+							"Start": 11,
+							"End": 16
+						}
+					},
+					"Location": {
+						"FileName": "*file*",
+						"Start": 11,
+						"End": 17
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 11,
+					"End": 8
+				}
+			}
+		},
+		{
+			"PrintStatement": {
+				"Expression": {
+					"Term": {
+						"Number": 1,
+						"Location": {
+							"FileName": "*file*",
+							"Start": 12,
+							"End": 9
+						}
+					},
+					"ExpressionTail": {
+						"Op": "+",
+						"Term": {
+							"Number": 2,
+							"Location": {
+								"FileName": "*file*",
+								"Start": 12,
+								"End": 13
+							}
+						},
+						"Next": {
+							"Op": "-",
+							"Term": {
+								"Number": 3,
+								"Location": {
+									"FileName": "*file*",
+									"Start": 12,
+									"End": 17
+								}
+							},
+							"Next": {
+								"Op": "*",
+								"Term": {
+									"Number": 4,
+									"Location": {
+										"FileName": "*file*",
+										"Start": 12,
+										"End": 21
+									}
+								},
+								"Next": {
+									"Op": "/",
+									"Term": {
+										"Number": 5,
+										"Location": {
+											"FileName": "*file*",
+											"Start": 12,
+											"End": 25
+										}
+									},
+									"Next": {
+										"Op": "%",
+										"Term": {
+											"Number": 6,
+											"Location": {
+												"FileName": "*file*",
+												"Start": 12,
+												"End": 29
+											}
+										},
+										"Location": {
+											"FileName": "*file*",
+											"Start": 12,
+											"End": 29
+										}
+									},
+									"Location": {
+										"FileName": "*file*",
+										"Start": 12,
+										"End": 25
+									}
+								},
+								"Location": {
+									"FileName": "*file*",
+									"Start": 12,
+									"End": 21
+								}
+							},
+							"Location": {
+								"FileName": "*file*",
+								"Start": 12,
+								"End": 17
+							}
+						},
+						"Location": {
+							"FileName": "*file*",
+							"Start": 12,
+							"End": 13
+						}
+					},
+					"Location": {
+						"FileName": "*file*",
+						"Start": 12,
+						"End": 11
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 12,
+					"End": 8
+				}
+			}
+		},
+		{
+			"PrintStatement": {
+				"Expression": {
+					"Term": {
+						"Number": 123,
+						"Location": {
+							"FileName": "*file*",
+							"Start": 13,
+							"End": 11
+						}
+					},
+					"Location": {
+						"FileName": "*file*",
+						"Start": 13,
+						"End": 12
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 13,
+					"End": 8
+				}
+			}
+		},
+		{
+			"PrintStatement": {
+				"Expression": {
+					"Term": {
+						"Identifier": "message",
+						"Location": {
+							"FileName": "*file*",
+							"Start": 14,
+							"End": 15
+						}
+					},
+					"Location": {
+						"FileName": "*file*",
+						"Start": 14,
+						"End": 16
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 14,
+					"End": 8
+				}
+			}
+		},
+		{
+			"PrintStatement": {
+				"Expression": {
+					"Term": {
+						"Identifier": "points",
+						"Location": {
+							"FileName": "*file*",
+							"Start": 15,
+							"End": 14
+						}
+					},
+					"Location": {
+						"FileName": "*file*",
+						"Start": 15,
+						"End": 15
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 15,
+					"End": 8
+				}
+			}
+		},
+		{
+			"PrintStatement": {
+				"Expression": {
+					"Term": {
+						"Identifier": "isRunning",
+						"Location": {
+							"FileName": "*file*",
+							"Start": 16,
+							"End": 17
+						}
+					},
+					"Location": {
+						"FileName": "*file*",
+						"Start": 16,
+						"End": 18
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 16,
+					"End": 8
+				}
+			}
+		},
+		{
+			"Assignment": {
+				"Identifier": {
+					"Name": "num1",
+					"Location": {
+						"FileName": "*file*",
+						"Start": 18,
+						"End": 6
+					}
+				},
+				"Expression": {
+					"Term": {
+						"Number": 1,
+						"Location": {
+							"FileName": "*file*",
+							"Start": 18,
+							"End": 10
+						}
+					},
+					"Location": {
+						"FileName": "*file*",
+						"Start": 18,
+						"End": 11
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 18,
+					"End": 11
+				}
+			}
+		},
+		{
+			"Assignment": {
+				"Identifier": {
+					"Name": "num2",
+					"Location": {
+						"FileName": "*file*",
+						"Start": 19,
+						"End": 6
+					}
+				},
+				"Expression": {
+					"Term": {
+						"Number": 2,
+						"Location": {
+							"FileName": "*file*",
+							"Start": 19,
+							"End": 10
+						}
+					},
+					"Location": {
+						"FileName": "*file*",
+						"Start": 19,
+						"End": 11
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 19,
+					"End": 11
+				}
+			}
+		},
+		{
+			"Assignment": {
+				"Identifier": {
+					"Name": "num3",
+					"Location": {
+						"FileName": "*file*",
+						"Start": 21,
+						"End": 6
+					}
+				},
+				"Expression": {
+					"Term": {
+						"Identifier": "num1",
+						"Location": {
+							"FileName": "*file*",
+							"Start": 21,
+							"End": 13
+						}
+					},
+					"ExpressionTail": {
+						"Op": "+",
+						"Term": {
+							"Identifier": "num2",
+							"Location": {
+								"FileName": "*file*",
+								"Start": 21,
+								"End": 20
+							}
+						},
+						"Next": {
+							"Op": "*",
+							"Term": {
+								"Identifier": "points",
+								"Location": {
+									"FileName": "*file*",
+									"Start": 21,
+									"End": 29
+								}
+							},
+							"Location": {
+								"FileName": "*file*",
+								"Start": 21,
+								"End": 29
+							}
+						},
+						"Location": {
+							"FileName": "*file*",
+							"Start": 21,
+							"End": 20
+						}
+					},
+					"Location": {
+						"FileName": "*file*",
+						"Start": 21,
+						"End": 15
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 21,
+					"End": 30
+				}
+			}
+		},
+		{
+			"PrintStatement": {
+				"Expression": {
+					"Term": {
+						"Identifier": "num3",
+						"Location": {
+							"FileName": "*file*",
+							"Start": 23,
+							"End": 12
+						}
+					},
+					"Location": {
+						"FileName": "*file*",
+						"Start": 23,
+						"End": 13
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"Start": 23,
+					"End": 8
+				}
+			}
+		}
+	],
+	"Location": {
+		"FileName": "*file*",
+		"Start": 1,
+		"End": 1
+	}
+}

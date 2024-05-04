@@ -1,0 +1,4 @@
+program
+  var int num1;
+  num1 = 10;
+end;

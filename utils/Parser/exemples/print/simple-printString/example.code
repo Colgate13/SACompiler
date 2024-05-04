@@ -1,0 +1,5 @@
+program
+  print("Hello World");
+  print("teste");
+  print("kkk");
+end;
