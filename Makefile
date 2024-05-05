@@ -8,12 +8,10 @@ PARSER_DIR = src/Parser
 ERROR_DIR = src/Error
 
 # Paths to include headers and libraries
-LIB_INCLUDE = -I/usr/local/include
-LIB_PATH = -L/usr/local/lib
-LIBS_ALL = -lcjson
+LIBS_ARGS = -Ilibs/includes -Llibs -lcjson
 
 # Compiler flags
-CFLAGS = -g -Wall -Wextra $(LIB_INCLUDE) $(LIBS_ALL)
+CFLAGS = -g -Wall -Wextra
 
 # Source files for different components
 LEXICAL_SOURCES = $(LEXICAL_DIR)/Scanners.c $(LEXICAL_DIR)/Token.c $(LEXICAL_DIR)/Utils.c $(LEXICAL_DIR)/lexicalAnalyzer.c
@@ -27,7 +25,7 @@ all: $(BIN_DIR) SACompiler
 # Build the main compiler executable
 SACompiler: $(SACompiler)
 	@echo "Building SACompiler..."
-	$(CC) $(CFLAGS) -o $(BIN_DIR)/SACompiler $^
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/SACompiler $^ $(LIBS_ARGS)
 
 # Build the lexical analyzer standalone executable
 lexical: $(ERROR_SOURCES) $(LEXICAL_SOURCES) $(LEXICAL_DIR)/main.c
@@ -37,7 +35,7 @@ lexical: $(ERROR_SOURCES) $(LEXICAL_SOURCES) $(LEXICAL_DIR)/main.c
 # Build the parser standalone executable
 parser: $(ERROR_SOURCES) $(LEXICAL_SOURCES) $(PARSER_SOURCES) $(PARSER_DIR)/main.c
 	@echo "Building parser..."
-	$(CC) $(CFLAGS) -o $(BIN_DIR)/parser $^
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/parser $^ $(LIBS_ARGS)
 
 # Rule to create the binary directory if it does not exist
 $(BIN_DIR):

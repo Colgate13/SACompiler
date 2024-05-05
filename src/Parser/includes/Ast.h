@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stddef.h>
 #include "./Parser.h"
-#include "cjson/cJSON.h"
+#include "../../../libs/includes/cJSON.h"
 
 Program createProgram(Location *location);
 Location *createLocation(char *fileName, size_t start, size_t end);
