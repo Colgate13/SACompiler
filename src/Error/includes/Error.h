@@ -19,9 +19,17 @@ typedef struct
 {
     int code;
     char *message;
+    ErrorMetadata metadata;
+} ParserError;
+
+typedef struct
+{
+    int code;
+    char *message;
 } Error;
 
 void throwError(int code, char *message);
+void throwParserError(int code, char *message, int line, int column, char *contentLine);
 void throwLexicalError(int code, char *message, int line, int column, char *lexeme);
 
 #endif

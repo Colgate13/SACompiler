@@ -16,6 +16,15 @@ void removeNewline(char *str)
     }
 }
 
+void printArrow(int column)
+{
+    for (int i = 0; i < column; i++)
+    {
+        fprintf(stderr, " ");
+    }
+    fprintf(stderr, ANSI_COLOR_RED "^" ANSI_COLOR_RESET "\n");
+}
+
 void throwError(int code, char *message)
 {
 
@@ -23,7 +32,28 @@ void throwError(int code, char *message)
         .code = code,
         .message = message};
 
-    printf("<Lexical> Error: %d with message: %s\n", Error.code, Error.message);
+    printf("<SACompiler> Error: %d with message: %s\n", Error.code, Error.message);
+    exit(Error.code);
+}
+
+void throwParserError(int code, char *message, int line, int column, char *contentLine)
+{
+    removeNewline(contentLine);
+    ErrorMetadata errorMetadata = {
+        .column = column,
+        .line = line,
+        .lexeme = contentLine};
+        
+    ParserError Error = {
+        .code = code,
+        .message = message,
+        .metadata = errorMetadata};
+
+    fprintf(stderr, ANSI_COLOR_RED "<SACompiler::Parser> Error (%d): %s\n", Error.code, Error.message);
+    fprintf(stderr, ANSI_COLOR_RESET "Position: Line %d, Column %d\n", Error.metadata.line + 1, Error.metadata.column + 1);
+    fprintf(stderr, "%s\n", contentLine);
+    printArrow(Error.metadata.column - 1);
+
     exit(Error.code);
 }
 
@@ -40,13 +70,10 @@ void throwLexicalError(int code, char *message, int line, int column, char *cont
         .message = message,
         .metadata = errorMetadata};
 
-    fprintf(stderr, ANSI_COLOR_RED "<Lexical> Error (%s): %s\n", contentLine, Error.message);
-    fprintf(stderr, ANSI_COLOR_RESET "Position: Line %d, Column %d\n", Error.metadata.line, Error.metadata.column + 1);
+    fprintf(stderr, ANSI_COLOR_RED "<SACompiler::Lexical> Error (%d): %s\n", Error.code, Error.message);
+    fprintf(stderr, ANSI_COLOR_RESET "Position: Line %d, Column %d\n", Error.metadata.line + 1, Error.metadata.column + 1);
     fprintf(stderr, "%s\n", contentLine);
-    for (int i = 0; i < Error.metadata.column; i++)
-    {
-        fprintf(stderr, " ");
-    }
-    fprintf(stderr, ANSI_COLOR_RED "^\n");
+    printArrow(Error.metadata.column);
+
     exit(Error.code);
 }
