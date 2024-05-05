@@ -16,10 +16,12 @@ jobs:
       uses: actions/cache@v3
       with:
         path: |
-          cJSON
-        key: ${{ runner.os }}-cjson-${{ hashFiles('**/cJSON/**') }}
+          /usr/local/include/cjson
+          /usr/local/lib
+        key: ${{ runner.os }}-cjson-${{ hashFiles('cJSON/**') }}
         restore-keys: |
           ${{ runner.os }}-cjson-
+    
 
     - name: Install cJSON
       run: |
