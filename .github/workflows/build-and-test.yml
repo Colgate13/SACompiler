@@ -21,7 +21,7 @@ jobs:
           sudo make install
           sudo ldconfig
 
-      - name: Set LD_LIBRARY_PATH # Configura a variável de ambiente para que o sistema encontre a libcjson.so
+      - name: Set LD_LIBRARY_PATH # Set the LD_LIBRARY_PATH environment variable to find the libcjson.so
         run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib"
 
       - name: Compile the project # Compile the project
