@@ -1,4 +1,4 @@
-name: Build and Test
+name: C Build and Test
 
 on: [push, pull_request]
 
@@ -7,25 +7,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
+      # Faz checkout do código
 
-      - name: Install system dependencies # Install any system dependencies
-        run: sudo apt-get update && sudo apt-get install -y gcc make cmake
+    - name: Install system dependencies
+      run: sudo apt-get update && sudo apt-get install -y gcc make cmake
+      # Instala GCC, make e cmake
 
-      - name: Install cJSON # Install dinamic project dependencies
-        run: |
+    - name: Cache cJSON
+      uses: actions/cache@v3
+      with:
+        path: |
+          cJSON
+        key: ${{ runner.os }}-cjson-${{ hashFiles('**/cJSON/**') }}
+        restore-keys: |
+          ${{ runner.os }}-cjson-
+
+    - name: Install cJSON
+      run: |
+        if [ ! -d "cJSON" ]; then
           git clone https://github.com/DaveGamble/cJSON.git
           cd cJSON
           cmake .
           make
           sudo make install
           sudo ldconfig
+        fi
+      # Clona e instala cJSON a partir do código fonte se não estiver no cache
 
-      - name: Set LD_LIBRARY_PATH # Configura a variável de ambiente para que o sistema encontre a libcjson.so
-        run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib"
+    - name: Set LD_LIBRARY_PATH
+      run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib" >> $GITHUB_ENV
+      # Configura a variável de ambiente para que o sistema encontre a libcjson.so
 
-      - name: Compile the project # Compile the project
-        run: make
+    - name: Compile the project
+      run: make
+      # Compila seu projeto usando makefile ou outro comando de compilação
 
-      - name: Run tests # Run the tests
-        run: ./bin/SACompiler utils/Parser/exemples/general/exemple.code ./test-out.json
+    - name: Run tests
+      run: ./bin/SACompiler "utils/Parser/exemples/general/exemple.code" "./test-out.json"
+      # Substitua 'your_executable' e os caminhos dos arquivos conforme necessário
