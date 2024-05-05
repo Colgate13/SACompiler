@@ -106,7 +106,6 @@ For Parser using this [grammar](https://github.com/Colgate13/SACompiler/blob/mai
 
 ```sh
 clang
-cJSON
 ```
 
 ### Build and Run
