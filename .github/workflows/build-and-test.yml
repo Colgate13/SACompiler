@@ -1,0 +1,27 @@
+name: Build and Test
+
+on: [push, pull_request]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install system dependencies # Install any system dependencies
+      run: sudo apt-get update && sudo apt-get install -y gcc make cmake
+
+    - name: Install cJSON # Install dinamic project dependencies
+      run: |
+        git clone https://github.com/DaveGamble/cJSON.git
+        cd cJSON
+        cmake .
+        make
+        sudo make install
+
+    - name: Compile the project # Compile the project
+      run: make
+
+    - name: Run tests # Run the tests
+      run: ./SACompiler utils/Parser/exemples/general/exemple.code ./test-out.json
