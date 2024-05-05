@@ -7,21 +7,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Install system dependencies # Install any system dependencies
-      run: sudo apt-get update && sudo apt-get install -y gcc make cmake
+      - name: Install system dependencies # Install any system dependencies
+        run: sudo apt-get update && sudo apt-get install -y gcc make cmake
 
-    - name: Install cJSON # Install dinamic project dependencies
-      run: |
-        git clone https://github.com/DaveGamble/cJSON.git
-        cd cJSON
-        cmake .
-        make
-        sudo make install
+      - name: Install cJSON # Install dinamic project dependencies
+        run: |
+          git clone https://github.com/DaveGamble/cJSON.git
+          cd cJSON
+          cmake .
+          make
+          sudo make install
 
-    - name: Compile the project # Compile the project
-      run: make
+      - name: Set LD_LIBRARY_PATH # Configura a variável de ambiente para que o sistema encontre a libcjson.so
+        run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib"
 
-    - name: Run tests # Run the tests
-      run: ./bin/SACompiler utils/Parser/exemples/general/exemple.code ./test-out.json
+      - name: Compile the project # Compile the project
+        run: make
+
+      - name: Run tests # Run the tests
+        run: ./bin/SACompiler utils/Parser/exemples/general/exemple.code ./test-out.json
