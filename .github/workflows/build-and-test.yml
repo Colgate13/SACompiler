@@ -12,17 +12,17 @@ jobs:
       - name: Install system dependencies # Install any system dependencies
         run: sudo apt-get update && sudo apt-get install -y gcc make cmake
 
-      - name: Install cJSON # Install dinamic project dependencies
-        run: |
-          git clone https://github.com/DaveGamble/cJSON.git
-          cd cJSON
-          cmake .
-          make
-          sudo make install
-          sudo ldconfig
+      # - name: Install cJSON # Install dinamic project dependencies
+      #   run: |
+      #     git clone https://github.com/DaveGamble/cJSON.git
+      #     cd cJSON
+      #     cmake .
+      #     make
+      #     sudo make install
+      #     sudo ldconfig
 
-      - name: Set LD_LIBRARY_PATH # Set the LD_LIBRARY_PATH environment variable to find the libcjson.so
-        run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib"
+      # - name: Set LD_LIBRARY_PATH # Set the LD_LIBRARY_PATH environment variable to find the libcjson.so
+      #   run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib"
 
       - name: Compile the project # Compile the project
         run: make
