@@ -24,4 +24,4 @@ jobs:
       run: make
 
     - name: Run tests # Run the tests
-      run: ./SACompiler utils/Parser/exemples/general/exemple.code ./test-out.json
+      run: ./bin/SACompiler utils/Parser/exemples/general/exemple.code ./test-out.json
