@@ -1,5 +1,5 @@
 program
-  var int num1;?
+  var int num1;
   var int num2;
   var int num3;
 
