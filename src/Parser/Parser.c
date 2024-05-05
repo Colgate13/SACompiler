@@ -125,7 +125,7 @@ Statement *ParserStatement(Parser *parser)
     }
     else
     {
-        throwError(1, "Expected print_statement , variable_declaration or assignment\n");
+        throwParserError(1, "Expected print_statement , variable_declaration or assignment\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
         exit(1);
     }
 }
@@ -152,13 +152,13 @@ PrintStatement *ParserPrintStatement(Parser *parser)
         }
         else
         {
-            throwError(1, "Expected )\n");
+            throwParserError(1, "Expected )\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
             exit(1);
         }
     }
     else
     {
-        throwError(1, "Expected identifier\n");
+        throwParserError(1, "Expected identifier\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
         exit(1);
     }
 }
@@ -186,7 +186,7 @@ VariableDeclaration *ParserVariableDeclaration(Parser *parser)
     }
     else
     {
-        throwError(1, "Expected type\n");
+        throwParserError(1, "Expected type\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
         exit(1);
     }
 
@@ -228,7 +228,7 @@ Assignment *ParserAssignment(Parser *parser)
         }
     }
 
-    throwError(1, "Expected TOKEN_TYPE_IDENTIFIER\n");
+    throwParserError(1, "Expected TOKEN_TYPE_IDENTIFIER\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
     exit(1);
 }
 
@@ -257,7 +257,7 @@ Expression *ParserExpression(Parser *parser)
     }
     else
     {
-        throwError(1, "Expected TOKEN_TYPE_NUMBER\n");
+        throwParserError(1, "Expected TOKEN_TYPE_NUMBER\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
         exit(1);
     }
 }
@@ -285,7 +285,7 @@ ExpressionTail *ParserExpressionTail(Parser *parser, unsigned short int recursiv
         }
         else
         {
-            throwError(1, "Expected TOKEN_TYPE_NUMBER, TOKEN_TYPE_STRING or TOKEN_TYPE_IDENTIFIER\n");
+            throwParserError(1, "Expected TOKEN_TYPE_NUMBER, TOKEN_TYPE_STRING or TOKEN_TYPE_IDENTIFIER\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
             exit(1);
         }
     }
@@ -316,7 +316,7 @@ Term *ParserTerm(Parser *parser)
     }
     else
     {
-        throwError(1, "Expected TOKEN_TYPE_NUMBER, TOKEN_TYPE_STRING or TOKEN_TYPE_IDENTIFIER\n");
+        throwParserError(1, "Expected TOKEN_TYPE_NUMBER, TOKEN_TYPE_STRING or TOKEN_TYPE_IDENTIFIER\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
         exit(1);
     }
 }

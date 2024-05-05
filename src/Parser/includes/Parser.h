@@ -2,7 +2,7 @@
 #define PARSER_H
 
 #include "../../Lexical/includes/lexicalAnalyzer.h"
-#define LOGS 1
+#define LOGS 0
 
 typedef enum
 {
