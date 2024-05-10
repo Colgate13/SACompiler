@@ -1,0 +1,45 @@
+Gramatica de atributos
+
+  Analise sintatico-semantica de expressoes aritmeticas;
+
+  **O atributo principal (exp, temro ou fator) é o seu valor numérico, que denotamos por val**
+
+  *+,-,* sao chamados de MARCAS*
+
+  exp -> exp + termo | exp - termo | termo
+  termo -> termo * fator | termo div fator | fator
+  fator -> (exp) | id
+
+  Regras gramaticais         | Regras semanticas
+  exp1 -> exp2 + termo       | exp1.val = exp2.val + termo.val
+  exp1 -> exp2 - termo       | exp1.val = exp2.val - termo.val
+  exp1 -> termo              | exp1.val = termo.val
+  termo1 -> termo2 * fator   | termo1.val = termo2.val * fator.val
+  termo1 -> termo2 div fator | termo1.val = termo2.val / fator.val
+  termo -> fator             | termo.val = fator.val
+  fator -> (exp)             | fator.val = exp.val
+  fator -> num               | fator.val = num.val
+
+EXEMPLO: ESCREVA A GRAMATICA DE ATRIBUTOS PARA A GRAMATICA ABIAXO
+
+numero -> numero digito | digito
+digito -> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+**O Atributo mais significativo de um numero é o seu valor, que recebe o nome val**
+
+Regras gramaticais         | Regras semanticas
+numero1 -> numero2 digito  | numero1.val = numero2.val * 10 + digito.val
+numero -> digito           | numero.val = digito.val
+digito -> 0                | digito.val = 0
+digito -> 1                | digito.val = 1
+digito -> 2                | digito.val = 2
+digito -> 3                | digito.val = 3
+digito -> 4                | digito.val = 4
+digito -> 5                | digito.val = 5
+digito -> 6                | digito.val = 6
+digito -> 7                | digito.val = 7
+digito -> 8                | digito.val = 8
+digito -> 9                | digito.val = 9
+
+digito -> 0 é uma marca ou caractere e infica que o digito temo valor 0
+digito.val = 0 o digito tem o valor numerico zero

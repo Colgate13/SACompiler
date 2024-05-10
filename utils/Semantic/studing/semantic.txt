@@ -1,0 +1,80 @@
+Análise semântica
+    
+Resumo:
+        Verificação do uso adequado
+          Análise contextual: declarações prévias de variáveis, procedimentos, etc.
+          Checagem de tipos: o tipo da variável é o correto para o operador? Checagem de tipos: o tipo da variável é o correto para o operador?
+          Unicidade: o identificador (variável, rótulo) é único no escopo?
+          Coisas que vão além do domínio da sintaxe
+
+        Tipos de verificações semânticas
+          X foi declarado apenas uma vez?
+          X foi declarado/definido antes do seu primeiro uso?
+          X é declarado mas nunca foi utilizado? X é declarado mas nunca foi utilizado?
+          A que declaração X se refere?
+          Os tipos de uma expressão são compatíveis?
+          As dimensões casam com o declarado?
+
+Completo:
+
+  Tipos de analise semantica
+    Estaticas: em tempo de compilacao, geralmente utilizada em linguagens tipadas. c, c++, java etc
+    Dinamica: em tempo de execucao, geralmente utilizada em linguagens nao tipadas. python, javascript etc
+
+  Pode ser dividida em duas categorias
+    Analise de um programa para verificar sua correcao e garantir sua execucao
+    melhorar a eficiencia de execucao
+      * Duvida isso nao deveria ser feito em uma parte especifica de otimizacao? Apos a analise semantica.
+
+  Analise semantica estatica
+    Descricao das analises a efetuar e a implementacao dessas analises
+      Algoritmos apropriedos
+    Similar as analises lexicas e sintaticas
+
+  Devido as variacoes de especificao semantica das linguagens de prorgamacao, na analise semantica:
+    Situacao nao é tao clara:
+      Nao existir um metodo padrao como (BNF) para especificar a semantica estatica da linguagem
+      Nao é tao bem formalizada
+      Nao existe um mapeamento claro da representacao para o algoritmo correspondente
+
+  Metodo para descrever a analise semantica:
+    Identificar atributos ou propriedades de entidade da linguagem
+    Escrever equacoes de atributos(regras semanticas) que expressem como os atributos se relacionam com as regras
+    gramaticais de linguagem
+
+  conjunto de atributos e equacoes === gramatica de atributos
+
+  **Um programa pode esta sintaticamente correto mas semanticamente incorreto**
+
+  Gramatica de atributos sao uteis para linguagens que obedecem ao principio da semantica dirigida pela sintaxe:
+    Conteudo semantico fortemente relacionado á sintaxe do programa, maioria das linguagens de programacao seguem esse principio
+
+    Em geral, a semantica de uma linguagem de programacao não é especificada: 
+      O projetisca dao compilador tem que analisar e extrair a semantica a partir do manial da linguagem
+
+  Assim como a sintaxe, a semantica precisa ser formalizada antes de ser implementada
+    Sintaxe: por exemplo, BNF -> Procedimentos recursivos
+
+  Gramatica de atributos:
+    é o formalismo de descricao da semantica comument utilizado
+
+    adicinar atributos, ou anotacoes ao nos da arvore sintatica
+    anaotacoes guardam as informacoes semanticas
+    tecnica depende da analise sintatica
+    especificacao dos atributos é feita na mesma gramatica que descreve a sintaxe
+    cada producao da gramatica adicina-se uma ou mais regras que especificam como os atributos sao calculados
+
+    é uma gramatica livre de contexto incrementada com um conjunto de regras
+    cada simbolo (terminal ou nao terminal) da derivacao tem um conjunto de atributos
+    principal funcao é incluir restricoes semanticas as contrucoes sintaticamente corretas
+    sao escritas em forma de tabelas
+      cada regra gramatical listada junto com o conjunto de equacoes de atributos ou regras semanticas associadas
+
+    atributos associados aos simbolos gramaticais
+      Exemplo:
+        x.valor,x.escopo
+
+    regras semanticas que manipulam os atributos:
+      Exemplo: regra somar os atributos valores de duas variaveis
+        x: = a + b, cuja regra é x.valor = a.valor + b.valor  
+          se o tipo da variavel a === ao tipo da variavel b e o tipo da expressao for compativel com tipo de x
