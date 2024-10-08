@@ -28,10 +28,20 @@ int main(int argc, char *argv[])
     exit(1);
   }
 
+  // Create lexical analyzer
   LexicalAnalyzer *lexicalAnalyzer = createLexicalAnalyzer(argv[1]);
+
+  // Create parser using lexical analyzer
   Parser *parser = createParser(lexicalAnalyzer);
   ParserProgram(parser);
-  AstConsumer(*parser->ast->program, argv[2]);
+
+  // Create output file (ast-output.json) only for test and debug
+  if (LOGS == 1)
+  {
+    AstConsumer(*parser->ast->program, argv[2]);
+  }
+
+  // Close lexical analyzer
   closeLexicalAnalyzer(lexicalAnalyzer);
 
   return 0;

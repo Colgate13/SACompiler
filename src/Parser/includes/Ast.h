@@ -6,7 +6,7 @@
 #include "../../../libs/includes/cJSON.h"
 
 Program createProgram(Location *location);
-Location *createLocation(char *fileName, size_t start, size_t end);
+Location *createLocation(char *fileName, size_t line, size_t column);
 Statement *createStatement_Assignment(Location *location, Assignment *assignment);
 Statement *createStatement_VariableDeclaration(Location *Location, VariableDeclaration *vd);
 Statement *createStatement_PrintStatement(Location *location, PrintStatement *ps);

@@ -3,6 +3,8 @@
     "system_error": "c",
     "ast.h": "c",
     "stddef.h": "c",
-    "cjson.h": "c"
+    "cjson.h": "c",
+    "parser.h": "c",
+    "error.h": "c"
   }
 }

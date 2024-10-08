@@ -20,13 +20,13 @@ Program createProgram(Location *location)
 /**
  * @Location
  */
-Location *createLocation(char *fileName, size_t start, size_t end)
+Location *createLocation(char *fileName, size_t line, size_t column)
 {
   Location *Location = malloc(sizeof(Location));
 
   Location->fileName = strdup(fileName);
-  Location->start = start;
-  Location->end = end;
+  Location->line = line;
+  Location->column = column;
   return Location;
 }
 
@@ -286,22 +286,22 @@ cJSON *checkLocation(Location *Location)
     exit(1);
   }
 
-  if (Location->start == 0)
+  if (Location->line == 0)
   {
-    printf("Location without start\n");
+    printf("Location without line\n");
     exit(1);
   }
 
-  if (Location->end == 0)
+  if (Location->column == 0)
   {
-    printf("Location without end\n");
+    printf("Location without column\n");
     exit(1);
   }
 
   cJSON *jsonLocation = cJSON_CreateObject();
   cJSON_AddItemToObject(jsonLocation, "FileName", cJSON_CreateString(Location->fileName));
-  cJSON_AddItemToObject(jsonLocation, "Start", cJSON_CreateNumber(Location->start));
-  cJSON_AddItemToObject(jsonLocation, "End", cJSON_CreateNumber(Location->end));
+  cJSON_AddItemToObject(jsonLocation, "line", cJSON_CreateNumber(Location->line));
+  cJSON_AddItemToObject(jsonLocation, "column", cJSON_CreateNumber(Location->column));
 
   return jsonLocation;
 }

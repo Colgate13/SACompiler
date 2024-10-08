@@ -2,7 +2,7 @@
 #define PARSER_H
 
 #include "../../Lexical/includes/lexicalAnalyzer.h"
-#define LOGS 0
+#define LOGS 1
 
 typedef enum
 {
@@ -32,8 +32,8 @@ enum EKeywords
 // Location = { start: 0, end: 0, fileName: "test.txt" }
 typedef struct
 {
-  size_t start;
-  size_t end;
+  size_t line; // Line
+  size_t column; // Column
   char *fileName;
 } Location;
 
