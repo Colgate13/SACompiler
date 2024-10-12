@@ -36,8 +36,6 @@ int main(int argc, char *argv[])
   Parser *parser = createParser(lexicalAnalyzer);
   ParserProgram(parser);
 
-  createSemantic(parser);
-
   // Create output file only for test and debug
   if (LOGS == 1)
   {
