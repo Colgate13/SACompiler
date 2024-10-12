@@ -230,14 +230,9 @@ LexicalAnalyzer *createLexicalAnalyzer(const char *filePath)
   return lexicalAnalyzer;
 }
 
-void destroyLexicalAnalyzer(LexicalAnalyzer *analyzer)
+void destroyLexicalAnalyzer(LexicalAnalyzer *lexicalAnalyzer)
 {
-  fclose(analyzer->file);
-  free(analyzer->line);
-  free(analyzer);
-}
-
-void closeLexicalAnalyzer(LexicalAnalyzer *lexicalAnalyzer)
-{
-  destroyLexicalAnalyzer(lexicalAnalyzer);
+  fclose(lexicalAnalyzer->file);
+  free(lexicalAnalyzer->line);
+  free(lexicalAnalyzer);
 }

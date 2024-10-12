@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stddef.h>
 
-// #include "/home/gabriel/projects/SACompiler/src/Lexical/includes/lexicalAnalyzer.h"
 #include "../Lexical/includes/lexicalAnalyzer.h"
 
 #include "../Error/includes/Error.h"
@@ -40,6 +39,12 @@ Parser *createParser(LexicalAnalyzer *lexicalAnalyzer)
     return parser;
 }
 
+void destroyParser(Parser *parser)
+{
+    free(parser->ast);
+    free(parser);
+}
+
 void controlNextToken(Parser *parser)
 {
     parser->token = nextToken(parser->lexicalAnalyzer);
@@ -56,8 +61,7 @@ void controlNextToken(Parser *parser)
  */
 void ParserProgram(Parser *parser)
 {
-    Program program;
-    program = createProgram(createLocation("*file*", 1, 1));
+    Program program = createProgram(createLocation("*file*", 1, 1));
     parser->ast->program = &program;
     parser->token = nextToken(parser->lexicalAnalyzer);
 

@@ -36,14 +36,17 @@ int main(int argc, char *argv[])
   Parser *parser = createParser(lexicalAnalyzer);
   ParserProgram(parser);
 
-  // Create output file (ast-output.json) only for test and debug
+  createSemantic(parser);
+
+  // Create output file only for test and debug
   if (LOGS == 1)
   {
     AstJsonConsumer(*parser->ast->program, argv[2]);
   }
 
-  // Close lexical analyzer
-  closeLexicalAnalyzer(lexicalAnalyzer);
+  // Destroy`s
+  destroyLexicalAnalyzer(lexicalAnalyzer);
+  destroyParser(parser);
 
   return 0;
 }

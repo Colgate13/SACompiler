@@ -147,7 +147,7 @@ cJSON *AstConsumerPrintStatement(PrintStatement *ps)
 {
   if (ps == NULL)
   {
-    printf("PrintStatement without print_statement\n");
+    printf("PrintStatement without print_statement2\n");
     exit(1);
   }
 
@@ -229,7 +229,7 @@ void AstJsonConsumer(Program program, char *fileOutputAst)
     case PRINT_STATEMENT:
       if (currentStatement->print_statement == NULL)
       {
-        printf("PrintStatement without print_statement\n");
+        printf("PrintStatement without print_statement1\n");
         exit(1);
       }
 

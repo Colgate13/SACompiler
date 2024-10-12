@@ -20,7 +20,7 @@ typedef struct
 } LexicalAnalyzer;
 
 LexicalAnalyzer *createLexicalAnalyzer(const char *filePath);
-void closeLexicalAnalyzer(LexicalAnalyzer *lexicalAnalyzer);
+void destroyLexicalAnalyzer(LexicalAnalyzer *lexicalAnalyzer);
 Token nextToken(LexicalAnalyzer *lexicalAnalyzer);
 
 #endif

@@ -145,6 +145,7 @@ void controlNextToken(Parser *parser);
 void ParserProgram(Parser *parser);
 
 Parser *createParser(LexicalAnalyzer *lexicalAnalyzer);
+void destroyParser(Parser *parser);
 Statement *ParserStatement(Parser *parser);
 PrintStatement *ParserPrintStatement(Parser *parser);
 VariableDeclaration *ParserVariableDeclaration(Parser *parser);

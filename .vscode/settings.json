@@ -9,6 +9,10 @@
     "token.h": "c",
     "lexicalanalyzer.h": "c",
     "utils.h": "c",
-    "astjson.h": "c"
+    "astjson.h": "c",
+    "semantic.h": "c",
+    "stdlib.h": "c",
+    "string.h": "c",
+    "stdio.h": "c"
   }
 }
