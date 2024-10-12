@@ -1,0 +1,53 @@
+Verificacao estatica analisador semantico
+
+As verificacoes estaticas sao verificacoes de consistencia feitas durante a compilacao
+
+Verificao sintatica: a sintaxe é mais que apenas uma gramaticais
+Ex: so pode existir um identificador por escopo, um break deve esta dentro de um loop e etc
+
+Verificacoes de tipos: as regras de tpo garantem que um operador ou funcao seja aplicado ao numero e ao tipo correto de operadores
+Ex: se uma conversao for necessarioa, o verificador de tipos pode inserir uma conversao explicita na arvore sintatica
+
+Existe uma distincao entre o significado dos identificadores que aparecem no lado equerdo e no lado direito de uma atribuicao
+
+    O lado direito especifica um valor (valor-r)
+    o lado esquerdo especifica um local de armazenamento (valor-l)
+    i = 5; // i é um valor-l
+    j = i + 1 // i é um valor-r
+
+  A verificacao estatistica precisa garantir que o lado esquerdo é um valor-l 
+    Um identificador, como i ou vet[2], possui um valor-l
+    Uma constante, como o numero 5, possuir apenas um valor-r
+
+
+  A verificacao de tipos garante o casamento entre o tipo esperado por uma construicao e o tipo recebido
+  Na instruicao if espera-se que o expr tenha tipo booleano
+      if (expr) stmt
+
+  Em uma operacao relacional (E^ <= E²) espera-se que os dois operandos tenha m o mesmo tipo e o resultado seja booleano
+    O tipo pode ser verificado na construcao do no
+
+
+// Como o analisador semantico pode analisar se o tipo é o mesmo
+    if (E1.type == E2.type)
+      E.type = bool
+    else
+      SemanticError();
+
+
+    E
+    <=
+    /\
+  E1  E2
+
+
+  A ideia de casar os tipos se aplica mesmo nos casos:
+
+  Coercao: a linguagem especifica as coercoes permitidas
+  Ex: na expressao 2 * 3.14, o inteiro ´e convertido em ponto flutuantes
+
+    No exemplo anterior o operador <= poderia aceitar tipos diferentes, se estes fosse convertiveis entre si
+
+  Sobrecarga: o significado de um operador sobrecarregado é determinado considerando-se os tipos conhecidos de seus 
+  operandos
+  Ex: o operador + pode ser adicao de numeros ou concatenacao de strings

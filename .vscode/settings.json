@@ -5,6 +5,10 @@
     "stddef.h": "c",
     "cjson.h": "c",
     "parser.h": "c",
-    "error.h": "c"
+    "error.h": "c",
+    "token.h": "c",
+    "lexicalanalyzer.h": "c",
+    "utils.h": "c",
+    "astjson.h": "c"
   }
 }

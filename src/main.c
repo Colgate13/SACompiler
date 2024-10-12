@@ -4,6 +4,7 @@
 #include "./Error/includes/Error.h"
 #include "./Parser/includes/Parser.h"
 #include "./Parser/includes/Ast.h"
+#include "./Parser/includes/AstJson.h"
 
 #define MAX_LINE_SIZE 1024
 
@@ -38,7 +39,7 @@ int main(int argc, char *argv[])
   // Create output file (ast-output.json) only for test and debug
   if (LOGS == 1)
   {
-    AstConsumer(*parser->ast->program, argv[2]);
+    AstJsonConsumer(*parser->ast->program, argv[2]);
   }
 
   // Close lexical analyzer

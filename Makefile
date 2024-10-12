@@ -15,7 +15,7 @@ CFLAGS = -g -Wall -Wextra
 
 # Source files for different components
 LEXICAL_SOURCES = $(LEXICAL_DIR)/Scanners.c $(LEXICAL_DIR)/Token.c $(LEXICAL_DIR)/Utils.c $(LEXICAL_DIR)/lexicalAnalyzer.c
-PARSER_SOURCES = $(PARSER_DIR)/Parser.c $(PARSER_DIR)/Ast.c $(PARSER_DIR)/Utils.c
+PARSER_SOURCES = $(PARSER_DIR)/Parser.c $(PARSER_DIR)/Ast.c $(PARSER_DIR)/AstJson.c $(PARSER_DIR)/Utils.c
 ERROR_SOURCES = $(ERROR_DIR)/Error.c
 SACompiler = $(ERROR_SOURCES) $(LEXICAL_SOURCES) $(PARSER_SOURCES) src/main.c
 
@@ -26,16 +26,6 @@ all: $(BIN_DIR) SACompiler
 SACompiler: $(SACompiler)
 	@echo "Building SACompiler..."
 	$(CC) $(CFLAGS) -o $(BIN_DIR)/SACompiler $^ $(LIBS_ARGS)
-
-# Build the lexical analyzer standalone executable
-lexical: $(ERROR_SOURCES) $(LEXICAL_SOURCES) $(LEXICAL_DIR)/main.c
-	@echo "Building lexical analyzer..."
-	$(CC) $(CFLAGS) -o $(BIN_DIR)/lexical $^
-
-# Build the parser standalone executable
-parser: $(ERROR_SOURCES) $(LEXICAL_SOURCES) $(PARSER_SOURCES) $(PARSER_DIR)/main.c
-	@echo "Building parser..."
-	$(CC) $(CFLAGS) -o $(BIN_DIR)/parser $^ $(LIBS_ARGS)
 
 # Rule to create the binary directory if it does not exist
 $(BIN_DIR):
