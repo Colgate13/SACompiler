@@ -47,8 +47,9 @@ int main(int argc, char *argv[])
   }
 
   // Destroy`s
-  destroyLexicalAnalyzer(lexicalAnalyzer);
+  destroySemantic(semantic);
   destroyParser(parser);
+  destroyLexicalAnalyzer(lexicalAnalyzer);
 
   return 0;
 }

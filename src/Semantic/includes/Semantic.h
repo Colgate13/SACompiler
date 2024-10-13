@@ -11,5 +11,6 @@ typedef struct
 } Semantic;
 
 Semantic *createSemantic(Parser *parser);
+void destroySemantic(Semantic *semantic);
 
 #endif

@@ -13,3 +13,8 @@ Semantic *createSemantic(Parser *parser)
   semantic->parser = parser;
   return semantic;
 }
+
+void destroySemantic(Semantic *semantic)
+{
+  free(semantic);
+}
