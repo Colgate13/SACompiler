@@ -25,7 +25,8 @@ Parser *createParser(LexicalAnalyzer *lexicalAnalyzer)
 
     if (parser == NULL)
     {
-        return NULL;
+        fprintf(stderr, "Memory allocation error\n");
+        exit(1);
     }
 
     parser->lexicalAnalyzer = lexicalAnalyzer;
@@ -33,7 +34,8 @@ Parser *createParser(LexicalAnalyzer *lexicalAnalyzer)
 
     if (parser->ast == NULL)
     {
-        return NULL;
+        fprintf(stderr, "Memory allocation error\n");
+        exit(1);
     }
 
     return parser;
@@ -61,8 +63,7 @@ void controlNextToken(Parser *parser)
  */
 void ParserProgram(Parser *parser)
 {
-    Program program = createProgram(createLocation("*file*", 1, 1));
-    parser->ast->program = &program;
+    parser->ast->program = createProgram(createLocation("*file*", 1, 1));
     parser->token = nextToken(parser->lexicalAnalyzer);
 
     if (

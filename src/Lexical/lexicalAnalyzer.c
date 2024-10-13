@@ -17,6 +17,13 @@ Token nextStageState(LexicalAnalyzer *lexicalAnalyzer)
   }
 
   char *term = (char *)malloc(MAX_TERM_SIZE * sizeof(char));
+
+  if (term == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
   unsigned short int currentState = INITIAL_STATE;
 
   while (lexicalAnalyzer->positionCount <= strlen(lexicalAnalyzer->line) + 1)
@@ -188,6 +195,13 @@ Token nextToken(LexicalAnalyzer *lexicalAnalyzer)
   if (token.type == TOKEN_TYPE_END_LINE)
   {
     char *line = (char *)malloc(MAX_LINE_SIZE * sizeof(char));
+
+    if (line == NULL)
+    {
+      fprintf(stderr, "Memory allocation error\n");
+      exit(1);
+    }
+
     line = readLine(lexicalAnalyzer->file, MAX_LINE_SIZE);
 
     if (line == NULL)
@@ -220,6 +234,12 @@ LexicalAnalyzer *createLexicalAnalyzer(const char *filePath)
   }
 
   LexicalAnalyzer *lexicalAnalyzer = (LexicalAnalyzer *)malloc(sizeof(LexicalAnalyzer));
+
+  if (lexicalAnalyzer == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
 
   lexicalAnalyzer->file = attachFile;
   lexicalAnalyzer->newLine = 0;

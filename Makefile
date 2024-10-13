@@ -5,6 +5,7 @@ CC = clang
 BIN_DIR = bin
 LEXICAL_DIR = src/Lexical
 PARSER_DIR = src/Parser
+SEMANTIC_DIR = src/Semantic
 ERROR_DIR = src/Error
 
 # Paths to include headers and libraries
@@ -16,8 +17,9 @@ CFLAGS = -g -Wall -Wextra
 # Source files for different components
 LEXICAL_SOURCES = $(LEXICAL_DIR)/Scanners.c $(LEXICAL_DIR)/Token.c $(LEXICAL_DIR)/Utils.c $(LEXICAL_DIR)/lexicalAnalyzer.c
 PARSER_SOURCES = $(PARSER_DIR)/Parser.c $(PARSER_DIR)/Ast.c $(PARSER_DIR)/AstJson.c $(PARSER_DIR)/Utils.c
+SEMANTIC_SOURCES = $(SEMANTIC_DIR)/Semantic.c
 ERROR_SOURCES = $(ERROR_DIR)/Error.c
-SACompiler = $(ERROR_SOURCES) $(LEXICAL_SOURCES) $(PARSER_SOURCES) src/main.c
+SACompiler = $(ERROR_SOURCES) $(LEXICAL_SOURCES) $(PARSER_SOURCES) $(SEMANTIC_SOURCES) src/main.c
 
 # Top-level rule to create the binary directory and build the main program
 all: $(BIN_DIR) SACompiler

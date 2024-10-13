@@ -6,12 +6,19 @@
 /**
  * @Program
  */
-Program createProgram(Location *location)
+Program *createProgram(Location *location)
 {
-  Program program;
+  Program *program = malloc(sizeof(Program));
 
-  program.statements = NULL;
-  program.location = location;
+  if (program == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
+  program->location = location;
+  program->statements = NULL;
+
   return program;
 }
 
@@ -21,6 +28,12 @@ Program createProgram(Location *location)
 Location *createLocation(char *fileName, size_t line, size_t column)
 {
   Location *Location = malloc(sizeof(Location));
+
+  if (Location == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
 
   Location->fileName = strdup(fileName);
   Location->line = line;
@@ -34,6 +47,12 @@ Location *createLocation(char *fileName, size_t line, size_t column)
 Statement *createStatement_Assignment(Location *location, Assignment *assignment)
 {
   Statement *s = malloc(sizeof(Statement));
+
+  if (s == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
 
   s->location = location;
   s->type = ASSIGNMENT_STATEMENT;
@@ -52,6 +71,12 @@ Statement *createStatement_VariableDeclaration(Location *Location, VariableDecla
 {
   Statement *s = malloc(sizeof(Statement));
 
+  if (s == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
   s->location = Location;
   s->type = VARIABLE_DECLARATION_STATEMENT;
 
@@ -68,6 +93,12 @@ Statement *createStatement_VariableDeclaration(Location *Location, VariableDecla
 Statement *createStatement_PrintStatement(Location *location, PrintStatement *ps)
 {
   Statement *s = malloc(sizeof(Statement));
+
+  if (s == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
 
   s->location = location;
   s->type = PRINT_STATEMENT;
@@ -86,6 +117,12 @@ VariableDeclaration *createVariableDeclaration(Location *location, Type type, Id
 {
   VariableDeclaration *vd = malloc(sizeof(VariableDeclaration));
 
+  if (vd == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
   vd->location = location;
 
   vd->type = type;
@@ -99,6 +136,12 @@ VariableDeclaration *createVariableDeclaration(Location *location, Type type, Id
 Assignment *createAssignment(Location *location, Identifier *identifier, Expression *expression)
 {
   Assignment *a = malloc(sizeof(Assignment));
+
+  if (a == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
 
   a->location = location;
 
@@ -114,6 +157,12 @@ PrintStatement *createPrintStatement(Location *location, Expression *expression)
 {
   PrintStatement *ps = malloc(sizeof(PrintStatement));
 
+  if (ps == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
   ps->location = location;
   ps->expression = expression;
   return ps;
@@ -125,6 +174,12 @@ PrintStatement *createPrintStatement(Location *location, Expression *expression)
 Expression *createExpression_Term_ExpressionTail(Location *location, Term *term, ExpressionTail *tail)
 {
   Expression *expr = malloc(sizeof(Expression));
+
+  if (expr == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
 
   expr->location = location;
 
@@ -140,6 +195,12 @@ Expression *createExpression_Term(Location *location, Term *term)
 {
   Expression *expr = malloc(sizeof(Expression));
 
+  if (expr == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
   expr->location = location;
 
   expr->term = term;
@@ -153,6 +214,12 @@ Expression *createExpression_Term(Location *location, Term *term)
 ExpressionTail *createExpressionTail(Location *location, char op, Term *term, ExpressionTail *next)
 {
   ExpressionTail *tail = malloc(sizeof(ExpressionTail));
+
+  if (tail == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
 
   tail->location = location;
 
@@ -169,6 +236,12 @@ Term *createTerm_number(Location *location, Number *number)
 {
   Term *term = malloc(sizeof(Term));
 
+  if (term == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
   term->location = location;
 
   term->number = number;
@@ -183,6 +256,12 @@ Term *createTerm_number(Location *location, Number *number)
 Term *createTerm_identifier(Location *location, Identifier *identifier)
 {
   Term *term = malloc(sizeof(Term));
+
+  if (term == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
 
   term->location = location;
 
@@ -199,6 +278,12 @@ Term *createTerm_string(Location *location, String *string)
 {
   Term *term = malloc(sizeof(Term));
 
+  if (term == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
   term->location = location;
 
   term->number = NULL;
@@ -214,6 +299,12 @@ String *createString(Location *location, char *value)
 {
   String *str = malloc(sizeof(String));
 
+  if (str == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
   str->location = location;
 
   str->value = strdup(value);
@@ -227,6 +318,12 @@ Number *createNumber(Location *location, int value)
 {
   Number *number = malloc(sizeof(Number));
 
+  if (number == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
   number->location = location;
 
   number->value = value;
@@ -239,6 +336,12 @@ Number *createNumber(Location *location, int value)
 Identifier *createIdentifier(Location *location, char *name)
 {
   Identifier *identifier = malloc(sizeof(Identifier));
+
+  if (identifier == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
 
   identifier->location = location;
 

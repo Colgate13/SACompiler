@@ -1,3 +1,6 @@
+#ifndef AST_H
+#define AST_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,7 +8,7 @@
 #include "./Parser.h"
 #include "../../../libs/includes/cJSON.h"
 
-Program createProgram(Location *location);
+Program *createProgram(Location *location);
 Location *createLocation(char *fileName, size_t line, size_t column);
 Statement *createStatement_Assignment(Location *location, Assignment *assignment);
 Statement *createStatement_VariableDeclaration(Location *Location, VariableDeclaration *vd);
@@ -23,3 +26,5 @@ String *createString(Location *location, char *value);
 Number *createNumber(Location *location, int value);
 Identifier *createIdentifier(Location *location, char *name);
 Type getLiteralType(char *searchType);
+
+#endif

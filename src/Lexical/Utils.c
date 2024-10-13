@@ -19,7 +19,7 @@ char *readLine(FILE *file, size_t MAX_LINE_SIZE)
 {
     char *line = (char *)malloc(MAX_LINE_SIZE * sizeof(char));
 
-    if (!line)
+    if (line == NULL)
     {
         fprintf(stderr, "Error: Memory allocation failed\n");
         exit(1);

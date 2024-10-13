@@ -5,6 +5,7 @@
 #include "./Parser/includes/Parser.h"
 #include "./Parser/includes/Ast.h"
 #include "./Parser/includes/AstJson.h"
+#include "./Semantic/includes/Semantic.h"
 
 #define MAX_LINE_SIZE 1024
 
@@ -35,6 +36,9 @@ int main(int argc, char *argv[])
   // Create parser using lexical analyzer
   Parser *parser = createParser(lexicalAnalyzer);
   ParserProgram(parser);
+
+  // Create semantic
+  Semantic *semantic = createSemantic(parser);
 
   // Create output file only for test and debug
   if (LOGS == 1)
