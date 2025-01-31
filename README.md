@@ -42,42 +42,74 @@ Implements this automata/state machine for lexical
 For Parser using this [grammar](https://github.com/Colgate13/SACompiler/blob/main/utils/Parser/gram.txt):
 
 ```
-<program>            --> "program" <statement> "end;"
+<program>            --> "program" <statement_tail> "end;"
+
+<statement_tail>    --> <statement> <statement_tail>
+                     | ε
 
 <statement>          --> <print_statement>
                     | <variable_declaration>
                     | <assignment>
+                    | <if_statement>
 
+<block>             --> "{" <statement_tail> "}"
+
+// Statements Grammar
 <variable_declaration> --> "var" <type> <identifier> ";"
-
 <assignment>         --> <identifier> "=" <expression> ";"
-
 <print_statement>    --> "print(" <expression> ");"
+<if_statement>      --> "if" "(" <expression> ")" <block>
 
-<expression>         --> <term> <expression_tail>
-                    | <term>
+// Expression Grammar (Contais the arithmetic operations and the relational operators)
+<expression>         --> <arithmetic_expression> <operator_relational>
 
-<expression_tail>    --> "+" <term> <expression_tail>
-                    | "-" <term> <expression_tail>
-                    | "*" <term> <expression_tail>
-                    | "/" <term> <expression_tail>
-                    | "%" <term> <expression_tail>
+// Relational Operator Grammar
+<operator_relational> --> <relational_operator> <arithmetic_expression>
                     | ε
 
-<term>               --> <number>
+// Relational Operator Tokens
+<relational_operator> --> "==" | "!=" | "<" | "<=" | ">" | ">="
+
+// Arithmetic Expression Grammar
+<arithmetic_expression> --> <term> <arithmetic_expression_tail>
+<arithmetic_expression_tail> --> <add_operator> <term> <arithmetic_expression_tail>
+                    | ε
+
+// Arithmetic Operator Tokens
+<add_operator>       --> "+" | "-" // Addition and Subtraction
+<mult_operator>      --> "*" | "/" | "%" // Multiplication, Division and Modulus
+
+<term>               --> <factor> <term_tail>
+<term_tail>          --> <mult_operator> <factor> <term_tail>
+                    | ε
+
+<factor>             --> <number>
                     | <identifier>
                     | <string>
+                    | "(" <expression> ")"
 
+// Basic Tokens
 <number>             --> [0-9]+
-
 <string>             --> '"' [a-zA-Z0-9_]* '"'
-
 <identifier>         --> [a-zA-Z_][a-zA-Z0-9_]*
-
 <type>               --> "int"
                     | "float"
                     | "string"
 
+
+// Exemples of code that can be parsed by this grammar
+if (identifier1 == identifier2) {
+  print("They are equal");
+}
+
+// if (<expression>) { <block> }
+  // -> if ({<arithmetic_expression>} {<operator_relational>}) { <block> }
+    // -> if ({<term> <arithmetic_expression_tail>} {<relational_operator> <arithmetic_expression>}) { <block> }
+      // -> if ({<factor> <term_tail>} {"=" <arithmetic_expression>}) { <block> }
+        // -> if ({<identifier>} {"=" {<term> <arithmetic_expression_tail>}}) { <block> }
+          // -> if ({<identifier>} {"=" {<factor> <term_tail>}}) { <block> }
+            // -> if ({<identifier>} {"=" {<identifier>}}) { <block> }
+              // -> if (<identifier> "=" <identifier>) { <block> } // This is a valid statement
 ```
 
 ## Technologies 🐱‍🏍🎂
