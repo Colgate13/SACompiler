@@ -21,6 +21,7 @@ cJSON *AstConsumerPrintStatement(PrintStatement *ps);
 cJSON *AstConsumerVariableDeclarationStatement(VariableDeclaration *vd);
 cJSON *AstConsumerAssignmentStatement(Assignment *ag);
 cJSON *AstConsumerIfStatement(IfStatement *is);
+cJSON *AstConsumerBlock(Block *block);
 void AstJsonConsumer(Program program, char *fileOutputAst);
 
 #endif // AST_JSON_H

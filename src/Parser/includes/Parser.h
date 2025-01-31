@@ -183,7 +183,6 @@ typedef struct Expression
 typedef struct IfStatement
 {
   Expression *expression;
-  Statement *statement;
   Block *block;
   Location *location;
 } IfStatement;

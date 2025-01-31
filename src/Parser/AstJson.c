@@ -243,6 +243,22 @@ cJSON *AstConsumerAssignmentStatement(Assignment *ag)
   return jsonAg;
 }
 
+cJSON *AstConsumerIfStatement(IfStatement *is)
+{
+  if (is == NULL)
+  {
+    printf("IfStatement without if_statement\n");
+    exit(1);
+  }
+
+  cJSON *jsonIs = cJSON_CreateObject();
+  cJSON_AddItemToObject(jsonIs, "Expression", AstConsumerExpression(is->expression));
+  cJSON_AddItemToObject(jsonIs, "Block", AstConsumerBlock(is->block));
+  cJSON_AddItemToObject(jsonIs, "Location", checkLocation(is->location));
+
+  return jsonIs;
+}
+
 cJSON *AstConsumerStatement(Statement *st)
 {
   if (st == NULL)
@@ -294,12 +310,9 @@ cJSON *AstConsumerStatement(Statement *st)
       exit(1);
     }
 
-    cJSON *jsonIfStatement = cJSON_CreateObject();
-    cJSON_AddItemToObject(jsonIfStatement, "Expression", AstConsumerExpression(st->if_statement->expression));
-    cJSON_AddItemToObject(jsonIfStatement, "Location", checkLocation(st->if_statement->location));
+    cJSON *jsonIfStatement = AstConsumerIfStatement(st->if_statement);
     cJSON_AddItemToObject(jsonSt, "IfStatement", jsonIfStatement);
     break;
-
   default:
     printf("Statement type unknow: %d\n", st->type);
     exit(1);
@@ -335,6 +348,21 @@ cJSON *AstConsumerStatementTail(StatementTail *st)
   cJSON_AddItemToObject(jsonSt, "Location", checkLocation(st->location));
 
   return jsonSt;
+}
+
+cJSON *AstConsumerBlock(Block *block)
+{
+  if (block == NULL)
+  {
+    printf("Block without block\n");
+    exit(1);
+  }
+
+  cJSON *jsonBlock = cJSON_CreateObject();
+  cJSON_AddItemToObject(jsonBlock, "StatementTail", AstConsumerStatementTail(block->statement_tail));
+  cJSON_AddItemToObject(jsonBlock, "Location", checkLocation(block->location));
+
+  return jsonBlock;
 }
 
 void createOutputFile(cJSON *json, char *fileOutputAst)
