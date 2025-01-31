@@ -9,11 +9,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Install system dependencies # Install any system dependencies
-        run: sudo apt-get update && sudo apt-get install -y gcc make cmake
+      # - name: Install system dependencies # Install any system dependencies
+      #   run: sudo apt-get update && sudo apt-get install -y gcc make cmake
 
       - name: Compile the project # Compile the project
         run: make
 
       - name: Run tests # Run the tests
         run: ./bin/SACompiler utils/exemples/general/exemple.code ./test-out.json
+
+      - name: Upload test results # Upload the test results
+        uses: actions/upload-artifact@v2
+        with:
+          path: test-out.json
+          name: test-results
