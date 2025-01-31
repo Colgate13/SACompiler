@@ -37,6 +37,65 @@ cJSON *checkLocation(Location *Location)
   return jsonLocation;
 }
 
+cJSON *AstConsumerFactor(Factor *factor)
+{
+  if (factor == NULL)
+  {
+    printf("Factor without factor\n");
+    exit(1);
+  }
+
+  cJSON *jsonFactor = cJSON_CreateObject();
+
+  if (factor->expression != NULL)
+  {
+    cJSON_AddItemToObject(jsonFactor, "Expression", AstConsumerExpression(factor->expression));
+  }
+  else if (factor->number != NULL)
+  {
+    cJSON_AddItemToObject(jsonFactor, "Number", cJSON_CreateNumber(factor->number->value));
+  }
+  else if (factor->identifier != NULL)
+  {
+    cJSON_AddItemToObject(jsonFactor, "Identifier", AstConsumerIdentifier(factor->identifier));
+  }
+  else if (factor->string != NULL)
+  {
+    cJSON_AddItemToObject(jsonFactor, "String", cJSON_CreateString(factor->string->value));
+  }
+  else
+  {
+    printf("Factor without factor\n");
+    exit(1);
+  }
+
+  cJSON_AddItemToObject(jsonFactor, "Location", checkLocation(factor->location));
+
+  return jsonFactor;
+}
+
+cJSON *AstConsumerTermTail(TermTail *tt)
+{
+  if (tt == NULL)
+  {
+    printf("TermTail without term_tail\n");
+    exit(1);
+  }
+
+  cJSON *jsonTt = cJSON_CreateObject();
+
+  if (tt->factor == NULL)
+  {
+    printf("TermTail without factor\n");
+    exit(1);
+  }
+
+  cJSON_AddItemToObject(jsonTt, "Factor", AstConsumerFactor(tt->factor));
+  cJSON_AddItemToObject(jsonTt, "Location", checkLocation(tt->location));
+
+  return jsonTt;
+}
+
 cJSON *AstConsumerTerm(Term *term)
 {
   if (term == NULL)
@@ -49,36 +108,8 @@ cJSON *AstConsumerTerm(Term *term)
 
   checkLocation(term->location);
 
-  if (term->number == NULL && term->identifier == NULL && term->string == NULL)
-  {
-    printf("Term without number, identifier or string\n");
-    exit(1);
-  }
-
-  if (term->number != NULL)
-  {
-    // printf("Term\n");
-    // printf("Number\n");
-    // printf("Value: %d\n", term->number->value);
-    cJSON_AddNumberToObject(jsonTerm, "Number", term->number->value);
-  }
-
-  if (term->identifier != NULL)
-  {
-    // printf("Term\n");
-    // printf("Identifier\n");
-    // printf("Value: %s\n", term->identifier->name);
-    cJSON_AddStringToObject(jsonTerm, "Identifier", term->identifier->name);
-  }
-
-  if (term->string != NULL)
-  {
-    // printf("Term\n");
-    // printf("String\n");
-    // printf("Value: %s\n", term->string->value);
-    cJSON_AddStringToObject(jsonTerm, "String", term->string->value);
-  }
-
+  cJSON_AddItemToObject(jsonTerm, "Factor", AstConsumerFactor(term->factor));
+  if (term->term_tail != NULL) cJSON_AddItemToObject(jsonTerm, "TermTail", AstConsumerTermTail(term->term_tail));
   cJSON_AddItemToObject(jsonTerm, "Location", checkLocation(term->location));
 
   return jsonTerm;
@@ -100,26 +131,53 @@ cJSON *AstConsumerIdentifier(Identifier *identifier)
   return jsonIdentifier;
 }
 
-cJSON *AstConsumerExpressionTail(ExpressionTail *exprTail)
+cJSON *AstConsumerArithmeticExpressionTail(ArithmeticExpressionTail *aet)
 {
-  if (exprTail == NULL)
+  if (aet == NULL)
   {
-    printf("ExpressionTail without expression_tail\n");
+    printf("ArithmeticExpressionTail without arithmetic_expression_tail\n");
     exit(1);
   }
 
-  cJSON *jsonExprTail = cJSON_CreateObject();
-  cJSON_AddItemToObject(jsonExprTail, "Op", cJSON_CreateString(&exprTail->op));
-  cJSON_AddItemToObject(jsonExprTail, "Term", AstConsumerTerm(exprTail->term));
+  cJSON *jsonAet = cJSON_CreateObject();
+  cJSON_AddItemToObject(jsonAet, "AddOperator", cJSON_CreateNumber(aet->add_operator));
+  cJSON_AddItemToObject(jsonAet, "Term", AstConsumerTerm(aet->term));
+  if (aet->next != NULL) cJSON_AddItemToObject(jsonAet, "ArithmeticExpressionTail", AstConsumerArithmeticExpressionTail(aet->next));
+  cJSON_AddItemToObject(jsonAet, "Location", checkLocation(aet->location));
 
-  if (exprTail->next != NULL)
+  return jsonAet;
+}
+
+cJSON *AstConsumerArithmeticExpression(ArithmeticExpression *ae)
+{
+  if (ae == NULL)
   {
-    cJSON_AddItemToObject(jsonExprTail, "Next", AstConsumerExpressionTail(exprTail->next));
+    printf("ArithmeticExpression without arithmetic_expression\n");
+    exit(1);
   }
 
-  cJSON_AddItemToObject(jsonExprTail, "Location", checkLocation(exprTail->location));
+  cJSON *jsonAe = cJSON_CreateObject();
+  cJSON_AddItemToObject(jsonAe, "Term", AstConsumerTerm(ae->term));
+  if (ae->arithmetic_expression_tail != NULL) cJSON_AddItemToObject(jsonAe, "ArithmeticExpressionTail", AstConsumerArithmeticExpressionTail(ae->arithmetic_expression_tail));
+  cJSON_AddItemToObject(jsonAe, "Location", checkLocation(ae->location));
 
-  return jsonExprTail;
+  return jsonAe;
+}
+
+cJSON *AstConsumerOperatorRelational(OperatorRelational *or)
+{
+  if (or == NULL)
+  {
+    printf("OperatorRelational without operator_relational\n");
+    exit(1);
+  }
+
+  cJSON *jsonOr = cJSON_CreateObject();
+  cJSON_AddItemToObject(jsonOr, "Operator", cJSON_CreateNumber(or->relational_operator));
+  cJSON_AddItemToObject(jsonOr, "ArithmeticExpression", AstConsumerArithmeticExpression(or->arithmetic_expression));
+  cJSON_AddItemToObject(jsonOr, "Location", checkLocation(or->location));
+
+  return jsonOr;
 }
 
 cJSON *AstConsumerExpression(Expression *expr)
@@ -131,13 +189,8 @@ cJSON *AstConsumerExpression(Expression *expr)
   }
 
   cJSON *jsonExpr = cJSON_CreateObject();
-  cJSON_AddItemToObject(jsonExpr, "Term", AstConsumerTerm(expr->term));
-
-  if (expr->expression_tail != NULL)
-  {
-    cJSON_AddItemToObject(jsonExpr, "ExpressionTail", AstConsumerExpressionTail(expr->expression_tail));
-  }
-
+  cJSON_AddItemToObject(jsonExpr, "ArithmeticExpression", AstConsumerArithmeticExpression(expr->arithmetic_expression));
+  if (expr->operator_relational != NULL) cJSON_AddItemToObject(jsonExpr, "OperatorRelational", AstConsumerOperatorRelational(expr->operator_relational));
   cJSON_AddItemToObject(jsonExpr, "Location", checkLocation(expr->location));
 
   return jsonExpr;
@@ -207,7 +260,7 @@ void createOutputFile(cJSON *json, char *fileOutputAst)
 void AstJsonConsumer(Program program, char *fileOutputAst)
 {
 
-  if (program.statements == NULL)
+  if (program.statement_tail->statement == NULL)
   {
     printf("Program without statements\n");
     exit(1);
@@ -218,10 +271,11 @@ void AstJsonConsumer(Program program, char *fileOutputAst)
 
   cJSON_AddItemToObject(jsonProgram, "Statements", jsonStatements);
 
-  Statement *currentStatement = program.statements;
+  StatementTail *currentStatementTail = program.statement_tail;
 
-  while (currentStatement != NULL)
+  while (currentStatementTail->statement != NULL)
   {
+    Statement *currentStatement = currentStatementTail->statement;
 
     cJSON *jsonStatement = cJSON_CreateObject();
     switch (currentStatement->type)
@@ -236,7 +290,7 @@ void AstJsonConsumer(Program program, char *fileOutputAst)
       cJSON *jsonPrintStatement = AstConsumerPrintStatement(currentStatement->print_statement);
       cJSON_AddItemToObject(jsonStatement, "PrintStatement", jsonPrintStatement);
 
-      currentStatement = currentStatement->next;
+      currentStatementTail = currentStatementTail->next;
       break;
 
     case VARIABLE_DECLARATION_STATEMENT:
@@ -249,7 +303,7 @@ void AstJsonConsumer(Program program, char *fileOutputAst)
       cJSON *jsonVariableDeclaration = AstConsumerVariableDeclarationStatement(currentStatement->variable_declaration);
       cJSON_AddItemToObject(jsonStatement, "VariableDeclaration", jsonVariableDeclaration);
 
-      currentStatement = currentStatement->next;
+      currentStatementTail = currentStatementTail->next;
       break;
     case ASSIGNMENT_STATEMENT:
       if (currentStatement->assignment == NULL)
@@ -261,7 +315,7 @@ void AstJsonConsumer(Program program, char *fileOutputAst)
       cJSON *jsonAssignment = AstConsumerAssignmentStatement(currentStatement->assignment);
       cJSON_AddItemToObject(jsonStatement, "Assignment", jsonAssignment);
 
-      currentStatement = currentStatement->next;
+      currentStatementTail = currentStatementTail->next;
       break;
     default:
       printf("Statement type unknow\n");

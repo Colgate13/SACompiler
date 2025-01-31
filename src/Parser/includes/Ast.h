@@ -10,18 +10,26 @@
 
 Program *createProgram(Location *location);
 Location *createLocation(char *fileName, size_t line, size_t column);
-Statement *createStatement_Assignment(Location *location, Assignment *assignment);
-Statement *createStatement_VariableDeclaration(Location *Location, VariableDeclaration *vd);
+StatementTail *createStatementTail(Location *location, Statement *statement);
+Statement *createStatement_IfStatement(Location *location, IfStatement *ifStatement);
 Statement *createStatement_PrintStatement(Location *location, PrintStatement *ps);
+Statement *createStatement_VariableDeclaration(Location *Location, VariableDeclaration *vd);
+Statement *createStatement_Assignment(Location *location, Assignment *assignment);
 VariableDeclaration *createVariableDeclaration(Location *location, Type type, Identifier *identifier);
 Assignment *createAssignment(Location *location, Identifier *identifier, Expression *expression);
 PrintStatement *createPrintStatement(Location *location, Expression *expression);
-Expression *createExpression_Term_ExpressionTail(Location *location, Term *term, ExpressionTail *tail);
-Expression *createExpression_Term(Location *location, Term *term);
-ExpressionTail *createExpressionTail(Location *location, char op, Term *term, ExpressionTail *next);
-Term *createTerm_number(Location *location, Number *number);
-Term *createTerm_identifier(Location *location, Identifier *identifier);
-Term *createTerm_string(Location *location, String *string);
+
+Expression *createExpression(Location *location, ArithmeticExpression *arithmeticExpression, OperatorRelational *operatorRelational);
+OperatorRelational *createOperatorRelational(Location *location, char *operator, ArithmeticExpression *arithmeticExpression);
+ArithmeticExpression *createArithmeticExpression(Location *location, Term *term, ArithmeticExpressionTail *tail);
+ArithmeticExpressionTail *createArithmeticExpressionTail(Location *location, char *op, Term *term, ArithmeticExpressionTail *tail);
+Term *createTerm(Location *location, Factor *factor, TermTail *tail);
+Factor *createFactor_Expression(Location *location, Expression *expression);
+Factor *createFactor_Number(Location *location, Number *number);
+Factor *createFactor_Identifier(Location *location, Identifier *identifier);
+Factor *createFactor_String(Location *location, String *string);
+TermTail *createTermTail(Location *location, char *op, Factor *factor, TermTail *tail);
+
 String *createString(Location *location, char *value);
 Number *createNumber(Location *location, int value);
 Identifier *createIdentifier(Location *location, char *name);

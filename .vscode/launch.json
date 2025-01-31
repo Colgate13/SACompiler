@@ -6,7 +6,7 @@
       "type": "cppdbg",
       "request": "launch",
       "program": "${workspaceFolder}/bin/SACompiler",
-      "args": ["./utils/Parser/exemples/general/exemple.code", "${workspaceFolder}/bin/out.json"],
+      "args": ["./utils/exemples/general/exemple.code", "${workspaceFolder}/bin/out.json"],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],

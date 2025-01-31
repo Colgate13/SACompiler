@@ -14,6 +14,7 @@ const char *keywords[] = {
     "end",
     "var",
     "print",
+    "if",
     "int",
     "float",
     "string"
@@ -66,34 +67,34 @@ void ParserProgram(Parser *parser)
     parser->ast->program = createProgram(createLocation("*file*", 1, 1));
     parser->token = nextToken(parser->lexicalAnalyzer);
 
-    if (
-        checkToken(parser, "TOKEN_TYPE_IDENTIFIER") == 0 ||
+    if (checkToken(parser, "TOKEN_TYPE_IDENTIFIER") == 0 &&
         strcmp(parser->token.value, keywords[PROGRAM]) == 0)
     {
-        logToken(parser);
-        parser->ast->program->statements = ParserStatement(parser);
-        if ((parser->token.value && strcmp(parser->token.value, keywords[END]) == 0) || checkToken(parser, "TOKEN_TYPE_END") == 0)
-        {
-            return;
-        }
+        parser->ast->program->statement_tail = ParserStatementTail(parser);
+    }
+    else
+    {
+        throwParserError(1, "Expected program\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
+        exit(1);
+    }
+}
 
-        Statement *currentStatement = parser->ast->program->statements;
-        while (1)
-        {
-            Statement *newStatement = ParserStatement(parser);
+/**
+ * @details Implements <statement_tail>
+ */
+StatementTail *ParserStatementTail(Parser *parser)
+{
+    StatementTail *statementTail = createStatementTail(
+        cl(parser), ParserStatement(parser));
 
-            if (newStatement == NULL)
-            {
-                return;
-            }
-
-            currentStatement->next = newStatement;
-            currentStatement = currentStatement->next;
-            if ((parser->token.value && strcmp(parser->token.value, keywords[END]) == 0) || checkToken(parser, "TOKEN_TYPE_END") == 0)
-            {
-                return;
-            }
-        }
+    if (statementTail->statement == NULL)
+    {
+        return statementTail;
+    }
+    else
+    {
+        statementTail->next = ParserStatementTail(parser);
+        return statementTail;
     }
 }
 
@@ -110,7 +111,15 @@ Statement *ParserStatement(Parser *parser)
         return NULL;
     }
 
-    if (strcmp(parser->token.value, keywords[PRINT]) == 0)
+    if (strcmp(parser->token.value, keywords[IF]) == 0)
+    {
+        throwParserError(1, "If statement not implemented\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
+        exit(1);
+        // return createStatement_IfStatement(
+        //     cl(parser),
+        //     ParserIfStatement(parser));
+    }
+    else if (strcmp(parser->token.value, keywords[PRINT]) == 0)
     {
         return createStatement_PrintStatement(
             cl(parser),
@@ -242,57 +251,45 @@ Expression *ParserExpression(Parser *parser)
     controlNextToken(parser);
     logToken(parser);
 
-    if (
-        checkToken(parser, "TOKEN_TYPE_NUMBER") == 0 || checkToken(parser, "TOKEN_TYPE_STRING") == 0 || checkToken(parser, "TOKEN_TYPE_IDENTIFIER") == 0)
-    {
-        Term *firstTerm = ParserTerm(parser);
-        controlNextToken(parser);
-        logToken(parser);
-
-        if (checkToken(parser, "TOKEN_TYPE_OPERATOR") == 0)
-        {
-            Expression *exprTermTail = createExpression_Term_ExpressionTail(
-                cl(parser), firstTerm, ParserExpressionTail(parser, 0));
-
-            return exprTermTail;
-        }
-
-        Expression *exprTerm = createExpression_Term(cl(parser), firstTerm);
-        return exprTerm;
-    }
-    else
-    {
-        throwParserError(1, "Expected TOKEN_TYPE_NUMBER\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
-        exit(1);
-    }
+    return createExpression(
+        cl(parser), ParserArithmeticExpression(parser), ParserOperatorRelational(parser));
 }
 
-ExpressionTail *ParserExpressionTail(Parser *parser, unsigned short int recursiveControl)
+OperatorRelational *ParserOperatorRelational(Parser *parser)
 {
-    if (recursiveControl == 1)
+    if (checkToken(parser, "TOKEN_TYPE_OPERATOR") == 0 &&
+        (strcmp(parser->token.value, "==") == 0 || strcmp(parser->token.value, "!=") == 0 || strcmp(parser->token.value, ">") == 0 || strcmp(parser->token.value, "<") == 0 || strcmp(parser->token.value, ">=") == 0 || strcmp(parser->token.value, "<=") == 0))
     {
+        char *operator = parser->token.value;
+
         controlNextToken(parser);
         logToken(parser);
+
+        return createOperatorRelational(
+            cl(parser), operator, ParserArithmeticExpression(parser));
     }
 
-    if (checkToken(parser, "TOKEN_TYPE_OPERATOR") == 0)
+    return NULL;
+}
+
+ArithmeticExpression *ParserArithmeticExpression(Parser *parser)
+{
+    return createArithmeticExpression(
+        cl(parser), ParserTerm(parser), ParserArithmeticExpressionTail(parser));
+}
+
+ArithmeticExpressionTail *ParserArithmeticExpressionTail(Parser *parser)
+{
+    if (checkToken(parser, "TOKEN_TYPE_OPERATOR") == 0 &&
+        (strcmp(parser->token.value, "+") == 0 || strcmp(parser->token.value, "-") == 0))
     {
-        char op = *parser->token.value;
+        char *operator = parser->token.value;
+
         controlNextToken(parser);
         logToken(parser);
 
-        // <term> --> <number> | <string> |<identifier>
-        if (checkToken(parser, "TOKEN_TYPE_NUMBER") == 0 || checkToken(parser, "TOKEN_TYPE_STRING") == 0 || checkToken(parser, "TOKEN_TYPE_IDENTIFIER") == 0)
-        {
-            ExpressionTail *exprTail = createExpressionTail(
-                cl(parser), op, ParserTerm(parser), ParserExpressionTail(parser, 1));
-            return exprTail;
-        }
-        else
-        {
-            throwParserError(1, "Expected TOKEN_TYPE_NUMBER, TOKEN_TYPE_STRING or TOKEN_TYPE_IDENTIFIER\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
-            exit(1);
-        }
+        return createArithmeticExpressionTail(
+            cl(parser), operator, ParserTerm(parser), ParserArithmeticExpressionTail(parser));
     }
 
     return NULL;
@@ -300,28 +297,90 @@ ExpressionTail *ParserExpressionTail(Parser *parser, unsigned short int recursiv
 
 Term *ParserTerm(Parser *parser)
 {
-    if (checkToken(parser, "TOKEN_TYPE_NUMBER") == 0)
-    {
-        Number *number = strchr(parser->token.value, '.') != NULL
-                             ? createNumber(cl(parser), atof(parser->token.value))
-                             : createNumber(cl(parser), atoi(parser->token.value));
+    return createTerm(
+        cl(parser), ParserFactor(parser), ParserTermTail(parser));
+}
 
-        return createTerm_number(
+Factor *ParserFactor(Parser *parser)
+{
+    // "(" <expression> ")"
+    if (checkToken(parser, "TOKEN_TYPE_LEFT_PARENTHESIS") == 0)
+    {
+        controlNextToken(parser);
+        logToken(parser);
+
+        Expression *expr = ParserExpression(parser);
+
+        if (checkToken(parser, "TOKEN_TYPE_RIGHT_PARENTHESIS") == 0)
+        {
+            controlNextToken(parser);
+            logToken(parser);
+
+            return createFactor_Expression(
+                cl(parser), expr);
+        }
+        else
+        {
+            throwParserError(1, "Expected )\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
+            exit(1);
+        }
+    }
+    // <number>
+    else if (checkToken(parser, "TOKEN_TYPE_NUMBER") == 0)
+    {
+        Number *number = createNumber(
+            cl(parser), atoi(parser->token.value));
+
+        controlNextToken(parser);
+        logToken(parser);
+
+        return createFactor_Number(
             cl(parser), number);
     }
-    else if (checkToken(parser, "TOKEN_TYPE_STRING") == 0)
-    {
-        return createTerm_string(
-            cl(parser), createString(cl(parser), removeQuotes(parser->token.value)));
-    }
+    // <identifier>
     else if (checkToken(parser, "TOKEN_TYPE_IDENTIFIER") == 0)
     {
-        return createTerm_identifier(
-            cl(parser), createIdentifier(cl(parser), parser->token.value));
+        Identifier *identifier = createIdentifier(
+            cl(parser), parser->token.value);
+
+        controlNextToken(parser);
+        logToken(parser);
+
+        return createFactor_Identifier(
+            cl(parser), identifier);
+    }
+    // <string>
+    else if (checkToken(parser, "TOKEN_TYPE_STRING") == 0)
+    {
+        String *string = createString(
+            cl(parser), parser->token.value);
+
+        controlNextToken(parser);
+        logToken(parser);
+
+        return createFactor_String(
+            cl(parser), string);
     }
     else
     {
-        throwParserError(1, "Expected TOKEN_TYPE_NUMBER, TOKEN_TYPE_STRING or TOKEN_TYPE_IDENTIFIER\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
+        throwParserError(1, "Expected number, identifier or string\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
         exit(1);
     }
+}
+
+TermTail *ParserTermTail(Parser *parser)
+{
+    if (checkToken(parser, "TOKEN_TYPE_OPERATOR") == 0 &&
+        (strcmp(parser->token.value, "*") == 0 || strcmp(parser->token.value, "/") == 0 || strcmp(parser->token.value, "%") == 0))
+    {
+        char *operator = parser->token.value;
+
+        controlNextToken(parser);
+        logToken(parser);
+
+        return createTermTail(
+            cl(parser), operator, ParserFactor(parser), ParserTermTail(parser));
+    }
+
+    return NULL;
 }

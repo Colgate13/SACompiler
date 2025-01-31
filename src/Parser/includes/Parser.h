@@ -1,8 +1,30 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#pragma once
+
 #include "../../Lexical/includes/lexicalAnalyzer.h"
 #define LOGS 1
+
+enum EKeywords
+{
+  PROGRAM = 0,
+  END,
+  VAR,
+  PRINT,
+  IF,
+  INT,
+  FLOAT,
+  STRING
+};
+
+enum EStatementsType
+{
+  PRINT_STATEMENT = 0,
+  ASSIGNMENT_STATEMENT,
+  VARIABLE_DECLARATION_STATEMENT,
+  IF_STATEMENT
+};
 
 typedef enum
 {
@@ -11,31 +33,67 @@ typedef enum
   TYPE_STRING
 } Type;
 
-enum EStatementsType
+// <add_operator> --> "+" | "-"
+typedef enum
 {
-  PRINT_STATEMENT = 0,
-  ASSIGNMENT_STATEMENT,
-  VARIABLE_DECLARATION_STATEMENT,
-};
+  ADD = 0, // +
+  SUB      // -
+} AddOperator;
 
-enum EKeywords
+// <mult_operator> --> "*" | "/" | "%"
+typedef enum
 {
-  PROGRAM = 0,
-  END,
-  VAR,
-  PRINT,
-  INT,
-  FLOAT,
-  STRING
-};
+  MULT = 0, // *
+  DIV,      // /
+  MOD       // %
+} MultOperator;
+
+// <relational_operator> --> "==" | "!=" | "<" | "<=" | ">" | ">="
+typedef enum
+{
+  EQUALS = 0,
+  DIFFERENT,
+  LESS,
+  LESS_EQUALS,
+  GREATER,
+  GREATER_EQUALS
+} RelationalOperators;
+
+// FORWARD DECLARATIONS 
+typedef struct StatementTail StatementTail;
+typedef struct Statement Statement;
+typedef struct Expression Expression;
+typedef struct OperatorRelational OperatorRelational;
+typedef struct ArithmeticExpression ArithmeticExpression;
+typedef struct ArithmeticExpressionTail ArithmeticExpressionTail;
+typedef struct Term Term;
+typedef struct TermTail TermTail;
+typedef struct Factor Factor;
+typedef struct Block Block;
+typedef struct IfStatement IfStatement;
+typedef struct PrintStatement PrintStatement;
+typedef struct VariableDeclaration VariableDeclaration;
+typedef struct Assignment Assignment;
+typedef struct Program Program;
+typedef struct Ast Ast;
+typedef struct Parser Parser;
+
+// Structs Definitions
 
 // Location = { start: 0, end: 0, fileName: "test.txt" }
-typedef struct
+typedef struct Location
 {
   size_t line; // Line
   size_t column; // Column
   char *fileName;
 } Location;
+
+// <block> --> "{" <statement_tail> "}"
+typedef struct Block
+{
+  StatementTail *statement_tail;
+  Location *location;
+} Block;
 
 // <identifier> --> [a-zA-Z_][a-zA-Z0-9_]*
 typedef struct Identifier
@@ -58,41 +116,84 @@ typedef struct String
   Location *location;
 } String;
 
-// Term = Number | Identifier | String
-typedef struct Term
+// Factor = "(" <expression> ")" | <number> | <identifier> | <string>
+typedef struct Factor
 {
+  Expression *expression;
+  // |
   Number *number;
   // |
   Identifier *identifier;
   // |
   String *string;
   Location *location;
+} Factor;
+
+// <term_tail> --> <mult_operator> <factor> <term_tail> | ε
+typedef struct TermTail
+{
+  MultOperator mult_operator;
+  Factor *factor;
+  struct TermTail *next;
+  Location *location;
+} TermTail;
+
+// Term = <factor> <term_tail>
+typedef struct Term
+{
+  Factor *factor;
+  TermTail *term_tail;
+  Location *location;
 } Term;
 
-// <expression_tail> --> "+" <term> <expression_tail> | "-" <term> <expression_tail> | ε
-typedef struct ExpressionTail
+// <arithmetic_expression_tail> --> <add_operator> <term> <arithmetic_expression_tail> | ε
+typedef struct ArithmeticExpressionTail
 {
-  char op;
+  AddOperator add_operator;
   Term *term;
-  struct ExpressionTail *next;
+  struct ArithmeticExpressionTail *next;
   Location *location;
-} ExpressionTail;
+} ArithmeticExpressionTail;
 
-// <expression> --> <term> <expression_tail> | <term>
+// <arithmetic_expression> --> <term> <arithmetic_expression_tail>
+typedef struct ArithmeticExpression
+{
+  Term *term;
+  ArithmeticExpressionTail *arithmetic_expression_tail;
+  Location *location;
+} ArithmeticExpression;
+
+// <operator_relational> --> <relational_operator> <arithmetic_expression> | ε
+typedef struct OperatorRelational
+{
+  RelationalOperators relational_operator;
+  ArithmeticExpression *arithmetic_expression;
+  Location *location;
+} OperatorRelational;
+
+// <expression> --> <arithmetic_expression> <operator_relational>
 typedef struct Expression
 {
-  Term *term;
-  ExpressionTail *expression_tail;
+  ArithmeticExpression *arithmetic_expression;
+  OperatorRelational *operator_relational;
   Location *location;
 } Expression;
 
-// <assignment> --> <identifier> "=" <expression> ";"
-typedef struct Assignment
+// <if_statement> --> "if" "(" <expression> ")" <block>
+typedef struct IfStatement
 {
-  Identifier *identifier;
+  Expression *expression;
+  Statement *statement;
+  Block *block;
+  Location *location;
+} IfStatement;
+
+// <print_statement> --> "print(" <expression> ");"
+typedef struct PrintStatement
+{
   Expression *expression;
   Location *location;
-} Assignment;
+} PrintStatement;
 
 // <variable_declaration> --> "var" <type> <identifier> ";"
 typedef struct VariableDeclaration
@@ -102,12 +203,13 @@ typedef struct VariableDeclaration
   Location *location;
 } VariableDeclaration;
 
-// <print_statement> --> "print(" <expression> ");"
-typedef struct PrintStatement
+// <assignment> --> <identifier> "=" <expression> ";"
+typedef struct Assignment
 {
+  Identifier *identifier;
   Expression *expression;
   Location *location;
-} PrintStatement;
+} Assignment;
 
 // <statement> -> <assignment> | <variable_declaration> | <print_statement>
 typedef struct Statement
@@ -122,10 +224,18 @@ typedef struct Statement
   unsigned short int type;
 } Statement;
 
-// <program> -> "program" <statement> "end;"
+// <statement_tail> -> <statement> <statement_tail> | ε
+typedef struct StatementTail
+{
+  Statement *statement;
+  struct StatementTail *next;
+  Location *location;
+} StatementTail;
+
+// <program> -> "program" <statement_tail> "end;"
 typedef struct Program
 {
-  Statement *statements;
+  StatementTail *statement_tail;
   Location *location;
 } Program;
 
@@ -134,28 +244,38 @@ typedef struct Ast
   Program *program;
 } Ast;
 
-typedef struct
+typedef struct Parser
 {
   LexicalAnalyzer *lexicalAnalyzer;
   Ast *ast;
   Token token;
 } Parser;
 
+// FUNCTIONS DECLARATIONS
 void controlNextToken(Parser *parser);
 void ParserProgram(Parser *parser);
 
 Parser *createParser(LexicalAnalyzer *lexicalAnalyzer);
 void destroyParser(Parser *parser);
-Statement *ParserStatement(Parser *parser);
-PrintStatement *ParserPrintStatement(Parser *parser);
-VariableDeclaration *ParserVariableDeclaration(Parser *parser);
-Assignment *ParserAssignment(Parser *parser);
+
+Block *ParserBlock(Parser *parser);
+StatementTail *ParserStatementTail(Parser *parser);
+  Statement *ParserStatement(Parser *parser);
+    IfStatement *ParserIfStatement(Parser *parser);
+    PrintStatement *ParserPrintStatement(Parser *parser);
+    VariableDeclaration *ParserVariableDeclaration(Parser *parser);
+    Assignment *ParserAssignment(Parser *parser);
 
 Expression *ParserExpression(Parser *parser);
-ExpressionTail *ParserExpressionTail(Parser *parser, unsigned short int recursiveControl);
-Term *ParserTerm(Parser *parser);
+  ArithmeticExpression *ParserArithmeticExpression(Parser *parser);
+    Term *ParserTerm(Parser *parser);
+      Factor *ParserFactor(Parser *parser);
+      TermTail *ParserTermTail(Parser *parser);
+    ArithmeticExpressionTail *ParserArithmeticExpressionTail(Parser *parser);
+  OperatorRelational *ParserOperatorRelational(Parser *parser);
+
 
 Location *cl(Parser *parser);
 // void ParserParenthesis(Parser *parser); !TODO!
 
-#endif
+#endif // PARSER_H

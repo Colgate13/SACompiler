@@ -11,11 +11,16 @@
 // Declaração das funções de conversão
 cJSON *AstConsumerTerm(Term *term);
 cJSON *AstConsumerIdentifier(Identifier *identifier);
-cJSON *AstConsumerExpressionTail(ExpressionTail *exprTail);
 cJSON *AstConsumerExpression(Expression *expr);
+cJSON *AstConsumerArithmeticExpression(ArithmeticExpression *ae);
+cJSON *AstConsumerOperatorRelational(OperatorRelational *or);
+cJSON *AstConsumerFactor(Factor *factor);
+cJSON *AstConsumerTermTail(TermTail *tt);
+cJSON *AstConsumerArithmeticExpressionTail(ArithmeticExpressionTail *aet);
 cJSON *AstConsumerPrintStatement(PrintStatement *ps);
 cJSON *AstConsumerVariableDeclarationStatement(VariableDeclaration *vd);
 cJSON *AstConsumerAssignmentStatement(Assignment *ag);
+cJSON *AstConsumerIfStatement(IfStatement *is);
 void AstJsonConsumer(Program program, char *fileOutputAst);
 
 #endif // AST_JSON_H
