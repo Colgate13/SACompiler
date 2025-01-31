@@ -41,6 +41,10 @@ char *tokenTypeName(unsigned short int typeId)
         break;
         case 8:
             return "TOKEN_TYPE_LEFT_PARENTHESIS";
+        case 9:
+            return "TOKEN_TYPE_LEFT_BRACES";
+        case 10:
+            return "TOKEN_TYPE_RIGHT_BRACES";
         break;
         case 1000:
             return "TOKEN_TYPE_INITIALIZE";

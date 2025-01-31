@@ -211,7 +211,7 @@ typedef struct Assignment
   Location *location;
 } Assignment;
 
-// <statement> -> <assignment> | <variable_declaration> | <print_statement>
+// <statement> -> <assignment> | <variable_declaration> | <print_statement> | <if_statement>
 typedef struct Statement
 {
   Assignment *assignment;
@@ -219,6 +219,9 @@ typedef struct Statement
   VariableDeclaration *variable_declaration;
   // |
   PrintStatement *print_statement;
+  // |
+  IfStatement *if_statement;
+
   struct Statement *next;
   Location *location;
   unsigned short int type;

@@ -58,6 +58,24 @@ StatementTail *createStatementTail(Location *location, Statement *statement)
 }
 
 /**
+ * @Block
+ */
+Block *createBlock(Location *location, StatementTail *statementTail)
+{
+  Block *block = malloc(sizeof(Block));
+
+  if (block == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
+  block->location = location;
+  block->statement_tail = statementTail;
+  return block;
+}
+
+/**
  * @Statement
  */
 Statement *createStatement_Assignment(Location *location, Assignment *assignment)
@@ -127,6 +145,30 @@ Statement *createStatement_PrintStatement(Location *location, PrintStatement *ps
 }
 
 /**
+ * @Statement
+ */
+Statement *createStatement_IfStatement(Location *location, IfStatement *is)
+{
+  Statement *s = malloc(sizeof(Statement));
+
+  if (s == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
+  s->location = location;
+  s->type = IF_STATEMENT;
+
+  s->assignment = NULL;
+  s->variable_declaration = NULL;
+  s->print_statement = NULL;
+  s->if_statement = is;
+  s->next = NULL;
+  return s;
+}
+
+/**
  * @VariableDeclaration
  */
 VariableDeclaration *createVariableDeclaration(Location *location, Type type, Identifier *identifier)
@@ -164,6 +206,26 @@ Assignment *createAssignment(Location *location, Identifier *identifier, Express
   a->identifier = identifier;
   a->expression = expression;
   return a;
+}
+
+/**
+ * @IfStatement
+ */
+IfStatement *createIfStatement(Location *location, Expression *expression, Block *block)
+{
+  IfStatement *is = malloc(sizeof(IfStatement));
+
+  if (is == NULL)
+  {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
+  is->location = location;
+  is->expression = expression;
+  is->block = block;
+
+  return is;
 }
 
 /**

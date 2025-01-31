@@ -99,6 +99,33 @@ StatementTail *ParserStatementTail(Parser *parser)
 }
 
 /**
+ * @details Implements <block>
+ */
+Block *ParserBlock(Parser *parser)
+{
+    if (checkToken(parser, "TOKEN_TYPE_LEFT_BRACES") == 0)
+    {
+        StatementTail *statementTail = ParserStatementTail(parser);
+
+        if (checkToken(parser, "TOKEN_TYPE_RIGHT_BRACES") == 0)
+        {
+            return createBlock(
+                cl(parser), statementTail);
+        }
+        else
+        {
+            throwParserError(1, "Expected }\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
+            exit(1);
+        }
+    }
+    else
+    {
+        throwParserError(1, "Expected {\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
+        exit(1);
+    }
+}
+
+/**
  * @details Implements <statement>
  */
 Statement *ParserStatement(Parser *parser)
@@ -106,18 +133,23 @@ Statement *ParserStatement(Parser *parser)
     controlNextToken(parser);
     logToken(parser);
 
+    // Exit condition for <statement_tail> if the token is "end"
     if ((parser->token.value && strcmp(parser->token.value, keywords[END]) == 0) || checkToken(parser, "TOKEN_TYPE_END") == 0)
+    {
+        return NULL;
+    }
+
+    // Exit condition for <statement_tail> if the token is "}"
+    if (checkToken(parser, "TOKEN_TYPE_RIGHT_BRACES") == 0)
     {
         return NULL;
     }
 
     if (strcmp(parser->token.value, keywords[IF]) == 0)
     {
-        throwParserError(1, "If statement not implemented\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
-        exit(1);
-        // return createStatement_IfStatement(
-        //     cl(parser),
-        //     ParserIfStatement(parser));
+        return createStatement_IfStatement(
+            cl(parser),
+            ParserIfStatement(parser));
     }
     else if (strcmp(parser->token.value, keywords[PRINT]) == 0)
     {
@@ -246,6 +278,41 @@ Assignment *ParserAssignment(Parser *parser)
     exit(1);
 }
 
+/**
+ * @details Implements <if_statement>
+ */
+IfStatement *ParserIfStatement(Parser *parser)
+{
+    controlNextToken(parser);
+    logToken(parser);
+
+    if (checkToken(parser, "TOKEN_TYPE_LEFT_PARENTHESIS") == 0)
+    {
+        Expression *expr = ParserExpression(parser);
+
+        if (checkToken(parser, "TOKEN_TYPE_RIGHT_PARENTHESIS") == 0)
+        {
+            controlNextToken(parser);
+            logToken(parser);
+
+            Block *block = ParserBlock(parser);
+
+            return createIfStatement(
+                cl(parser), expr, block);
+        }
+        else
+        {
+            throwParserError(1, "Expected )\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
+            exit(1);
+        }
+    }
+    else
+    {
+        throwParserError(1, "Expected (\n", parser->lexicalAnalyzer->lineCount, parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
+        exit(1);
+    }
+}
+
 Expression *ParserExpression(Parser *parser)
 {
     controlNextToken(parser);
@@ -328,6 +395,13 @@ Factor *ParserFactor(Parser *parser)
     // <number>
     else if (checkToken(parser, "TOKEN_TYPE_NUMBER") == 0)
     {
+        /**
+         * @important
+         * 
+         * The atoi() function converts a string to an integer.
+         * 
+         * Floating point numbers are truncated to integer.
+         */
         Number *number = createNumber(
             cl(parser), atoi(parser->token.value));
 

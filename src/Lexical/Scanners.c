@@ -18,6 +18,16 @@ unsigned short int isLeftParenthesis(char c)
     return c == '(';
 }
 
+unsigned short int isLeftBrace(char c)
+{
+    return c == '{';
+}
+
+unsigned short int isRightBrace(char c)
+{
+    return c == '}';
+}
+
 unsigned short int isLetter(char c)
 {
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');

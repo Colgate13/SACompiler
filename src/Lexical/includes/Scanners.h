@@ -10,6 +10,8 @@ unsigned short int isNewLine(char c);
 unsigned short int isString(char c);
 unsigned short int isRightParenthesis(char c);
 unsigned short int isLeftParenthesis(char c);
+unsigned short int isLeftBrace(char c);
+unsigned short int isRightBrace(char c);
 unsigned short int isOperator(char c);
 unsigned short int isSemicolon(char c);
 unsigned short int isEOF(char c);
