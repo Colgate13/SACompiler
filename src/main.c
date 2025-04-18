@@ -39,6 +39,7 @@ int main(int argc, char *argv[])
 
   // Create semantic
   Semantic *semantic = createSemantic(parser);
+  SemanticAnalysis(semantic);
 
   // Create output file only for test and debug
   if (LOGS == 1)
