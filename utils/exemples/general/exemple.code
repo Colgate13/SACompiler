@@ -10,10 +10,11 @@ program
   var int num3;
 
   var string message;
-  var float points;
+  var string output;
+  var int points;
 
   message = "Hello World!";
-  points = 1.5;
+  points = 5;
 
   print("Start!");
   print(1 + 2 - 3 * 4 / 5 % 6);
@@ -25,12 +26,12 @@ program
   num2 = 2;
 
   num3 = num1 + num2 * points;
-
+  output = "Result: " + num3;
   print(num3);
 
   if (message == "Hello World!") { print("Hello"); }
   if (num1 == 1) { print("num1 is 1"); }
-  if (points == 1.5) { print("points is 1.5"); }
+  if (points == 1) { print("points is 1"); }
   if (num1 > 0) { print("num1 is greater than 0"); }
   if (num1 < 0) { print("num1 is less than 0"); }
   if (num1 >= 0) { print("num1 is greater or equal to 0"); }
