@@ -6,6 +6,7 @@
 #include "./Parser/includes/Ast.h"
 #include "./Parser/includes/AstJson.h"
 #include "./Semantic/includes/Semantic.h"
+#include "./CodeGen/includes/CodeGen.h"
 
 #define MAX_LINE_SIZE 1024
 
@@ -24,12 +25,6 @@ int main(int argc, char *argv[])
     exit(1);
   }
 
-  if (argc < 3)
-  {
-    throwError(1, "Output file ast not found\n");
-    exit(1);
-  }
-
   // Create lexical analyzer
   LexicalAnalyzer *lexicalAnalyzer = createLexicalAnalyzer(argv[1]);
 
@@ -40,6 +35,9 @@ int main(int argc, char *argv[])
   // Create semantic
   Semantic *semantic = createSemantic(parser);
   SemanticAnalysis(semantic);
+
+  // Generate code
+  CodeGen(parser->ast, "./out-code.c", CODE_GEN_STRATEGY_C);
 
   // Create output file only for test and debug
   if (LOGS == 1)

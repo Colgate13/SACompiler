@@ -1,5 +1,13 @@
 #include "./includes/Semantic.h"
 
+void logSemantic(const char *messageKey, const char *messageValue)
+{
+  if (LOGS_SEMANTIC == 1)
+  {
+    printf("Semantic<[%s]> %s\n", messageKey, messageValue);
+  }
+}
+
 Semantic *createSemantic(Parser *parser)
 {
   Semantic *semantic = (Semantic *)malloc(sizeof(Semantic));
@@ -99,7 +107,7 @@ void analyzeStatement(SymbolTable *stack, Statement *statement)
 
 void analyzeVariableDeclaration(SymbolTable *stack, VariableDeclaration *vd)
 {
-  printf("Semantic<[SEM#001]> Variable declaration: %s\n", vd->identifier->name);
+  logSemantic("SEM#001 - Variable declaration", vd->identifier->name);
 
   if (lookupSymbol(stack, vd->identifier->name) != NULL)
   {
@@ -108,12 +116,12 @@ void analyzeVariableDeclaration(SymbolTable *stack, VariableDeclaration *vd)
   }
 
   insertSymbol(stack, vd->identifier->name, SYMBOL_VARIABLE, vd->type, vd->location);
-  printf("Semantic<[SEM#001]> Variable declaration: Variable '%s' declared\n", vd->identifier->name);
+  logSemantic("SEM#001 - Variable declaration: Variable '%s' declared", vd->identifier->name);
 }
 
 void analyzeAssignment(SymbolTable *stack, Assignment *assignment)
 {
-  printf("Semantic<[SEM#002]> Assignment: %s\n", assignment->identifier->name);
+  logSemantic("SEM#002 - Assignment: %s", assignment->identifier->name);
   Symbol *symbol = lookupSymbol(stack, assignment->identifier->name);
   if (symbol == NULL)
   {
@@ -138,12 +146,12 @@ void analyzeAssignment(SymbolTable *stack, Assignment *assignment)
 
   // Mark the variable as used
   symbol->isUsed = 1;
-  printf("Semantic<[SEM#002]> Assignment: Variable '%s' is used\n", symbol->name);
+  logSemantic("SEM#002 - Assignment: Variable '%s' is used", symbol->name);
 }
 
 void analyzeIfStatement(SymbolTable *stack, IfStatement *ifStatement)
 {
-  printf("Semantic<[SEM#003]> If statement\n");
+  logSemantic("SEM#003 - If statement", "if");
 
   Type conditionType = inferRelationalExpressionType(stack, ifStatement->expression);
 
@@ -163,17 +171,17 @@ void analyzeIfStatement(SymbolTable *stack, IfStatement *ifStatement)
   }
 
   popScope(&stack);
-  printf("Semantic<[SEM#003]> If statement: type '%s'\n", typeToString(conditionType));
+  logSemantic("SEM#003 - If statement: type '%s'", typeToString(conditionType));
 }
 
 void analyzePrintStatement(SymbolTable *stack, PrintStatement *printStatement)
 {
-  printf("Semantic<[SEM#007]> Print statement\n");
+  logSemantic("SEM#007 - Print statement", "print");
 
   // Check if the expression is valid and infer its type
   Type expressionType = inferExpressionType(stack, printStatement->expression);
 
-  printf("Semantic<[SEM#007]> Print statement: expression type is '%s'\n", typeToString(expressionType));
+  logSemantic("SEM#007 - Print statement: expression type is", typeToString(expressionType));
 }
 
 Type inferRelationalExpressionType(SymbolTable *stack, Expression *expr)
@@ -211,7 +219,7 @@ Type inferRelationalExpressionType(SymbolTable *stack, Expression *expr)
 
 Type inferExpressionType(SymbolTable *stack, Expression *expr)
 {
-  printf("Semantic<[SEM#003]> Expression\n");
+  logSemantic("SEM#003 - Expression", "expression");
   if (!expr || !expr->arithmetic_expression)
   {
     fprintf(stderr, "Error: invalid expression\n");
@@ -247,13 +255,13 @@ Type inferExpressionType(SymbolTable *stack, Expression *expr)
     tail = tail->next;
   }
 
-  printf("Semantic<[SEM#003]> Expression: type '%s'\n", typeToString(base));
+  logSemantic("SEM#003 - Expression: type", typeToString(base));
   return base;
 }
 
 Type inferTermType(SymbolTable *stack, Term *term)
 {
-  printf("Semantic<[SEM#005]> Arithmetic Expressions \n");
+  logSemantic("SEM#005 - Arithmetic Expressions", "arithmetic expression");
   if (!term || !term->factor)
   {
     fprintf(stderr, "Error: invalid term\n");
@@ -296,7 +304,7 @@ Type inferTermType(SymbolTable *stack, Term *term)
 
 Type inferFactorType(SymbolTable *stack, Factor *factor)
 {
-  printf("Semantic<[SEM#006]> Factor\n");
+  logSemantic("SEM#006 - Factor", "factor");
   if (!factor)
   {
     fprintf(stderr, "Error: null factor\n");

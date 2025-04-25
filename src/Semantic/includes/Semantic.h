@@ -6,6 +6,8 @@
 #include <string.h>
 #include "../../Parser/includes/Parser.h"
 
+#define LOGS_SEMANTIC 0
+
 typedef enum
 {
   SYMBOL_VARIABLE,
@@ -38,6 +40,7 @@ typedef struct
   Parser *parser;
 } Semantic;
 
+void logSemantic(const char *messageKey, const char *messageValue);
 void SemanticAnalysis(Semantic *semantic);
 void analyzeStatement(SymbolTable *stack, Statement *stmt);
 void analyzeVariableDeclaration(SymbolTable *stack, VariableDeclaration *vd);

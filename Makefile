@@ -19,7 +19,7 @@ LEXICAL_SOURCES = $(LEXICAL_DIR)/Scanners.c $(LEXICAL_DIR)/Token.c $(LEXICAL_DIR
 PARSER_SOURCES = $(PARSER_DIR)/Parser.c $(PARSER_DIR)/Ast.c $(PARSER_DIR)/AstJson.c $(PARSER_DIR)/Utils.c
 SEMANTIC_SOURCES = $(SEMANTIC_DIR)/Semantic.c
 ERROR_SOURCES = $(ERROR_DIR)/Error.c
-SACompiler = $(ERROR_SOURCES) $(LEXICAL_SOURCES) $(PARSER_SOURCES) $(SEMANTIC_SOURCES) src/main.c
+SACompiler = $(ERROR_SOURCES) $(LEXICAL_SOURCES) $(PARSER_SOURCES) $(SEMANTIC_SOURCES) src/CodeGen/CodeGen.c src/main.c
 
 # Top-level rule to create the binary directory and build the main program
 all: $(BIN_DIR) SACompiler
