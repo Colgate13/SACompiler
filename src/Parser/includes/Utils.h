@@ -1,11 +1,11 @@
 #ifndef PARSER_UTILS_H
 #define PARSER_UTILS_H
 
+#include "../../Lexical/includes/lexicalAnalyzer.h"
+#include "./Ast.h"
+#include "./Parser.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "./Parser.h"
-#include "./Ast.h"
-#include "../../Lexical/includes/lexicalAnalyzer.h"
 #include <string.h>
 
 unsigned short int checkToken(Parser *parser, char *tokenType);

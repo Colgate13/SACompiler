@@ -1,17 +1,15 @@
+#include "./includes/Ast.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "./includes/Ast.h"
 
 /**
  * @Program
  */
-Program *createProgram(Location *location)
-{
+Program *createProgram(Location *location) {
   Program *program = malloc(sizeof(Program));
 
-  if (program == NULL)
-  {
+  if (program == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -25,12 +23,10 @@ Program *createProgram(Location *location)
 /**
  * @Location
  */
-Location *createLocation(char *fileName, size_t line, size_t column)
-{
+Location *createLocation(char *fileName, size_t line, size_t column) {
   Location *Location = malloc(sizeof(Location));
 
-  if (Location == NULL)
-  {
+  if (Location == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -41,12 +37,10 @@ Location *createLocation(char *fileName, size_t line, size_t column)
   return Location;
 }
 
-StatementTail *createStatementTail(Location *location, Statement *statement)
-{
+StatementTail *createStatementTail(Location *location, Statement *statement) {
   StatementTail *st = malloc(sizeof(StatementTail));
 
-  if (st == NULL)
-  {
+  if (st == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -60,12 +54,10 @@ StatementTail *createStatementTail(Location *location, Statement *statement)
 /**
  * @Block
  */
-Block *createBlock(Location *location, StatementTail *statementTail)
-{
+Block *createBlock(Location *location, StatementTail *statementTail) {
   Block *block = malloc(sizeof(Block));
 
-  if (block == NULL)
-  {
+  if (block == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -78,12 +70,11 @@ Block *createBlock(Location *location, StatementTail *statementTail)
 /**
  * @Statement
  */
-Statement *createStatement_Assignment(Location *location, Assignment *assignment)
-{
+Statement *createStatement_Assignment(Location *location,
+                                      Assignment *assignment) {
   Statement *s = malloc(sizeof(Statement));
 
-  if (s == NULL)
-  {
+  if (s == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -101,12 +92,11 @@ Statement *createStatement_Assignment(Location *location, Assignment *assignment
 /**
  * @Statement
  */
-Statement *createStatement_VariableDeclaration(Location *Location, VariableDeclaration *vd)
-{
+Statement *createStatement_VariableDeclaration(Location *Location,
+                                               VariableDeclaration *vd) {
   Statement *s = malloc(sizeof(Statement));
 
-  if (s == NULL)
-  {
+  if (s == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -124,12 +114,11 @@ Statement *createStatement_VariableDeclaration(Location *Location, VariableDecla
 /**
  * @Statement
  */
-Statement *createStatement_PrintStatement(Location *location, PrintStatement *ps)
-{
+Statement *createStatement_PrintStatement(Location *location,
+                                          PrintStatement *ps) {
   Statement *s = malloc(sizeof(Statement));
 
-  if (s == NULL)
-  {
+  if (s == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -147,12 +136,10 @@ Statement *createStatement_PrintStatement(Location *location, PrintStatement *ps
 /**
  * @Statement
  */
-Statement *createStatement_IfStatement(Location *location, IfStatement *is)
-{
+Statement *createStatement_IfStatement(Location *location, IfStatement *is) {
   Statement *s = malloc(sizeof(Statement));
 
-  if (s == NULL)
-  {
+  if (s == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -171,12 +158,11 @@ Statement *createStatement_IfStatement(Location *location, IfStatement *is)
 /**
  * @VariableDeclaration
  */
-VariableDeclaration *createVariableDeclaration(Location *location, Type type, Identifier *identifier)
-{
+VariableDeclaration *createVariableDeclaration(Location *location, Type type,
+                                               Identifier *identifier) {
   VariableDeclaration *vd = malloc(sizeof(VariableDeclaration));
 
-  if (vd == NULL)
-  {
+  if (vd == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -191,12 +177,11 @@ VariableDeclaration *createVariableDeclaration(Location *location, Type type, Id
 /**
  * @Assignment
  */
-Assignment *createAssignment(Location *location, Identifier *identifier, Expression *expression)
-{
+Assignment *createAssignment(Location *location, Identifier *identifier,
+                             Expression *expression) {
   Assignment *a = malloc(sizeof(Assignment));
 
-  if (a == NULL)
-  {
+  if (a == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -211,12 +196,11 @@ Assignment *createAssignment(Location *location, Identifier *identifier, Express
 /**
  * @IfStatement
  */
-IfStatement *createIfStatement(Location *location, Expression *expression, Block *block)
-{
+IfStatement *createIfStatement(Location *location, Expression *expression,
+                               Block *block) {
   IfStatement *is = malloc(sizeof(IfStatement));
 
-  if (is == NULL)
-  {
+  if (is == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -231,12 +215,11 @@ IfStatement *createIfStatement(Location *location, Expression *expression, Block
 /**
  * @PrintStatement
  */
-PrintStatement *createPrintStatement(Location *location, Expression *expression)
-{
+PrintStatement *createPrintStatement(Location *location,
+                                     Expression *expression) {
   PrintStatement *ps = malloc(sizeof(PrintStatement));
 
-  if (ps == NULL)
-  {
+  if (ps == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -249,12 +232,12 @@ PrintStatement *createPrintStatement(Location *location, Expression *expression)
 /**
  * @Expression
  */
-Expression *createExpression(Location *location, ArithmeticExpression *arithmeticExpression, OperatorRelational *operatorRelational)
-{
+Expression *createExpression(Location *location,
+                             ArithmeticExpression *arithmeticExpression,
+                             OperatorRelational *operatorRelational) {
   Expression *expr = malloc(sizeof(Expression));
 
-  if (expr == NULL)
-  {
+  if (expr == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -269,12 +252,12 @@ Expression *createExpression(Location *location, ArithmeticExpression *arithmeti
 /**
  * @OperatorRelational
  */
-OperatorRelational *createOperatorRelational(Location *location, char *operator, ArithmeticExpression *arithmeticExpression)
-{
+OperatorRelational *
+createOperatorRelational(Location *location, char *operator,
+                         ArithmeticExpression *arithmeticExpression) {
   OperatorRelational *or = malloc(sizeof(OperatorRelational));
 
-  if (or == NULL)
-  {
+  if (or == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -282,32 +265,19 @@ OperatorRelational *createOperatorRelational(Location *location, char *operator,
   or->location = location;
   or->arithmetic_expression = arithmeticExpression;
 
-  if (strcmp(operator, "==") == 0)
-  {
+  if (strcmp(operator, "==") == 0) {
     or->relational_operator = EQUALS;
-  }
-  else if (strcmp(operator, "!=") == 0)
-  {
+  } else if (strcmp(operator, "!=") == 0) {
     or->relational_operator = DIFFERENT;
-  }
-  else if (strcmp(operator, "<") == 0)
-  {
+  } else if (strcmp(operator, "<") == 0) {
     or->relational_operator = LESS;
-  }
-  else if (strcmp(operator, "<=") == 0)
-  {
+  } else if (strcmp(operator, "<=") == 0) {
     or->relational_operator = LESS_EQUALS;
-  }
-  else if (strcmp(operator, ">") == 0)
-  {
+  } else if (strcmp(operator, ">") == 0) {
     or->relational_operator = GREATER;
-  }
-  else if (strcmp(operator, ">=") == 0)
-  {
+  } else if (strcmp(operator, ">=") == 0) {
     or->relational_operator = GREATER_EQUALS;
-  }
-  else
-  {
+  } else {
     fprintf(stderr, "Unknown operator: %s\n", operator);
     exit(1);
   }
@@ -318,12 +288,12 @@ OperatorRelational *createOperatorRelational(Location *location, char *operator,
 /**
  * @ArithmeticExpression
  */
-ArithmeticExpression *createArithmeticExpression(Location *location, Term *term, ArithmeticExpressionTail *tail)
-{
+ArithmeticExpression *
+createArithmeticExpression(Location *location, Term *term,
+                           ArithmeticExpressionTail *tail) {
   ArithmeticExpression *ae = malloc(sizeof(ArithmeticExpression));
 
-  if (ae == NULL)
-  {
+  if (ae == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -337,12 +307,12 @@ ArithmeticExpression *createArithmeticExpression(Location *location, Term *term,
 /**
  * @ArithmeticExpressionTail
  */
-ArithmeticExpressionTail *createArithmeticExpressionTail(Location *location, char *op, Term *term, ArithmeticExpressionTail *tail)
-{
+ArithmeticExpressionTail *
+createArithmeticExpressionTail(Location *location, char *op, Term *term,
+                               ArithmeticExpressionTail *tail) {
   ArithmeticExpressionTail *aeTail = malloc(sizeof(ArithmeticExpressionTail));
 
-  if (aeTail == NULL)
-  {
+  if (aeTail == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -351,16 +321,11 @@ ArithmeticExpressionTail *createArithmeticExpressionTail(Location *location, cha
   aeTail->term = term;
   aeTail->next = tail;
 
-  if (strcmp(op, "+") == 0)
-  {
+  if (strcmp(op, "+") == 0) {
     aeTail->add_operator = ADD;
-  }
-  else if (strcmp(op, "-") == 0)
-  {
+  } else if (strcmp(op, "-") == 0) {
     aeTail->add_operator = SUB;
-  }
-  else
-  {
+  } else {
     fprintf(stderr, "Unknown operator: %s\n", op);
     exit(1);
   }
@@ -371,12 +336,10 @@ ArithmeticExpressionTail *createArithmeticExpressionTail(Location *location, cha
 /**
  * @Term
  */
-Term *createTerm(Location *location, Factor *factor, TermTail *tail)
-{
+Term *createTerm(Location *location, Factor *factor, TermTail *tail) {
   Term *term = malloc(sizeof(Term));
 
-  if (term == NULL)
-  {
+  if (term == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -390,12 +353,10 @@ Term *createTerm(Location *location, Factor *factor, TermTail *tail)
 /**
  * @Factor
  */
-Factor *createFactor_Expression(Location *location, Expression *expression)
-{
+Factor *createFactor_Expression(Location *location, Expression *expression) {
   Factor *factor = malloc(sizeof(Factor));
 
-  if (factor == NULL)
-  {
+  if (factor == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -411,12 +372,10 @@ Factor *createFactor_Expression(Location *location, Expression *expression)
 /**
  * @Factor
  */
-Factor *createFactor_Number(Location *location, Number *number)
-{
+Factor *createFactor_Number(Location *location, Number *number) {
   Factor *factor = malloc(sizeof(Factor));
 
-  if (factor == NULL)
-  {
+  if (factor == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -432,12 +391,10 @@ Factor *createFactor_Number(Location *location, Number *number)
 /**
  * @Factor
  */
-Factor *createFactor_Identifier(Location *location, Identifier *identifier)
-{
+Factor *createFactor_Identifier(Location *location, Identifier *identifier) {
   Factor *factor = malloc(sizeof(Factor));
 
-  if (factor == NULL)
-  {
+  if (factor == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -453,12 +410,10 @@ Factor *createFactor_Identifier(Location *location, Identifier *identifier)
 /**
  * @Factor
  */
-Factor *createFactor_String(Location *location, String *string)
-{
+Factor *createFactor_String(Location *location, String *string) {
   Factor *factor = malloc(sizeof(Factor));
 
-  if (factor == NULL)
-  {
+  if (factor == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -474,12 +429,11 @@ Factor *createFactor_String(Location *location, String *string)
 /**
  * @TermTail
  */
-TermTail *createTermTail(Location *location, char *op, Factor *factor, TermTail *tail)
-{
+TermTail *createTermTail(Location *location, char *op, Factor *factor,
+                         TermTail *tail) {
   TermTail *termTail = malloc(sizeof(TermTail));
 
-  if (termTail == NULL)
-  {
+  if (termTail == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -488,20 +442,13 @@ TermTail *createTermTail(Location *location, char *op, Factor *factor, TermTail 
   termTail->factor = factor;
   termTail->next = tail;
 
-  if (strcmp(op, "*") == 0)
-  {
+  if (strcmp(op, "*") == 0) {
     termTail->mult_operator = MULT;
-  }
-  else if (strcmp(op, "/") == 0)
-  {
+  } else if (strcmp(op, "/") == 0) {
     termTail->mult_operator = DIV;
-  }
-  else if (strcmp(op, "%") == 0)
-  {
+  } else if (strcmp(op, "%") == 0) {
     termTail->mult_operator = MOD;
-  }
-  else
-  {
+  } else {
     fprintf(stderr, "Unknown operator: %s\n", op);
     exit(1);
   }
@@ -512,12 +459,10 @@ TermTail *createTermTail(Location *location, char *op, Factor *factor, TermTail 
 /**
  * @String
  */
-String *createString(Location *location, char *value)
-{
+String *createString(Location *location, char *value) {
   String *str = malloc(sizeof(String));
 
-  if (str == NULL)
-  {
+  if (str == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -531,12 +476,10 @@ String *createString(Location *location, char *value)
 /**
  * @Number
  */
-Number *createNumber(Location *location, int value)
-{
+Number *createNumber(Location *location, int value) {
   Number *number = malloc(sizeof(Number));
 
-  if (number == NULL)
-  {
+  if (number == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -550,12 +493,10 @@ Number *createNumber(Location *location, int value)
 /**
  * @Identifier
  */
-Identifier *createIdentifier(Location *location, char *name)
-{
+Identifier *createIdentifier(Location *location, char *name) {
   Identifier *identifier = malloc(sizeof(Identifier));
 
-  if (identifier == NULL)
-  {
+  if (identifier == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -569,22 +510,14 @@ Identifier *createIdentifier(Location *location, char *name)
 /**
  * @Type
  */
-Type getLiteralType(char *searchType)
-{
-  if (strcmp(searchType, "int") == 0)
-  {
+Type getLiteralType(char *searchType) {
+  if (strcmp(searchType, "int") == 0) {
     return TYPE_INT;
-  }
-  else if (strcmp(searchType, "float") == 0)
-  {
+  } else if (strcmp(searchType, "float") == 0) {
     return TYPE_FLOAT;
-  }
-  else if (strcmp(searchType, "string") == 0)
-  {
+  } else if (strcmp(searchType, "string") == 0) {
     return TYPE_STRING;
-  }
-  else
-  {
+  } else {
     printf("Type unknow: %s\n", searchType);
     exit(1);
   }

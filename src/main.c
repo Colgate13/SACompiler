@@ -1,26 +1,23 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "./Lexical/includes/lexicalAnalyzer.h"
+#include "./CodeGen/includes/CodeGen.h"
 #include "./Error/includes/Error.h"
-#include "./Parser/includes/Parser.h"
+#include "./Lexical/includes/lexicalAnalyzer.h"
 #include "./Parser/includes/Ast.h"
 #include "./Parser/includes/AstJson.h"
+#include "./Parser/includes/Parser.h"
 #include "./Semantic/includes/Semantic.h"
-#include "./CodeGen/includes/CodeGen.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 #define MAX_LINE_SIZE 1024
 
-int main(int argc, char *argv[])
-{
-  if (LOGS == 1)
-  {
+int main(int argc, char *argv[]) {
+  if (LOGS == 1) {
     printf("Parser\n");
     printf("File attach: %s\n", argv[1]);
     printf("Output file ast: %s\n", argv[2]);
   }
 
-  if (argc < 2)
-  {
+  if (argc < 2) {
     throwError(1, "File attach not found\n");
     exit(1);
   }
@@ -40,8 +37,7 @@ int main(int argc, char *argv[])
   CodeGen(parser->ast, "./out-code.c", CODE_GEN_STRATEGY_C);
 
   // Create output file only for test and debug
-  if (LOGS == 1)
-  {
+  if (LOGS == 1) {
     AstJsonConsumer(*parser->ast->program, argv[2]);
   }
 

@@ -1,19 +1,15 @@
 #include "./includes/Semantic.h"
 
-void logSemantic(const char *messageKey, const char *messageValue)
-{
-  if (LOGS_SEMANTIC == 1)
-  {
+void logSemantic(const char *messageKey, const char *messageValue) {
+  if (LOGS_SEMANTIC == 1) {
     printf("Semantic<[%s]> %s\n", messageKey, messageValue);
   }
 }
 
-Semantic *createSemantic(Parser *parser)
-{
+Semantic *createSemantic(Parser *parser) {
   Semantic *semantic = (Semantic *)malloc(sizeof(Semantic));
 
-  if (semantic == NULL)
-  {
+  if (semantic == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -22,12 +18,10 @@ Semantic *createSemantic(Parser *parser)
   return semantic;
 }
 
-SymbolTable *createSymbolTable()
-{
+SymbolTable *createSymbolTable() {
   SymbolTable *symbolTable = (SymbolTable *)malloc(sizeof(SymbolTable));
 
-  if (symbolTable == NULL)
-  {
+  if (symbolTable == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -38,24 +32,21 @@ SymbolTable *createSymbolTable()
   return symbolTable;
 }
 
-void SemanticAnalysis(Semantic *semantic)
-{
+void SemanticAnalysis(Semantic *semantic) {
   // Initialize the symbol table. Create the first scope
   // and push it to the stack
   SymbolTable *symbolTable = createSymbolTable();
   pushScope(&symbolTable);
 
-  if (!semantic || !semantic->parser || !semantic->parser->ast || !semantic->parser->ast->program)
-  {
+  if (!semantic || !semantic->parser || !semantic->parser->ast ||
+      !semantic->parser->ast->program) {
     fprintf(stderr, "Erro: AST ou Parser nulo\n");
     exit(1);
   }
 
   StatementTail *statementTail = semantic->parser->ast->program->statement_tail;
-  while (statementTail != NULL)
-  {
-    if (statementTail->statement == NULL)
-    {
+  while (statementTail != NULL) {
+    if (statementTail->statement == NULL) {
       break;
     }
 
@@ -64,8 +55,7 @@ void SemanticAnalysis(Semantic *semantic)
     // Analyze the statement
     analyzeStatement(symbolTable, statement);
 
-    if (statementTail->next == NULL)
-    {
+    if (statementTail->next == NULL) {
       break;
     }
 
@@ -76,13 +66,11 @@ void SemanticAnalysis(Semantic *semantic)
   destroySymbolTable(symbolTable);
 }
 
-void analyzeStatement(SymbolTable *stack, Statement *statement)
-{
+void analyzeStatement(SymbolTable *stack, Statement *statement) {
   if (!statement)
     return;
 
-  switch (statement->type)
-  {
+  switch (statement->type) {
   case VARIABLE_DECLARATION_STATEMENT:
     // Handle variable declaration statement
     analyzeVariableDeclaration(stack, statement->variable_declaration);
@@ -105,27 +93,27 @@ void analyzeStatement(SymbolTable *stack, Statement *statement)
   }
 }
 
-void analyzeVariableDeclaration(SymbolTable *stack, VariableDeclaration *vd)
-{
+void analyzeVariableDeclaration(SymbolTable *stack, VariableDeclaration *vd) {
   logSemantic("SEM#001 - Variable declaration", vd->identifier->name);
 
-  if (lookupSymbol(stack, vd->identifier->name) != NULL)
-  {
-    fprintf(stderr, "Error: Variable '%s' already declared in this scope\n", vd->identifier->name);
+  if (lookupSymbol(stack, vd->identifier->name) != NULL) {
+    fprintf(stderr, "Error: Variable '%s' already declared in this scope\n",
+            vd->identifier->name);
     exit(1);
   }
 
-  insertSymbol(stack, vd->identifier->name, SYMBOL_VARIABLE, vd->type, vd->location);
-  logSemantic("SEM#001 - Variable declaration: Variable '%s' declared", vd->identifier->name);
+  insertSymbol(stack, vd->identifier->name, SYMBOL_VARIABLE, vd->type,
+               vd->location);
+  logSemantic("SEM#001 - Variable declaration: Variable '%s' declared",
+              vd->identifier->name);
 }
 
-void analyzeAssignment(SymbolTable *stack, Assignment *assignment)
-{
+void analyzeAssignment(SymbolTable *stack, Assignment *assignment) {
   logSemantic("SEM#002 - Assignment: %s", assignment->identifier->name);
   Symbol *symbol = lookupSymbol(stack, assignment->identifier->name);
-  if (symbol == NULL)
-  {
-    fprintf(stderr, "Error: Variable '%s' not declared\n", assignment->identifier->name);
+  if (symbol == NULL) {
+    fprintf(stderr, "Error: Variable '%s' not declared\n",
+            assignment->identifier->name);
     exit(1);
   }
 
@@ -133,12 +121,11 @@ void analyzeAssignment(SymbolTable *stack, Assignment *assignment)
   {
     Type expressionType = inferExpressionType(stack, assignment->expression);
 
-    if (symbol->type != expressionType)
-    {
+    if (symbol->type != expressionType) {
       fprintf(stderr,
-              "Error: Type mismatch in assignment to '%s'. Expected '%s', got '%s'\n",
-              symbol->name,
-              typeToString(symbol->type),
+              "Error: Type mismatch in assignment to '%s'. Expected '%s', got "
+              "'%s'\n",
+              symbol->name, typeToString(symbol->type),
               typeToString(expressionType));
       exit(1);
     }
@@ -149,14 +136,13 @@ void analyzeAssignment(SymbolTable *stack, Assignment *assignment)
   logSemantic("SEM#002 - Assignment: Variable '%s' is used", symbol->name);
 }
 
-void analyzeIfStatement(SymbolTable *stack, IfStatement *ifStatement)
-{
+void analyzeIfStatement(SymbolTable *stack, IfStatement *ifStatement) {
   logSemantic("SEM#003 - If statement", "if");
 
-  Type conditionType = inferRelationalExpressionType(stack, ifStatement->expression);
+  Type conditionType =
+      inferRelationalExpressionType(stack, ifStatement->expression);
 
-  if (conditionType != TYPE_INT)
-  {
+  if (conditionType != TYPE_INT) {
     fprintf(stderr, "Error: Invalid type for if statement\n");
     exit(1);
   }
@@ -164,8 +150,7 @@ void analyzeIfStatement(SymbolTable *stack, IfStatement *ifStatement)
   pushScope(&stack);
   StatementTail *body = ifStatement->block->statement_tail;
 
-  while (body != NULL)
-  {
+  while (body != NULL) {
     analyzeStatement(stack, body->statement);
     body = body->next;
   }
@@ -174,39 +159,36 @@ void analyzeIfStatement(SymbolTable *stack, IfStatement *ifStatement)
   logSemantic("SEM#003 - If statement: type '%s'", typeToString(conditionType));
 }
 
-void analyzePrintStatement(SymbolTable *stack, PrintStatement *printStatement)
-{
+void analyzePrintStatement(SymbolTable *stack, PrintStatement *printStatement) {
   logSemantic("SEM#007 - Print statement", "print");
 
   // Check if the expression is valid and infer its type
   Type expressionType = inferExpressionType(stack, printStatement->expression);
 
-  logSemantic("SEM#007 - Print statement: expression type is", typeToString(expressionType));
+  logSemantic("SEM#007 - Print statement: expression type is",
+              typeToString(expressionType));
 }
 
-Type inferRelationalExpressionType(SymbolTable *stack, Expression *expr)
-{
-  if (!expr || !expr->arithmetic_expression)
-  {
+Type inferRelationalExpressionType(SymbolTable *stack, Expression *expr) {
+  if (!expr || !expr->arithmetic_expression) {
     fprintf(stderr, "Error: invalid relational expression\n");
     exit(1);
   }
 
   Type left = inferTermType(stack, expr->arithmetic_expression->term);
 
-  if (!expr->operator_relational)
-  {
+  if (!expr->operator_relational) {
     // No relational operator, just return the type of the term
     return left;
   }
 
-  Type right = inferTermType(stack, expr->operator_relational->arithmetic_expression->term);
+  Type right = inferTermType(
+      stack, expr->operator_relational->arithmetic_expression->term);
 
-  if (left == TYPE_STRING || right == TYPE_STRING)
-  {
-    if (left != right)
-    {
-      fprintf(stderr, "Error: incompatible types in relational operation (string vs non-string)\n");
+  if (left == TYPE_STRING || right == TYPE_STRING) {
+    if (left != right) {
+      fprintf(stderr, "Error: incompatible types in relational operation "
+                      "(string vs non-string)\n");
       exit(1);
     }
   }
@@ -217,38 +199,30 @@ Type inferRelationalExpressionType(SymbolTable *stack, Expression *expr)
   return TYPE_INT; // Expression type is always int for relational expressions
 }
 
-Type inferExpressionType(SymbolTable *stack, Expression *expr)
-{
+Type inferExpressionType(SymbolTable *stack, Expression *expr) {
   logSemantic("SEM#003 - Expression", "expression");
-  if (!expr || !expr->arithmetic_expression)
-  {
+  if (!expr || !expr->arithmetic_expression) {
     fprintf(stderr, "Error: invalid expression\n");
     exit(1);
   }
 
   Type base = inferTermType(stack, expr->arithmetic_expression->term);
-  ArithmeticExpressionTail *tail = expr->arithmetic_expression->arithmetic_expression_tail;
+  ArithmeticExpressionTail *tail =
+      expr->arithmetic_expression->arithmetic_expression_tail;
 
-  while (tail != NULL)
-  {
+  while (tail != NULL) {
     Type right = inferTermType(stack, tail->term);
 
     // SEM#005
-    if (base == TYPE_STRING || right == TYPE_STRING)
-    {
-      if (tail->add_operator != ADD)
-      {
+    if (base == TYPE_STRING || right == TYPE_STRING) {
+      if (tail->add_operator != ADD) {
         fprintf(stderr, "Error: invalid operation on strings\n");
         exit(1);
       }
       base = TYPE_STRING;
-    }
-    else if (base == TYPE_FLOAT || right == TYPE_FLOAT)
-    {
+    } else if (base == TYPE_FLOAT || right == TYPE_FLOAT) {
       base = TYPE_FLOAT;
-    }
-    else
-    {
+    } else {
       base = TYPE_INT;
     }
 
@@ -259,11 +233,9 @@ Type inferExpressionType(SymbolTable *stack, Expression *expr)
   return base;
 }
 
-Type inferTermType(SymbolTable *stack, Term *term)
-{
+Type inferTermType(SymbolTable *stack, Term *term) {
   logSemantic("SEM#005 - Arithmetic Expressions", "arithmetic expression");
-  if (!term || !term->factor)
-  {
+  if (!term || !term->factor) {
     fprintf(stderr, "Error: invalid term\n");
     exit(1);
   }
@@ -271,28 +243,25 @@ Type inferTermType(SymbolTable *stack, Term *term)
   Type base = inferFactorType(stack, term->factor);
   TermTail *tail = term->term_tail;
 
-  while (tail != NULL)
-  {
+  while (tail != NULL) {
     Type right = inferFactorType(stack, tail->factor);
 
-    if (base == TYPE_STRING || right == TYPE_STRING)
-    {
-      fprintf(stderr, "Error: invalid operation on string with '*' '/' or '%%'\n");
+    if (base == TYPE_STRING || right == TYPE_STRING) {
+      fprintf(stderr,
+              "Error: invalid operation on string with '*' '/' or '%%'\n");
       exit(1);
     }
 
-    if (tail->mult_operator == MOD && (base == TYPE_FLOAT || right == TYPE_FLOAT))
-    {
-      fprintf(stderr, "Error: modulo operator '%%' cannot be used with float\n");
+    if (tail->mult_operator == MOD &&
+        (base == TYPE_FLOAT || right == TYPE_FLOAT)) {
+      fprintf(stderr,
+              "Error: modulo operator '%%' cannot be used with float\n");
       exit(1);
     }
 
-    if (base == TYPE_FLOAT || right == TYPE_FLOAT)
-    {
+    if (base == TYPE_FLOAT || right == TYPE_FLOAT) {
       base = TYPE_FLOAT;
-    }
-    else
-    {
+    } else {
       base = TYPE_INT;
     }
 
@@ -302,39 +271,33 @@ Type inferTermType(SymbolTable *stack, Term *term)
   return base;
 }
 
-Type inferFactorType(SymbolTable *stack, Factor *factor)
-{
+Type inferFactorType(SymbolTable *stack, Factor *factor) {
   logSemantic("SEM#006 - Factor", "factor");
-  if (!factor)
-  {
+  if (!factor) {
     fprintf(stderr, "Error: null factor\n");
     exit(1);
   }
 
-  if (factor->number != NULL)
-  {
+  if (factor->number != NULL) {
     return TYPE_INT;
   }
 
-  if (factor->string != NULL)
-  {
+  if (factor->string != NULL) {
     return TYPE_STRING;
   }
 
-  if (factor->identifier != NULL)
-  {
+  if (factor->identifier != NULL) {
     Symbol *symbol = lookupSymbol(stack, factor->identifier->name);
-    if (!symbol)
-    {
-      fprintf(stderr, "Error: variable '%s' not declared\n", factor->identifier->name);
+    if (!symbol) {
+      fprintf(stderr, "Error: variable '%s' not declared\n",
+              factor->identifier->name);
       exit(1);
     }
     symbol->isUsed = 1; // (SEM#006)
     return symbol->type;
   }
 
-  if (factor->expression != NULL)
-  {
+  if (factor->expression != NULL) {
     return inferExpressionType(stack, factor->expression);
   }
 
@@ -342,16 +305,12 @@ Type inferFactorType(SymbolTable *stack, Factor *factor)
   exit(1);
 }
 
-Symbol *lookupSymbol(SymbolTable *stack, char *name)
-{
+Symbol *lookupSymbol(SymbolTable *stack, char *name) {
   SymbolTable *currentScope = stack;
-  while (currentScope != NULL)
-  {
+  while (currentScope != NULL) {
     Symbol *currentSymbol = currentScope->symbols;
-    while (currentSymbol != NULL)
-    {
-      if (strcmp(currentSymbol->name, name) == 0)
-      {
+    while (currentSymbol != NULL) {
+      if (strcmp(currentSymbol->name, name) == 0) {
         return currentSymbol;
       }
       currentSymbol = currentSymbol->next;
@@ -363,10 +322,8 @@ Symbol *lookupSymbol(SymbolTable *stack, char *name)
   return NULL;
 }
 
-const char *typeToString(Type type)
-{
-  switch (type)
-  {
+const char *typeToString(Type type) {
+  switch (type) {
   case TYPE_INT:
     return "int";
   case TYPE_FLOAT:
@@ -378,12 +335,11 @@ const char *typeToString(Type type)
   }
 }
 
-void insertSymbol(SymbolTable *symbolTable, char *name, SymbolKind kind, Type type, Location *location)
-{
+void insertSymbol(SymbolTable *symbolTable, char *name, SymbolKind kind,
+                  Type type, Location *location) {
   Symbol *newSymbol = (Symbol *)malloc(sizeof(Symbol));
 
-  if (newSymbol == NULL)
-  {
+  if (newSymbol == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -403,8 +359,7 @@ void insertSymbol(SymbolTable *symbolTable, char *name, SymbolKind kind, Type ty
   symbolTable->symbols = newSymbol;
 }
 
-void pushScope(SymbolTable **stack)
-{
+void pushScope(SymbolTable **stack) {
   // Swap the current scope
   SymbolTable *newScope = createSymbolTable();
 
@@ -414,10 +369,8 @@ void pushScope(SymbolTable **stack)
   *stack = newScope;
 }
 
-void popScope(SymbolTable **symbolTable)
-{
-  if (*symbolTable == NULL)
-  {
+void popScope(SymbolTable **symbolTable) {
+  if (*symbolTable == NULL) {
     fprintf(stderr, "Error: No scope to pop\n");
     return;
   }
@@ -428,15 +381,13 @@ void popScope(SymbolTable **symbolTable)
   destroySymbolTable(oldScope);
 }
 
-void destroySymbolTable(SymbolTable *symbolTable)
-{
+void destroySymbolTable(SymbolTable *symbolTable) {
   if (!symbolTable)
     return;
   Symbol *current = symbolTable->symbols;
   Symbol *next;
 
-  while (current != NULL)
-  {
+  while (current != NULL) {
     next = current->next;
     if (current->name)
       free(current->name);
@@ -449,7 +400,4 @@ void destroySymbolTable(SymbolTable *symbolTable)
   free(symbolTable);
 }
 
-void destroySemantic(Semantic *semantic)
-{
-  free(semantic);
-}
+void destroySemantic(Semantic *semantic) { free(semantic); }

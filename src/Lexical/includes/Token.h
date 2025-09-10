@@ -17,14 +17,13 @@
 #define TOKEN_TYPE_LEFT_BRACES 9
 #define TOKEN_TYPE_RIGHT_BRACES 10
 
-typedef struct
-{
-    unsigned short int type;
-    char *value;
+typedef struct {
+  unsigned short int type;
+  char *value;
 } Token;
 
 Token constructToken(unsigned short int type, char *value);
-char *tokenTypeName(unsigned short int typeId); //#static function
+char *tokenTypeName(unsigned short int typeId); // #static function
 void destructToken(Token *token);
 void destructTokenNode(Token *token);
 unsigned short int getType(Token *token);

@@ -8,138 +8,99 @@
 #include "./includes/Utils.h"
 #include "./includes/lexicalAnalyzer.h"
 
-Token nextStageState(LexicalAnalyzer *lexicalAnalyzer)
-{
-  if (lexicalAnalyzer->newLine)
-  {
+Token nextStageState(LexicalAnalyzer *lexicalAnalyzer) {
+  if (lexicalAnalyzer->newLine) {
     lexicalAnalyzer->positionCount = 0;
     lexicalAnalyzer->lineCount++;
   }
 
   char *term = (char *)malloc(MAX_TERM_SIZE * sizeof(char));
 
-  if (term == NULL)
-  {
+  if (term == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
 
   unsigned short int currentState = INITIAL_STATE;
 
-  while (lexicalAnalyzer->positionCount <= strlen(lexicalAnalyzer->line) + 1)
-  {
+  while (lexicalAnalyzer->positionCount <= strlen(lexicalAnalyzer->line) + 1) {
     char currentChar = lexicalAnalyzer->line[lexicalAnalyzer->positionCount];
 
-    switch (currentState)
-    {
+    switch (currentState) {
     case INITIAL_STATE:
-      if (isLetter(currentChar))
-      {
+      if (isLetter(currentChar)) {
         strncat(term, &currentChar, 1);
         currentState = 1;
-      }
-      else if (isDigit(currentChar))
-      {
+      } else if (isDigit(currentChar)) {
         strncat(term, &currentChar, 1);
         currentState = 3;
-      }
-      else if (isOperator(currentChar))
-      {
+      } else if (isOperator(currentChar)) {
         strncat(term, &currentChar, 1);
         currentState = 5;
-      }
-      else if (isSemicolon(currentChar))
-      {
+      } else if (isSemicolon(currentChar)) {
         strncat(term, &currentChar, 1);
         currentState = 8;
-      }
-      else if (isSpace(currentChar))
-      {
+      } else if (isSpace(currentChar)) {
         currentState = 0;
-      }
-      else if (isNewLine(currentChar))
-      {
+      } else if (isNewLine(currentChar)) {
         currentState = 9;
-      }
-      else if (isString(currentChar))
-      {
+      } else if (isString(currentChar)) {
         strncat(term, &currentChar, 1);
         currentState = 11;
-      }
-      else if (isRightParenthesis(currentChar))
-      {
+      } else if (isRightParenthesis(currentChar)) {
         strncat(term, &currentChar, 1);
 
         currentState = 13;
-      }
-      else if (isLeftParenthesis(currentChar))
+      } else if (isLeftParenthesis(currentChar))
 
       {
         strncat(term, &currentChar, 1);
         currentState = 14;
-      }
-      else if (isRightBrace(currentChar))
-      {
+      } else if (isRightBrace(currentChar)) {
         strncat(term, &currentChar, 1);
         currentState = 15;
-      }
-      else if (isLeftBrace(currentChar))
-      {
+      } else if (isLeftBrace(currentChar)) {
         strncat(term, &currentChar, 1);
         currentState = 16;
-      }
-      else if (isEOF(currentChar))
-      {
+      } else if (isEOF(currentChar)) {
         currentState = 9;
-      }
-      else
-      {
-        throwLexicalError(1, "Error: Invalid character", lexicalAnalyzer->lineCount, lexicalAnalyzer->positionCount, lexicalAnalyzer->line);
+      } else {
+        throwLexicalError(
+            1, "Error: Invalid character", lexicalAnalyzer->lineCount,
+            lexicalAnalyzer->positionCount, lexicalAnalyzer->line);
         exit(1);
       }
       break;
     case 1:
-      if (isLetter(currentChar) || isDigit(currentChar))
-      {
+      if (isLetter(currentChar) || isDigit(currentChar)) {
         currentState = 1;
         strncat(term, &currentChar, 1);
-      }
-      else
-      {
+      } else {
         currentState = 2;
       }
       break;
     case 3:
-      if (isDigit(currentChar) || currentChar == '.')
-      {
+      if (isDigit(currentChar) || currentChar == '.') {
         currentState = 3;
         strncat(term, &currentChar, 1);
-      }
-      else
-      {
+      } else {
         currentState = 4;
       }
       break;
     case 5:
-      if (isOperator(currentChar))
-      {
+      if (isOperator(currentChar)) {
         currentState = 7;
         strncat(term, &currentChar, 1);
-      }
-      else
-      {
+      } else {
         currentState = 6;
       }
       break;
     case 11:
-      if (isString(currentChar))
-      {
+      if (isString(currentChar)) {
         strncat(term, &currentChar, 1);
 
         currentState = 12;
-      }
-      else
-      {
+      } else {
         currentState = 11;
         strncat(term, &currentChar, 1);
       }
@@ -181,7 +142,9 @@ Token nextStageState(LexicalAnalyzer *lexicalAnalyzer)
       return constructToken(TOKEN_TYPE_LEFT_BRACES, term);
       break;
     default:
-      throwLexicalError(1, "Error: Invalid character", lexicalAnalyzer->lineCount, lexicalAnalyzer->positionCount, term);
+      throwLexicalError(1, "Error: Invalid character",
+                        lexicalAnalyzer->lineCount,
+                        lexicalAnalyzer->positionCount, term);
       exit(1);
     }
 
@@ -192,45 +155,37 @@ Token nextStageState(LexicalAnalyzer *lexicalAnalyzer)
   return constructToken(TOKEN_TYPE_END_LINE, NULL);
 }
 
-Token nextToken(LexicalAnalyzer *lexicalAnalyzer)
-{
+Token nextToken(LexicalAnalyzer *lexicalAnalyzer) {
 
-  if (lexicalAnalyzer->isEOF)
-  {
+  if (lexicalAnalyzer->isEOF) {
     Token token = constructToken(TOKEN_TYPE_END, NULL);
     return token;
   }
 
-  if (lexicalAnalyzer->globalTokensCount == 0 && !lexicalAnalyzer->line)
-  {
+  if (lexicalAnalyzer->globalTokensCount == 0 && !lexicalAnalyzer->line) {
     lexicalAnalyzer->line = readLine(lexicalAnalyzer->file, MAX_LINE_SIZE);
   }
 
   Token token = token = nextStageState(lexicalAnalyzer);
 
-  if (token.type == TOKEN_TYPE_END_LINE)
-  {
+  if (token.type == TOKEN_TYPE_END_LINE) {
     char *line = (char *)malloc(MAX_LINE_SIZE * sizeof(char));
 
-    if (line == NULL)
-    {
+    if (line == NULL) {
       fprintf(stderr, "Memory allocation error\n");
       exit(1);
     }
 
     line = readLine(lexicalAnalyzer->file, MAX_LINE_SIZE);
 
-    if (line == NULL)
-    {
+    if (line == NULL) {
       lexicalAnalyzer->isEOF = 1;
     }
 
     lexicalAnalyzer->line = line;
     lexicalAnalyzer->newLine = 1;
     token = nextToken(lexicalAnalyzer);
-  }
-  else
-  {
+  } else {
     lexicalAnalyzer->newLine = 0;
   }
 
@@ -239,20 +194,18 @@ Token nextToken(LexicalAnalyzer *lexicalAnalyzer)
   return token;
 }
 
-LexicalAnalyzer *createLexicalAnalyzer(const char *filePath)
-{
+LexicalAnalyzer *createLexicalAnalyzer(const char *filePath) {
   FILE *attachFile = fopen(filePath, "r");
 
-  if (attachFile == NULL)
-  {
+  if (attachFile == NULL) {
     throwError(1, "Error: File not found\n");
     exit(1);
   }
 
-  LexicalAnalyzer *lexicalAnalyzer = (LexicalAnalyzer *)malloc(sizeof(LexicalAnalyzer));
+  LexicalAnalyzer *lexicalAnalyzer =
+      (LexicalAnalyzer *)malloc(sizeof(LexicalAnalyzer));
 
-  if (lexicalAnalyzer == NULL)
-  {
+  if (lexicalAnalyzer == NULL) {
     fprintf(stderr, "Memory allocation error\n");
     exit(1);
   }
@@ -266,8 +219,7 @@ LexicalAnalyzer *createLexicalAnalyzer(const char *filePath)
   return lexicalAnalyzer;
 }
 
-void destroyLexicalAnalyzer(LexicalAnalyzer *lexicalAnalyzer)
-{
+void destroyLexicalAnalyzer(LexicalAnalyzer *lexicalAnalyzer) {
   fclose(lexicalAnalyzer->file);
   free(lexicalAnalyzer->line);
   free(lexicalAnalyzer);
