@@ -147,7 +147,7 @@ git clone https://github.com/Colgate13/SACompiler.git
 cd SACompiler
 make
 
-./bin/SACompiler ./utils/Parser/exemples/general/exemple.code ./output.json
+./bin/SACompiler ./utils/Parser/exemples/general/exemple.code ./ast-output.json
 ```
 
 ## License

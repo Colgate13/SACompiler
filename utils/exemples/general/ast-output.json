@@ -1,539 +1,2345 @@
 {
-	"Statements": [
-		{
-			"VariableDeclaration": {
-				"Type": 0,
-				"Identifier": {
-					"Name": "num1",
-					"Location": {
-						"FileName": "*file*",
-						"Start": 1,
-						"End": 14
-					}
-				},
-				"Location": {
-					"FileName": "*file*",
-					"Start": 1,
-					"End": 14
-				}
-			}
-		},
-		{
-			"VariableDeclaration": {
-				"Type": 0,
-				"Identifier": {
-					"Name": "num2",
-					"Location": {
-						"FileName": "*file*",
-						"Start": 2,
-						"End": 14
-					}
-				},
-				"Location": {
-					"FileName": "*file*",
-					"Start": 2,
-					"End": 14
-				}
-			}
-		},
-		{
-			"VariableDeclaration": {
-				"Type": 0,
-				"Identifier": {
-					"Name": "num3",
-					"Location": {
-						"FileName": "*file*",
-						"Start": 3,
-						"End": 14
-					}
-				},
-				"Location": {
-					"FileName": "*file*",
-					"Start": 3,
-					"End": 14
-				}
-			}
-		},
-		{
-			"VariableDeclaration": {
-				"Type": 2,
-				"Identifier": {
-					"Name": "message",
-					"Location": {
-						"FileName": "*file*",
-						"Start": 5,
-						"End": 20
-					}
-				},
-				"Location": {
-					"FileName": "*file*",
-					"Start": 5,
-					"End": 20
-				}
-			}
-		},
-		{
-			"VariableDeclaration": {
-				"Type": 1,
-				"Identifier": {
-					"Name": "points",
-					"Location": {
-						"FileName": "*file*",
-						"Start": 6,
-						"End": 18
-					}
-				},
-				"Location": {
-					"FileName": "*file*",
-					"Start": 6,
-					"End": 18
-				}
-			}
-		},
-		{
-			"Assignment": {
-				"Identifier": {
-					"Name": "message",
-					"Location": {
-						"FileName": "*file*",
-						"Start": 8,
-						"End": 9
-					}
-				},
-				"Expression": {
-					"Term": {
-						"String": "Hello World!",
-						"Location": {
-							"FileName": "*file*",
-							"Start": 8,
-							"End": 26
-						}
-					},
-					"Location": {
-						"FileName": "*file*",
-						"Start": 8,
-						"End": 27
-					}
-				},
-				"Location": {
-					"FileName": "*file*",
-					"Start": 8,
-					"End": 27
-				}
-			}
-		},
-		{
-			"Assignment": {
-				"Identifier": {
-					"Name": "points",
-					"Location": {
-						"FileName": "*file*",
-						"Start": 9,
-						"End": 8
-					}
-				},
-				"Expression": {
-					"Term": {
-						"Number": 1,
-						"Location": {
-							"FileName": "*file*",
-							"Start": 9,
-							"End": 14
-						}
-					},
-					"Location": {
-						"FileName": "*file*",
-						"Start": 9,
-						"End": 15
-					}
-				},
-				"Location": {
-					"FileName": "*file*",
-					"Start": 9,
-					"End": 15
-				}
-			}
-		},
-		{
+	"StatementTail": {
+		"Statement": {
 			"PrintStatement": {
 				"Expression": {
-					"Term": {
-						"String": "Start!",
-						"Location": {
-							"FileName": "*file*",
-							"Start": 11,
-							"End": 16
-						}
-					},
-					"Location": {
-						"FileName": "*file*",
-						"Start": 11,
-						"End": 17
-					}
-				},
-				"Location": {
-					"FileName": "*file*",
-					"Start": 11,
-					"End": 8
-				}
-			}
-		},
-		{
-			"PrintStatement": {
-				"Expression": {
-					"Term": {
-						"Number": 1,
-						"Location": {
-							"FileName": "*file*",
-							"Start": 12,
-							"End": 9
-						}
-					},
-					"ExpressionTail": {
-						"Op": "+",
+					"ArithmeticExpression": {
 						"Term": {
-							"Number": 2,
-							"Location": {
-								"FileName": "*file*",
-								"Start": 12,
-								"End": 13
-							}
-						},
-						"Next": {
-							"Op": "-",
-							"Term": {
-								"Number": 3,
+							"Factor": {
+								"String": "\"Hello World!\"",
 								"Location": {
 									"FileName": "*file*",
-									"Start": 12,
-									"End": 17
+									"line": 1,
+									"column": 23
 								}
 							},
-							"Next": {
-								"Op": "*",
-								"Term": {
-									"Number": 4,
+							"Location": {
+								"FileName": "*file*",
+								"line": 1,
+								"column": 22
+							}
+						},
+						"Location": {
+							"FileName": "*file*",
+							"line": 1,
+							"column": 22
+						}
+					},
+					"Location": {
+						"FileName": "*file*",
+						"line": 1,
+						"column": 22
+					}
+				},
+				"Location": {
+					"FileName": "*file*",
+					"line": 1,
+					"column": 8
+				}
+			},
+			"Location": {
+				"FileName": "*file*",
+				"line": 1,
+				"column": 7
+			}
+		},
+		"StatementTail": {
+			"Statement": {
+				"IfStatement": {
+					"Expression": {
+						"ArithmeticExpression": {
+							"Term": {
+								"Factor": {
+									"Number": 1,
 									"Location": {
 										"FileName": "*file*",
-										"Start": 12,
-										"End": 21
+										"line": 3,
+										"column": 10
 									}
 								},
-								"Next": {
-									"Op": "/",
-									"Term": {
-										"Number": 5,
+								"Location": {
+									"FileName": "*file*",
+									"line": 3,
+									"column": 7
+								}
+							},
+							"Location": {
+								"FileName": "*file*",
+								"line": 3,
+								"column": 7
+							}
+						},
+						"OperatorRelational": {
+							"Operator": 0,
+							"ArithmeticExpression": {
+								"Term": {
+									"Factor": {
+										"Number": 1,
 										"Location": {
 											"FileName": "*file*",
-											"Start": 12,
-											"End": 25
+											"line": 3,
+											"column": 13
 										}
 									},
-									"Next": {
-										"Op": "%",
-										"Term": {
-											"Number": 6,
+									"Location": {
+										"FileName": "*file*",
+										"line": 3,
+										"column": 12
+									}
+								},
+								"Location": {
+									"FileName": "*file*",
+									"line": 3,
+									"column": 12
+								}
+							},
+							"Location": {
+								"FileName": "*file*",
+								"line": 3,
+								"column": 12
+							}
+						},
+						"Location": {
+							"FileName": "*file*",
+							"line": 3,
+							"column": 7
+						}
+					},
+					"Block": {
+						"StatementTail": {
+							"Statement": {
+								"PrintStatement": {
+									"Expression": {
+										"ArithmeticExpression": {
+											"Term": {
+												"Factor": {
+													"String": "\"Yes\"",
+													"Location": {
+														"FileName": "*file*",
+														"line": 4,
+														"column": 16
+													}
+												},
+												"Location": {
+													"FileName": "*file*",
+													"line": 4,
+													"column": 15
+												}
+											},
 											"Location": {
 												"FileName": "*file*",
-												"Start": 12,
-												"End": 29
+												"line": 4,
+												"column": 15
 											}
 										},
 										"Location": {
 											"FileName": "*file*",
-											"Start": 12,
-											"End": 29
+											"line": 4,
+											"column": 15
 										}
 									},
 									"Location": {
 										"FileName": "*file*",
-										"Start": 12,
-										"End": 25
+										"line": 4,
+										"column": 10
 									}
 								},
 								"Location": {
 									"FileName": "*file*",
-									"Start": 12,
-									"End": 21
+									"line": 4,
+									"column": 9
 								}
 							},
 							"Location": {
 								"FileName": "*file*",
-								"Start": 12,
-								"End": 17
+								"line": 3,
+								"column": 15
 							}
 						},
 						"Location": {
 							"FileName": "*file*",
-							"Start": 12,
-							"End": 13
+							"line": 5,
+							"column": 3
 						}
 					},
 					"Location": {
 						"FileName": "*file*",
-						"Start": 12,
-						"End": 11
+						"line": 5,
+						"column": 3
 					}
 				},
 				"Location": {
 					"FileName": "*file*",
-					"Start": 12,
-					"End": 8
+					"line": 3,
+					"column": 4
 				}
-			}
-		},
-		{
-			"PrintStatement": {
-				"Expression": {
-					"Term": {
-						"Number": 123,
-						"Location": {
-							"FileName": "*file*",
-							"Start": 13,
-							"End": 11
-						}
-					},
-					"Location": {
-						"FileName": "*file*",
-						"Start": 13,
-						"End": 12
-					}
-				},
-				"Location": {
-					"FileName": "*file*",
-					"Start": 13,
-					"End": 8
-				}
-			}
-		},
-		{
-			"PrintStatement": {
-				"Expression": {
-					"Term": {
-						"Identifier": "message",
-						"Location": {
-							"FileName": "*file*",
-							"Start": 14,
-							"End": 15
-						}
-					},
-					"Location": {
-						"FileName": "*file*",
-						"Start": 14,
-						"End": 16
-					}
-				},
-				"Location": {
-					"FileName": "*file*",
-					"Start": 14,
-					"End": 8
-				}
-			}
-		},
-		{
-			"PrintStatement": {
-				"Expression": {
-					"Term": {
-						"Identifier": "points",
-						"Location": {
-							"FileName": "*file*",
-							"Start": 15,
-							"End": 14
-						}
-					},
-					"Location": {
-						"FileName": "*file*",
-						"Start": 15,
-						"End": 15
-					}
-				},
-				"Location": {
-					"FileName": "*file*",
-					"Start": 15,
-					"End": 8
-				}
-			}
-		},
-		{
-			"PrintStatement": {
-				"Expression": {
-					"Term": {
-						"Identifier": "isRunning",
-						"Location": {
-							"FileName": "*file*",
-							"Start": 16,
-							"End": 17
-						}
-					},
-					"Location": {
-						"FileName": "*file*",
-						"Start": 16,
-						"End": 18
-					}
-				},
-				"Location": {
-					"FileName": "*file*",
-					"Start": 16,
-					"End": 8
-				}
-			}
-		},
-		{
-			"Assignment": {
-				"Identifier": {
-					"Name": "num1",
-					"Location": {
-						"FileName": "*file*",
-						"Start": 18,
-						"End": 6
-					}
-				},
-				"Expression": {
-					"Term": {
-						"Number": 1,
-						"Location": {
-							"FileName": "*file*",
-							"Start": 18,
-							"End": 10
-						}
-					},
-					"Location": {
-						"FileName": "*file*",
-						"Start": 18,
-						"End": 11
-					}
-				},
-				"Location": {
-					"FileName": "*file*",
-					"Start": 18,
-					"End": 11
-				}
-			}
-		},
-		{
-			"Assignment": {
-				"Identifier": {
-					"Name": "num2",
-					"Location": {
-						"FileName": "*file*",
-						"Start": 19,
-						"End": 6
-					}
-				},
-				"Expression": {
-					"Term": {
-						"Number": 2,
-						"Location": {
-							"FileName": "*file*",
-							"Start": 19,
-							"End": 10
-						}
-					},
-					"Location": {
-						"FileName": "*file*",
-						"Start": 19,
-						"End": 11
-					}
-				},
-				"Location": {
-					"FileName": "*file*",
-					"Start": 19,
-					"End": 11
-				}
-			}
-		},
-		{
-			"Assignment": {
-				"Identifier": {
-					"Name": "num3",
-					"Location": {
-						"FileName": "*file*",
-						"Start": 21,
-						"End": 6
-					}
-				},
-				"Expression": {
-					"Term": {
-						"Identifier": "num1",
-						"Location": {
-							"FileName": "*file*",
-							"Start": 21,
-							"End": 13
-						}
-					},
-					"ExpressionTail": {
-						"Op": "+",
-						"Term": {
-							"Identifier": "num2",
+			},
+			"StatementTail": {
+				"Statement": {
+					"VariableDeclaration": {
+						"Type": 0,
+						"Identifier": {
+							"Name": "num1",
 							"Location": {
 								"FileName": "*file*",
-								"Start": 21,
-								"End": 20
+								"line": 7,
+								"column": 14
 							}
 						},
-						"Next": {
-							"Op": "*",
-							"Term": {
-								"Identifier": "points",
+						"Location": {
+							"FileName": "*file*",
+							"line": 7,
+							"column": 14
+						}
+					},
+					"Location": {
+						"FileName": "*file*",
+						"line": 7,
+						"column": 5
+					}
+				},
+				"StatementTail": {
+					"Statement": {
+						"VariableDeclaration": {
+							"Type": 0,
+							"Identifier": {
+								"Name": "num2",
 								"Location": {
 									"FileName": "*file*",
-									"Start": 21,
-									"End": 29
+									"line": 8,
+									"column": 14
 								}
 							},
 							"Location": {
 								"FileName": "*file*",
-								"Start": 21,
-								"End": 29
+								"line": 8,
+								"column": 14
 							}
 						},
 						"Location": {
 							"FileName": "*file*",
-							"Start": 21,
-							"End": 20
+							"line": 8,
+							"column": 5
 						}
 					},
-					"Location": {
-						"FileName": "*file*",
-						"Start": 21,
-						"End": 15
-					}
-				},
-				"Location": {
-					"FileName": "*file*",
-					"Start": 21,
-					"End": 30
-				}
-			}
-		},
-		{
-			"PrintStatement": {
-				"Expression": {
-					"Term": {
-						"Identifier": "num3",
+					"StatementTail": {
+						"Statement": {
+							"VariableDeclaration": {
+								"Type": 0,
+								"Identifier": {
+									"Name": "num3",
+									"Location": {
+										"FileName": "*file*",
+										"line": 9,
+										"column": 14
+									}
+								},
+								"Location": {
+									"FileName": "*file*",
+									"line": 9,
+									"column": 14
+								}
+							},
+							"Location": {
+								"FileName": "*file*",
+								"line": 9,
+								"column": 5
+							}
+						},
+						"StatementTail": {
+							"Statement": {
+								"VariableDeclaration": {
+									"Type": 2,
+									"Identifier": {
+										"Name": "message",
+										"Location": {
+											"FileName": "*file*",
+											"line": 11,
+											"column": 20
+										}
+									},
+									"Location": {
+										"FileName": "*file*",
+										"line": 11,
+										"column": 20
+									}
+								},
+								"Location": {
+									"FileName": "*file*",
+									"line": 11,
+									"column": 5
+								}
+							},
+							"StatementTail": {
+								"Statement": {
+									"VariableDeclaration": {
+										"Type": 2,
+										"Identifier": {
+											"Name": "output",
+											"Location": {
+												"FileName": "*file*",
+												"line": 12,
+												"column": 19
+											}
+										},
+										"Location": {
+											"FileName": "*file*",
+											"line": 12,
+											"column": 19
+										}
+									},
+									"Location": {
+										"FileName": "*file*",
+										"line": 12,
+										"column": 5
+									}
+								},
+								"StatementTail": {
+									"Statement": {
+										"VariableDeclaration": {
+											"Type": 0,
+											"Identifier": {
+												"Name": "points",
+												"Location": {
+													"FileName": "*file*",
+													"line": 13,
+													"column": 16
+												}
+											},
+											"Location": {
+												"FileName": "*file*",
+												"line": 13,
+												"column": 16
+											}
+										},
+										"Location": {
+											"FileName": "*file*",
+											"line": 13,
+											"column": 5
+										}
+									},
+									"StatementTail": {
+										"Statement": {
+											"Assignment": {
+												"Identifier": {
+													"Name": "message",
+													"Location": {
+														"FileName": "*file*",
+														"line": 15,
+														"column": 9
+													}
+												},
+												"Expression": {
+													"ArithmeticExpression": {
+														"Term": {
+															"Factor": {
+																"String": "\"Hello World!\"",
+																"Location": {
+																	"FileName": "*file*",
+																	"line": 15,
+																	"column": 27
+																}
+															},
+															"Location": {
+																"FileName": "*file*",
+																"line": 15,
+																"column": 26
+															}
+														},
+														"Location": {
+															"FileName": "*file*",
+															"line": 15,
+															"column": 26
+														}
+													},
+													"Location": {
+														"FileName": "*file*",
+														"line": 15,
+														"column": 26
+													}
+												},
+												"Location": {
+													"FileName": "*file*",
+													"line": 15,
+													"column": 27
+												}
+											},
+											"Location": {
+												"FileName": "*file*",
+												"line": 15,
+												"column": 9
+											}
+										},
+										"StatementTail": {
+											"Statement": {
+												"Assignment": {
+													"Identifier": {
+														"Name": "points",
+														"Location": {
+															"FileName": "*file*",
+															"line": 16,
+															"column": 8
+														}
+													},
+													"Expression": {
+														"ArithmeticExpression": {
+															"Term": {
+																"Factor": {
+																	"Number": 5,
+																	"Location": {
+																		"FileName": "*file*",
+																		"line": 16,
+																		"column": 13
+																	}
+																},
+																"Location": {
+																	"FileName": "*file*",
+																	"line": 16,
+																	"column": 12
+																}
+															},
+															"Location": {
+																"FileName": "*file*",
+																"line": 16,
+																"column": 12
+															}
+														},
+														"Location": {
+															"FileName": "*file*",
+															"line": 16,
+															"column": 12
+														}
+													},
+													"Location": {
+														"FileName": "*file*",
+														"line": 16,
+														"column": 13
+													}
+												},
+												"Location": {
+													"FileName": "*file*",
+													"line": 16,
+													"column": 8
+												}
+											},
+											"StatementTail": {
+												"Statement": {
+													"PrintStatement": {
+														"Expression": {
+															"ArithmeticExpression": {
+																"Term": {
+																	"Factor": {
+																		"String": "\"Start!\"",
+																		"Location": {
+																			"FileName": "*file*",
+																			"line": 18,
+																			"column": 17
+																		}
+																	},
+																	"Location": {
+																		"FileName": "*file*",
+																		"line": 18,
+																		"column": 16
+																	}
+																},
+																"Location": {
+																	"FileName": "*file*",
+																	"line": 18,
+																	"column": 16
+																}
+															},
+															"Location": {
+																"FileName": "*file*",
+																"line": 18,
+																"column": 16
+															}
+														},
+														"Location": {
+															"FileName": "*file*",
+															"line": 18,
+															"column": 8
+														}
+													},
+													"Location": {
+														"FileName": "*file*",
+														"line": 18,
+														"column": 7
+													}
+												},
+												"StatementTail": {
+													"Statement": {
+														"PrintStatement": {
+															"Expression": {
+																"ArithmeticExpression": {
+																	"Term": {
+																		"Factor": {
+																			"Number": 1,
+																			"Location": {
+																				"FileName": "*file*",
+																				"line": 19,
+																				"column": 11
+																			}
+																		},
+																		"Location": {
+																			"FileName": "*file*",
+																			"line": 19,
+																			"column": 9
+																		}
+																	},
+																	"ArithmeticExpressionTail": {
+																		"AddOperator": 0,
+																		"Term": {
+																			"Factor": {
+																				"Number": 2,
+																				"Location": {
+																					"FileName": "*file*",
+																					"line": 19,
+																					"column": 15
+																				}
+																			},
+																			"Location": {
+																				"FileName": "*file*",
+																				"line": 19,
+																				"column": 13
+																			}
+																		},
+																		"ArithmeticExpressionTail": {
+																			"AddOperator": 1,
+																			"Term": {
+																				"Factor": {
+																					"Number": 3,
+																					"Location": {
+																						"FileName": "*file*",
+																						"line": 19,
+																						"column": 19
+																					}
+																				},
+																				"TermTail": {
+																					"Factor": {
+																						"Number": 4,
+																						"Location": {
+																							"FileName": "*file*",
+																							"line": 19,
+																							"column": 23
+																						}
+																					},
+																					"Location": {
+																						"FileName": "*file*",
+																						"line": 19,
+																						"column": 21
+																					}
+																				},
+																				"Location": {
+																					"FileName": "*file*",
+																					"line": 19,
+																					"column": 17
+																				}
+																			},
+																			"Location": {
+																				"FileName": "*file*",
+																				"line": 19,
+																				"column": 17
+																			}
+																		},
+																		"Location": {
+																			"FileName": "*file*",
+																			"line": 19,
+																			"column": 13
+																		}
+																	},
+																	"Location": {
+																		"FileName": "*file*",
+																		"line": 19,
+																		"column": 9
+																	}
+																},
+																"Location": {
+																	"FileName": "*file*",
+																	"line": 19,
+																	"column": 9
+																}
+															},
+															"Location": {
+																"FileName": "*file*",
+																"line": 19,
+																"column": 8
+															}
+														},
+														"Location": {
+															"FileName": "*file*",
+															"line": 19,
+															"column": 7
+														}
+													},
+													"StatementTail": {
+														"Statement": {
+															"PrintStatement": {
+																"Expression": {
+																	"ArithmeticExpression": {
+																		"Term": {
+																			"Factor": {
+																				"Number": 123,
+																				"Location": {
+																					"FileName": "*file*",
+																					"line": 20,
+																					"column": 12
+																				}
+																			},
+																			"Location": {
+																				"FileName": "*file*",
+																				"line": 20,
+																				"column": 11
+																			}
+																		},
+																		"Location": {
+																			"FileName": "*file*",
+																			"line": 20,
+																			"column": 11
+																		}
+																	},
+																	"Location": {
+																		"FileName": "*file*",
+																		"line": 20,
+																		"column": 11
+																	}
+																},
+																"Location": {
+																	"FileName": "*file*",
+																	"line": 20,
+																	"column": 8
+																}
+															},
+															"Location": {
+																"FileName": "*file*",
+																"line": 20,
+																"column": 7
+															}
+														},
+														"StatementTail": {
+															"Statement": {
+																"PrintStatement": {
+																	"Expression": {
+																		"ArithmeticExpression": {
+																			"Term": {
+																				"Factor": {
+																					"Identifier": {
+																						"Name": "message",
+																						"Location": {
+																							"FileName": "*file*",
+																							"line": 21,
+																							"column": 15
+																						}
+																					},
+																					"Location": {
+																						"FileName": "*file*",
+																						"line": 21,
+																						"column": 16
+																					}
+																				},
+																				"Location": {
+																					"FileName": "*file*",
+																					"line": 21,
+																					"column": 15
+																				}
+																			},
+																			"Location": {
+																				"FileName": "*file*",
+																				"line": 21,
+																				"column": 15
+																			}
+																		},
+																		"Location": {
+																			"FileName": "*file*",
+																			"line": 21,
+																			"column": 15
+																		}
+																	},
+																	"Location": {
+																		"FileName": "*file*",
+																		"line": 21,
+																		"column": 8
+																	}
+																},
+																"Location": {
+																	"FileName": "*file*",
+																	"line": 21,
+																	"column": 7
+																}
+															},
+															"StatementTail": {
+																"Statement": {
+																	"PrintStatement": {
+																		"Expression": {
+																			"ArithmeticExpression": {
+																				"Term": {
+																					"Factor": {
+																						"Identifier": {
+																							"Name": "points",
+																							"Location": {
+																								"FileName": "*file*",
+																								"line": 22,
+																								"column": 14
+																							}
+																						},
+																						"Location": {
+																							"FileName": "*file*",
+																							"line": 22,
+																							"column": 15
+																						}
+																					},
+																					"Location": {
+																						"FileName": "*file*",
+																						"line": 22,
+																						"column": 14
+																					}
+																				},
+																				"Location": {
+																					"FileName": "*file*",
+																					"line": 22,
+																					"column": 14
+																				}
+																			},
+																			"Location": {
+																				"FileName": "*file*",
+																				"line": 22,
+																				"column": 14
+																			}
+																		},
+																		"Location": {
+																			"FileName": "*file*",
+																			"line": 22,
+																			"column": 8
+																		}
+																	},
+																	"Location": {
+																		"FileName": "*file*",
+																		"line": 22,
+																		"column": 7
+																	}
+																},
+																"StatementTail": {
+																	"Statement": {
+																		"Assignment": {
+																			"Identifier": {
+																				"Name": "num1",
+																				"Location": {
+																					"FileName": "*file*",
+																					"line": 24,
+																					"column": 6
+																				}
+																			},
+																			"Expression": {
+																				"ArithmeticExpression": {
+																					"Term": {
+																						"Factor": {
+																							"Number": 1,
+																							"Location": {
+																								"FileName": "*file*",
+																								"line": 24,
+																								"column": 11
+																							}
+																						},
+																						"Location": {
+																							"FileName": "*file*",
+																							"line": 24,
+																							"column": 10
+																						}
+																					},
+																					"Location": {
+																						"FileName": "*file*",
+																						"line": 24,
+																						"column": 10
+																					}
+																				},
+																				"Location": {
+																					"FileName": "*file*",
+																					"line": 24,
+																					"column": 10
+																				}
+																			},
+																			"Location": {
+																				"FileName": "*file*",
+																				"line": 24,
+																				"column": 11
+																			}
+																		},
+																		"Location": {
+																			"FileName": "*file*",
+																			"line": 24,
+																			"column": 6
+																		}
+																	},
+																	"StatementTail": {
+																		"Statement": {
+																			"Assignment": {
+																				"Identifier": {
+																					"Name": "num2",
+																					"Location": {
+																						"FileName": "*file*",
+																						"line": 25,
+																						"column": 6
+																					}
+																				},
+																				"Expression": {
+																					"ArithmeticExpression": {
+																						"Term": {
+																							"Factor": {
+																								"Number": 2,
+																								"Location": {
+																									"FileName": "*file*",
+																									"line": 25,
+																									"column": 11
+																								}
+																							},
+																							"Location": {
+																								"FileName": "*file*",
+																								"line": 25,
+																								"column": 10
+																							}
+																						},
+																						"Location": {
+																							"FileName": "*file*",
+																							"line": 25,
+																							"column": 10
+																						}
+																					},
+																					"Location": {
+																						"FileName": "*file*",
+																						"line": 25,
+																						"column": 10
+																					}
+																				},
+																				"Location": {
+																					"FileName": "*file*",
+																					"line": 25,
+																					"column": 11
+																				}
+																			},
+																			"Location": {
+																				"FileName": "*file*",
+																				"line": 25,
+																				"column": 6
+																			}
+																		},
+																		"StatementTail": {
+																			"Statement": {
+																				"Assignment": {
+																					"Identifier": {
+																						"Name": "num3",
+																						"Location": {
+																							"FileName": "*file*",
+																							"line": 27,
+																							"column": 6
+																						}
+																					},
+																					"Expression": {
+																						"ArithmeticExpression": {
+																							"Term": {
+																								"Factor": {
+																									"Identifier": {
+																										"Name": "num1",
+																										"Location": {
+																											"FileName": "*file*",
+																											"line": 27,
+																											"column": 13
+																										}
+																									},
+																									"Location": {
+																										"FileName": "*file*",
+																										"line": 27,
+																										"column": 15
+																									}
+																								},
+																								"Location": {
+																									"FileName": "*file*",
+																									"line": 27,
+																									"column": 13
+																								}
+																							},
+																							"ArithmeticExpressionTail": {
+																								"AddOperator": 0,
+																								"Term": {
+																									"Factor": {
+																										"Identifier": {
+																											"Name": "num2",
+																											"Location": {
+																												"FileName": "*file*",
+																												"line": 27,
+																												"column": 20
+																											}
+																										},
+																										"Location": {
+																											"FileName": "*file*",
+																											"line": 27,
+																											"column": 22
+																										}
+																									},
+																									"TermTail": {
+																										"Factor": {
+																											"Identifier": {
+																												"Name": "points",
+																												"Location": {
+																													"FileName": "*file*",
+																													"line": 27,
+																													"column": 29
+																												}
+																											},
+																											"Location": {
+																												"FileName": "*file*",
+																												"line": 27,
+																												"column": 30
+																											}
+																										},
+																										"Location": {
+																											"FileName": "*file*",
+																											"line": 27,
+																											"column": 29
+																										}
+																									},
+																									"Location": {
+																										"FileName": "*file*",
+																										"line": 27,
+																										"column": 20
+																									}
+																								},
+																								"Location": {
+																									"FileName": "*file*",
+																									"line": 27,
+																									"column": 20
+																								}
+																							},
+																							"Location": {
+																								"FileName": "*file*",
+																								"line": 27,
+																								"column": 13
+																							}
+																						},
+																						"Location": {
+																							"FileName": "*file*",
+																							"line": 27,
+																							"column": 13
+																						}
+																					},
+																					"Location": {
+																						"FileName": "*file*",
+																						"line": 27,
+																						"column": 30
+																					}
+																				},
+																				"Location": {
+																					"FileName": "*file*",
+																					"line": 27,
+																					"column": 6
+																				}
+																			},
+																			"StatementTail": {
+																				"Statement": {
+																					"Assignment": {
+																						"Identifier": {
+																							"Name": "output",
+																							"Location": {
+																								"FileName": "*file*",
+																								"line": 28,
+																								"column": 8
+																							}
+																						},
+																						"Expression": {
+																							"ArithmeticExpression": {
+																								"Term": {
+																									"Factor": {
+																										"String": "\"Result: \"",
+																										"Location": {
+																											"FileName": "*file*",
+																											"line": 28,
+																											"column": 23
+																										}
+																									},
+																									"Location": {
+																										"FileName": "*file*",
+																										"line": 28,
+																										"column": 21
+																									}
+																								},
+																								"ArithmeticExpressionTail": {
+																									"AddOperator": 0,
+																									"Term": {
+																										"Factor": {
+																											"Identifier": {
+																												"Name": "num3",
+																												"Location": {
+																													"FileName": "*file*",
+																													"line": 28,
+																													"column": 28
+																												}
+																											},
+																											"Location": {
+																												"FileName": "*file*",
+																												"line": 28,
+																												"column": 29
+																											}
+																										},
+																										"Location": {
+																											"FileName": "*file*",
+																											"line": 28,
+																											"column": 28
+																										}
+																									},
+																									"Location": {
+																										"FileName": "*file*",
+																										"line": 28,
+																										"column": 28
+																									}
+																								},
+																								"Location": {
+																									"FileName": "*file*",
+																									"line": 28,
+																									"column": 21
+																								}
+																							},
+																							"Location": {
+																								"FileName": "*file*",
+																								"line": 28,
+																								"column": 21
+																							}
+																						},
+																						"Location": {
+																							"FileName": "*file*",
+																							"line": 28,
+																							"column": 29
+																						}
+																					},
+																					"Location": {
+																						"FileName": "*file*",
+																						"line": 28,
+																						"column": 8
+																					}
+																				},
+																				"StatementTail": {
+																					"Statement": {
+																						"PrintStatement": {
+																							"Expression": {
+																								"ArithmeticExpression": {
+																									"Term": {
+																										"Factor": {
+																											"Identifier": {
+																												"Name": "num3",
+																												"Location": {
+																													"FileName": "*file*",
+																													"line": 29,
+																													"column": 12
+																												}
+																											},
+																											"Location": {
+																												"FileName": "*file*",
+																												"line": 29,
+																												"column": 13
+																											}
+																										},
+																										"Location": {
+																											"FileName": "*file*",
+																											"line": 29,
+																											"column": 12
+																										}
+																									},
+																									"Location": {
+																										"FileName": "*file*",
+																										"line": 29,
+																										"column": 12
+																									}
+																								},
+																								"Location": {
+																									"FileName": "*file*",
+																									"line": 29,
+																									"column": 12
+																								}
+																							},
+																							"Location": {
+																								"FileName": "*file*",
+																								"line": 29,
+																								"column": 8
+																							}
+																						},
+																						"Location": {
+																							"FileName": "*file*",
+																							"line": 29,
+																							"column": 7
+																						}
+																					},
+																					"StatementTail": {
+																						"Statement": {
+																							"IfStatement": {
+																								"Expression": {
+																									"ArithmeticExpression": {
+																										"Term": {
+																											"Factor": {
+																												"Identifier": {
+																													"Name": "message",
+																													"Location": {
+																														"FileName": "*file*",
+																														"line": 31,
+																														"column": 13
+																													}
+																												},
+																												"Location": {
+																													"FileName": "*file*",
+																													"line": 31,
+																													"column": 16
+																												}
+																											},
+																											"Location": {
+																												"FileName": "*file*",
+																												"line": 31,
+																												"column": 13
+																											}
+																										},
+																										"Location": {
+																											"FileName": "*file*",
+																											"line": 31,
+																											"column": 13
+																										}
+																									},
+																									"OperatorRelational": {
+																										"Operator": 0,
+																										"ArithmeticExpression": {
+																											"Term": {
+																												"Factor": {
+																													"String": "\"Hello World!\"",
+																													"Location": {
+																														"FileName": "*file*",
+																														"line": 31,
+																														"column": 32
+																													}
+																												},
+																												"Location": {
+																													"FileName": "*file*",
+																													"line": 31,
+																													"column": 31
+																												}
+																											},
+																											"Location": {
+																												"FileName": "*file*",
+																												"line": 31,
+																												"column": 31
+																											}
+																										},
+																										"Location": {
+																											"FileName": "*file*",
+																											"line": 31,
+																											"column": 31
+																										}
+																									},
+																									"Location": {
+																										"FileName": "*file*",
+																										"line": 31,
+																										"column": 13
+																									}
+																								},
+																								"Block": {
+																									"StatementTail": {
+																										"Statement": {
+																											"PrintStatement": {
+																												"Expression": {
+																													"ArithmeticExpression": {
+																														"Term": {
+																															"Factor": {
+																																"String": "\"Hello\"",
+																																"Location": {
+																																	"FileName": "*file*",
+																																	"line": 31,
+																																	"column": 49
+																																}
+																															},
+																															"Location": {
+																																"FileName": "*file*",
+																																"line": 31,
+																																"column": 48
+																															}
+																														},
+																														"Location": {
+																															"FileName": "*file*",
+																															"line": 31,
+																															"column": 48
+																														}
+																													},
+																													"Location": {
+																														"FileName": "*file*",
+																														"line": 31,
+																														"column": 48
+																													}
+																												},
+																												"Location": {
+																													"FileName": "*file*",
+																													"line": 31,
+																													"column": 41
+																												}
+																											},
+																											"Location": {
+																												"FileName": "*file*",
+																												"line": 31,
+																												"column": 40
+																											}
+																										},
+																										"Location": {
+																											"FileName": "*file*",
+																											"line": 31,
+																											"column": 34
+																										}
+																									},
+																									"Location": {
+																										"FileName": "*file*",
+																										"line": 31,
+																										"column": 52
+																									}
+																								},
+																								"Location": {
+																									"FileName": "*file*",
+																									"line": 31,
+																									"column": 52
+																								}
+																							},
+																							"Location": {
+																								"FileName": "*file*",
+																								"line": 31,
+																								"column": 4
+																							}
+																						},
+																						"StatementTail": {
+																							"Statement": {
+																								"IfStatement": {
+																									"Expression": {
+																										"ArithmeticExpression": {
+																											"Term": {
+																												"Factor": {
+																													"Identifier": {
+																														"Name": "num1",
+																														"Location": {
+																															"FileName": "*file*",
+																															"line": 32,
+																															"column": 10
+																														}
+																													},
+																													"Location": {
+																														"FileName": "*file*",
+																														"line": 32,
+																														"column": 13
+																													}
+																												},
+																												"Location": {
+																													"FileName": "*file*",
+																													"line": 32,
+																													"column": 10
+																												}
+																											},
+																											"Location": {
+																												"FileName": "*file*",
+																												"line": 32,
+																												"column": 10
+																											}
+																										},
+																										"OperatorRelational": {
+																											"Operator": 0,
+																											"ArithmeticExpression": {
+																												"Term": {
+																													"Factor": {
+																														"Number": 1,
+																														"Location": {
+																															"FileName": "*file*",
+																															"line": 32,
+																															"column": 16
+																														}
+																													},
+																													"Location": {
+																														"FileName": "*file*",
+																														"line": 32,
+																														"column": 15
+																													}
+																												},
+																												"Location": {
+																													"FileName": "*file*",
+																													"line": 32,
+																													"column": 15
+																												}
+																											},
+																											"Location": {
+																												"FileName": "*file*",
+																												"line": 32,
+																												"column": 15
+																											}
+																										},
+																										"Location": {
+																											"FileName": "*file*",
+																											"line": 32,
+																											"column": 10
+																										}
+																									},
+																									"Block": {
+																										"StatementTail": {
+																											"Statement": {
+																												"PrintStatement": {
+																													"Expression": {
+																														"ArithmeticExpression": {
+																															"Term": {
+																																"Factor": {
+																																	"String": "\"num1 is 1\"",
+																																	"Location": {
+																																		"FileName": "*file*",
+																																		"line": 32,
+																																		"column": 37
+																																	}
+																																},
+																																"Location": {
+																																	"FileName": "*file*",
+																																	"line": 32,
+																																	"column": 36
+																																}
+																															},
+																															"Location": {
+																																"FileName": "*file*",
+																																"line": 32,
+																																"column": 36
+																															}
+																														},
+																														"Location": {
+																															"FileName": "*file*",
+																															"line": 32,
+																															"column": 36
+																														}
+																													},
+																													"Location": {
+																														"FileName": "*file*",
+																														"line": 32,
+																														"column": 25
+																													}
+																												},
+																												"Location": {
+																													"FileName": "*file*",
+																													"line": 32,
+																													"column": 24
+																												}
+																											},
+																											"Location": {
+																												"FileName": "*file*",
+																												"line": 32,
+																												"column": 18
+																											}
+																										},
+																										"Location": {
+																											"FileName": "*file*",
+																											"line": 32,
+																											"column": 40
+																										}
+																									},
+																									"Location": {
+																										"FileName": "*file*",
+																										"line": 32,
+																										"column": 40
+																									}
+																								},
+																								"Location": {
+																									"FileName": "*file*",
+																									"line": 32,
+																									"column": 4
+																								}
+																							},
+																							"StatementTail": {
+																								"Statement": {
+																									"IfStatement": {
+																										"Expression": {
+																											"ArithmeticExpression": {
+																												"Term": {
+																													"Factor": {
+																														"Identifier": {
+																															"Name": "points",
+																															"Location": {
+																																"FileName": "*file*",
+																																"line": 33,
+																																"column": 12
+																															}
+																														},
+																														"Location": {
+																															"FileName": "*file*",
+																															"line": 33,
+																															"column": 15
+																														}
+																													},
+																													"Location": {
+																														"FileName": "*file*",
+																														"line": 33,
+																														"column": 12
+																													}
+																												},
+																												"Location": {
+																													"FileName": "*file*",
+																													"line": 33,
+																													"column": 12
+																												}
+																											},
+																											"OperatorRelational": {
+																												"Operator": 0,
+																												"ArithmeticExpression": {
+																													"Term": {
+																														"Factor": {
+																															"Number": 1,
+																															"Location": {
+																																"FileName": "*file*",
+																																"line": 33,
+																																"column": 18
+																															}
+																														},
+																														"Location": {
+																															"FileName": "*file*",
+																															"line": 33,
+																															"column": 17
+																														}
+																													},
+																													"Location": {
+																														"FileName": "*file*",
+																														"line": 33,
+																														"column": 17
+																													}
+																												},
+																												"Location": {
+																													"FileName": "*file*",
+																													"line": 33,
+																													"column": 17
+																												}
+																											},
+																											"Location": {
+																												"FileName": "*file*",
+																												"line": 33,
+																												"column": 12
+																											}
+																										},
+																										"Block": {
+																											"StatementTail": {
+																												"Statement": {
+																													"PrintStatement": {
+																														"Expression": {
+																															"ArithmeticExpression": {
+																																"Term": {
+																																	"Factor": {
+																																		"String": "\"points is 1\"",
+																																		"Location": {
+																																			"FileName": "*file*",
+																																			"line": 33,
+																																			"column": 41
+																																		}
+																																	},
+																																	"Location": {
+																																		"FileName": "*file*",
+																																		"line": 33,
+																																		"column": 40
+																																	}
+																																},
+																																"Location": {
+																																	"FileName": "*file*",
+																																	"line": 33,
+																																	"column": 40
+																																}
+																															},
+																															"Location": {
+																																"FileName": "*file*",
+																																"line": 33,
+																																"column": 40
+																															}
+																														},
+																														"Location": {
+																															"FileName": "*file*",
+																															"line": 33,
+																															"column": 27
+																														}
+																													},
+																													"Location": {
+																														"FileName": "*file*",
+																														"line": 33,
+																														"column": 26
+																													}
+																												},
+																												"Location": {
+																													"FileName": "*file*",
+																													"line": 33,
+																													"column": 20
+																												}
+																											},
+																											"Location": {
+																												"FileName": "*file*",
+																												"line": 33,
+																												"column": 44
+																											}
+																										},
+																										"Location": {
+																											"FileName": "*file*",
+																											"line": 33,
+																											"column": 44
+																										}
+																									},
+																									"Location": {
+																										"FileName": "*file*",
+																										"line": 33,
+																										"column": 4
+																									}
+																								},
+																								"StatementTail": {
+																									"Statement": {
+																										"IfStatement": {
+																											"Expression": {
+																												"ArithmeticExpression": {
+																													"Term": {
+																														"Factor": {
+																															"Identifier": {
+																																"Name": "num1",
+																																"Location": {
+																																	"FileName": "*file*",
+																																	"line": 34,
+																																	"column": 10
+																																}
+																															},
+																															"Location": {
+																																"FileName": "*file*",
+																																"line": 34,
+																																"column": 12
+																															}
+																														},
+																														"Location": {
+																															"FileName": "*file*",
+																															"line": 34,
+																															"column": 10
+																														}
+																													},
+																													"Location": {
+																														"FileName": "*file*",
+																														"line": 34,
+																														"column": 10
+																													}
+																												},
+																												"OperatorRelational": {
+																													"Operator": 4,
+																													"ArithmeticExpression": {
+																														"Term": {
+																															"Factor": {
+																																"Number": 0,
+																																"Location": {
+																																	"FileName": "*file*",
+																																	"line": 34,
+																																	"column": 15
+																																}
+																															},
+																															"Location": {
+																																"FileName": "*file*",
+																																"line": 34,
+																																"column": 14
+																															}
+																														},
+																														"Location": {
+																															"FileName": "*file*",
+																															"line": 34,
+																															"column": 14
+																														}
+																													},
+																													"Location": {
+																														"FileName": "*file*",
+																														"line": 34,
+																														"column": 14
+																													}
+																												},
+																												"Location": {
+																													"FileName": "*file*",
+																													"line": 34,
+																													"column": 10
+																												}
+																											},
+																											"Block": {
+																												"StatementTail": {
+																													"Statement": {
+																														"PrintStatement": {
+																															"Expression": {
+																																"ArithmeticExpression": {
+																																	"Term": {
+																																		"Factor": {
+																																			"String": "\"num1 is greater than 0\"",
+																																			"Location": {
+																																				"FileName": "*file*",
+																																				"line": 34,
+																																				"column": 49
+																																			}
+																																		},
+																																		"Location": {
+																																			"FileName": "*file*",
+																																			"line": 34,
+																																			"column": 48
+																																		}
+																																	},
+																																	"Location": {
+																																		"FileName": "*file*",
+																																		"line": 34,
+																																		"column": 48
+																																	}
+																																},
+																																"Location": {
+																																	"FileName": "*file*",
+																																	"line": 34,
+																																	"column": 48
+																																}
+																															},
+																															"Location": {
+																																"FileName": "*file*",
+																																"line": 34,
+																																"column": 24
+																															}
+																														},
+																														"Location": {
+																															"FileName": "*file*",
+																															"line": 34,
+																															"column": 23
+																														}
+																													},
+																													"Location": {
+																														"FileName": "*file*",
+																														"line": 34,
+																														"column": 17
+																													}
+																												},
+																												"Location": {
+																													"FileName": "*file*",
+																													"line": 34,
+																													"column": 52
+																												}
+																											},
+																											"Location": {
+																												"FileName": "*file*",
+																												"line": 34,
+																												"column": 52
+																											}
+																										},
+																										"Location": {
+																											"FileName": "*file*",
+																											"line": 34,
+																											"column": 4
+																										}
+																									},
+																									"StatementTail": {
+																										"Statement": {
+																											"IfStatement": {
+																												"Expression": {
+																													"ArithmeticExpression": {
+																														"Term": {
+																															"Factor": {
+																																"Identifier": {
+																																	"Name": "num1",
+																																	"Location": {
+																																		"FileName": "*file*",
+																																		"line": 35,
+																																		"column": 10
+																																	}
+																																},
+																																"Location": {
+																																	"FileName": "*file*",
+																																	"line": 35,
+																																	"column": 12
+																																}
+																															},
+																															"Location": {
+																																"FileName": "*file*",
+																																"line": 35,
+																																"column": 10
+																															}
+																														},
+																														"Location": {
+																															"FileName": "*file*",
+																															"line": 35,
+																															"column": 10
+																														}
+																													},
+																													"OperatorRelational": {
+																														"Operator": 2,
+																														"ArithmeticExpression": {
+																															"Term": {
+																																"Factor": {
+																																	"Number": 0,
+																																	"Location": {
+																																		"FileName": "*file*",
+																																		"line": 35,
+																																		"column": 15
+																																	}
+																																},
+																																"Location": {
+																																	"FileName": "*file*",
+																																	"line": 35,
+																																	"column": 14
+																																}
+																															},
+																															"Location": {
+																																"FileName": "*file*",
+																																"line": 35,
+																																"column": 14
+																															}
+																														},
+																														"Location": {
+																															"FileName": "*file*",
+																															"line": 35,
+																															"column": 14
+																														}
+																													},
+																													"Location": {
+																														"FileName": "*file*",
+																														"line": 35,
+																														"column": 10
+																													}
+																												},
+																												"Block": {
+																													"StatementTail": {
+																														"Statement": {
+																															"PrintStatement": {
+																																"Expression": {
+																																	"ArithmeticExpression": {
+																																		"Term": {
+																																			"Factor": {
+																																				"String": "\"num1 is less than 0\"",
+																																				"Location": {
+																																					"FileName": "*file*",
+																																					"line": 35,
+																																					"column": 46
+																																				}
+																																			},
+																																			"Location": {
+																																				"FileName": "*file*",
+																																				"line": 35,
+																																				"column": 45
+																																			}
+																																		},
+																																		"Location": {
+																																			"FileName": "*file*",
+																																			"line": 35,
+																																			"column": 45
+																																		}
+																																	},
+																																	"Location": {
+																																		"FileName": "*file*",
+																																		"line": 35,
+																																		"column": 45
+																																	}
+																																},
+																																"Location": {
+																																	"FileName": "*file*",
+																																	"line": 35,
+																																	"column": 24
+																																}
+																															},
+																															"Location": {
+																																"FileName": "*file*",
+																																"line": 35,
+																																"column": 23
+																															}
+																														},
+																														"Location": {
+																															"FileName": "*file*",
+																															"line": 35,
+																															"column": 17
+																														}
+																													},
+																													"Location": {
+																														"FileName": "*file*",
+																														"line": 35,
+																														"column": 49
+																													}
+																												},
+																												"Location": {
+																													"FileName": "*file*",
+																													"line": 35,
+																													"column": 49
+																												}
+																											},
+																											"Location": {
+																												"FileName": "*file*",
+																												"line": 35,
+																												"column": 4
+																											}
+																										},
+																										"StatementTail": {
+																											"Statement": {
+																												"IfStatement": {
+																													"Expression": {
+																														"ArithmeticExpression": {
+																															"Term": {
+																																"Factor": {
+																																	"Identifier": {
+																																		"Name": "num1",
+																																		"Location": {
+																																			"FileName": "*file*",
+																																			"line": 36,
+																																			"column": 10
+																																		}
+																																	},
+																																	"Location": {
+																																		"FileName": "*file*",
+																																		"line": 36,
+																																		"column": 13
+																																	}
+																																},
+																																"Location": {
+																																	"FileName": "*file*",
+																																	"line": 36,
+																																	"column": 10
+																																}
+																															},
+																															"Location": {
+																																"FileName": "*file*",
+																																"line": 36,
+																																"column": 10
+																															}
+																														},
+																														"OperatorRelational": {
+																															"Operator": 5,
+																															"ArithmeticExpression": {
+																																"Term": {
+																																	"Factor": {
+																																		"Number": 0,
+																																		"Location": {
+																																			"FileName": "*file*",
+																																			"line": 36,
+																																			"column": 16
+																																		}
+																																	},
+																																	"Location": {
+																																		"FileName": "*file*",
+																																		"line": 36,
+																																		"column": 15
+																																	}
+																																},
+																																"Location": {
+																																	"FileName": "*file*",
+																																	"line": 36,
+																																	"column": 15
+																																}
+																															},
+																															"Location": {
+																																"FileName": "*file*",
+																																"line": 36,
+																																"column": 15
+																															}
+																														},
+																														"Location": {
+																															"FileName": "*file*",
+																															"line": 36,
+																															"column": 10
+																														}
+																													},
+																													"Block": {
+																														"StatementTail": {
+																															"Statement": {
+																																"PrintStatement": {
+																																	"Expression": {
+																																		"ArithmeticExpression": {
+																																			"Term": {
+																																				"Factor": {
+																																					"String": "\"num1 is greater or equal to 0\"",
+																																					"Location": {
+																																						"FileName": "*file*",
+																																						"line": 36,
+																																						"column": 57
+																																					}
+																																				},
+																																				"Location": {
+																																					"FileName": "*file*",
+																																					"line": 36,
+																																					"column": 56
+																																				}
+																																			},
+																																			"Location": {
+																																				"FileName": "*file*",
+																																				"line": 36,
+																																				"column": 56
+																																			}
+																																		},
+																																		"Location": {
+																																			"FileName": "*file*",
+																																			"line": 36,
+																																			"column": 56
+																																		}
+																																	},
+																																	"Location": {
+																																		"FileName": "*file*",
+																																		"line": 36,
+																																		"column": 25
+																																	}
+																																},
+																																"Location": {
+																																	"FileName": "*file*",
+																																	"line": 36,
+																																	"column": 24
+																																}
+																															},
+																															"Location": {
+																																"FileName": "*file*",
+																																"line": 36,
+																																"column": 18
+																															}
+																														},
+																														"Location": {
+																															"FileName": "*file*",
+																															"line": 36,
+																															"column": 60
+																														}
+																													},
+																													"Location": {
+																														"FileName": "*file*",
+																														"line": 36,
+																														"column": 60
+																													}
+																												},
+																												"Location": {
+																													"FileName": "*file*",
+																													"line": 36,
+																													"column": 4
+																												}
+																											},
+																											"StatementTail": {
+																												"Statement": {
+																													"IfStatement": {
+																														"Expression": {
+																															"ArithmeticExpression": {
+																																"Term": {
+																																	"Factor": {
+																																		"Identifier": {
+																																			"Name": "num1",
+																																			"Location": {
+																																				"FileName": "*file*",
+																																				"line": 37,
+																																				"column": 10
+																																			}
+																																		},
+																																		"Location": {
+																																			"FileName": "*file*",
+																																			"line": 37,
+																																			"column": 13
+																																		}
+																																	},
+																																	"Location": {
+																																		"FileName": "*file*",
+																																		"line": 37,
+																																		"column": 10
+																																	}
+																																},
+																																"Location": {
+																																	"FileName": "*file*",
+																																	"line": 37,
+																																	"column": 10
+																																}
+																															},
+																															"OperatorRelational": {
+																																"Operator": 3,
+																																"ArithmeticExpression": {
+																																	"Term": {
+																																		"Factor": {
+																																			"Number": 0,
+																																			"Location": {
+																																				"FileName": "*file*",
+																																				"line": 37,
+																																				"column": 16
+																																			}
+																																		},
+																																		"Location": {
+																																			"FileName": "*file*",
+																																			"line": 37,
+																																			"column": 15
+																																		}
+																																	},
+																																	"Location": {
+																																		"FileName": "*file*",
+																																		"line": 37,
+																																		"column": 15
+																																	}
+																																},
+																																"Location": {
+																																	"FileName": "*file*",
+																																	"line": 37,
+																																	"column": 15
+																																}
+																															},
+																															"Location": {
+																																"FileName": "*file*",
+																																"line": 37,
+																																"column": 10
+																															}
+																														},
+																														"Block": {
+																															"StatementTail": {
+																																"Statement": {
+																																	"PrintStatement": {
+																																		"Expression": {
+																																			"ArithmeticExpression": {
+																																				"Term": {
+																																					"Factor": {
+																																						"String": "\"num1 is less or equal to 0\"",
+																																						"Location": {
+																																							"FileName": "*file*",
+																																							"line": 37,
+																																							"column": 54
+																																						}
+																																					},
+																																					"Location": {
+																																						"FileName": "*file*",
+																																						"line": 37,
+																																						"column": 53
+																																					}
+																																				},
+																																				"Location": {
+																																					"FileName": "*file*",
+																																					"line": 37,
+																																					"column": 53
+																																				}
+																																			},
+																																			"Location": {
+																																				"FileName": "*file*",
+																																				"line": 37,
+																																				"column": 53
+																																			}
+																																		},
+																																		"Location": {
+																																			"FileName": "*file*",
+																																			"line": 37,
+																																			"column": 25
+																																		}
+																																	},
+																																	"Location": {
+																																		"FileName": "*file*",
+																																		"line": 37,
+																																		"column": 24
+																																	}
+																																},
+																																"Location": {
+																																	"FileName": "*file*",
+																																	"line": 37,
+																																	"column": 18
+																																}
+																															},
+																															"Location": {
+																																"FileName": "*file*",
+																																"line": 37,
+																																"column": 57
+																															}
+																														},
+																														"Location": {
+																															"FileName": "*file*",
+																															"line": 37,
+																															"column": 57
+																														}
+																													},
+																													"Location": {
+																														"FileName": "*file*",
+																														"line": 37,
+																														"column": 4
+																													}
+																												},
+																												"StatementTail": {
+																													"Statement": {
+																														"IfStatement": {
+																															"Expression": {
+																																"ArithmeticExpression": {
+																																	"Term": {
+																																		"Factor": {
+																																			"Identifier": {
+																																				"Name": "num1",
+																																				"Location": {
+																																					"FileName": "*file*",
+																																					"line": 38,
+																																					"column": 10
+																																				}
+																																			},
+																																			"Location": {
+																																				"FileName": "*file*",
+																																				"line": 38,
+																																				"column": 13
+																																			}
+																																		},
+																																		"Location": {
+																																			"FileName": "*file*",
+																																			"line": 38,
+																																			"column": 10
+																																		}
+																																	},
+																																	"Location": {
+																																		"FileName": "*file*",
+																																		"line": 38,
+																																		"column": 10
+																																	}
+																																},
+																																"OperatorRelational": {
+																																	"Operator": 1,
+																																	"ArithmeticExpression": {
+																																		"Term": {
+																																			"Factor": {
+																																				"Number": 0,
+																																				"Location": {
+																																					"FileName": "*file*",
+																																					"line": 38,
+																																					"column": 16
+																																				}
+																																			},
+																																			"Location": {
+																																				"FileName": "*file*",
+																																				"line": 38,
+																																				"column": 15
+																																			}
+																																		},
+																																		"Location": {
+																																			"FileName": "*file*",
+																																			"line": 38,
+																																			"column": 15
+																																		}
+																																	},
+																																	"Location": {
+																																		"FileName": "*file*",
+																																		"line": 38,
+																																		"column": 15
+																																	}
+																																},
+																																"Location": {
+																																	"FileName": "*file*",
+																																	"line": 38,
+																																	"column": 10
+																																}
+																															},
+																															"Block": {
+																																"StatementTail": {
+																																	"Statement": {
+																																		"PrintStatement": {
+																																			"Expression": {
+																																				"ArithmeticExpression": {
+																																					"Term": {
+																																						"Factor": {
+																																							"String": "\"num1 is different from 0\"",
+																																							"Location": {
+																																								"FileName": "*file*",
+																																								"line": 38,
+																																								"column": 52
+																																							}
+																																						},
+																																						"Location": {
+																																							"FileName": "*file*",
+																																							"line": 38,
+																																							"column": 51
+																																						}
+																																					},
+																																					"Location": {
+																																						"FileName": "*file*",
+																																						"line": 38,
+																																						"column": 51
+																																					}
+																																				},
+																																				"Location": {
+																																					"FileName": "*file*",
+																																					"line": 38,
+																																					"column": 51
+																																				}
+																																			},
+																																			"Location": {
+																																				"FileName": "*file*",
+																																				"line": 38,
+																																				"column": 25
+																																			}
+																																		},
+																																		"Location": {
+																																			"FileName": "*file*",
+																																			"line": 38,
+																																			"column": 24
+																																		}
+																																	},
+																																	"Location": {
+																																		"FileName": "*file*",
+																																		"line": 38,
+																																		"column": 18
+																																	}
+																																},
+																																"Location": {
+																																	"FileName": "*file*",
+																																	"line": 38,
+																																	"column": 55
+																																}
+																															},
+																															"Location": {
+																																"FileName": "*file*",
+																																"line": 38,
+																																"column": 55
+																															}
+																														},
+																														"Location": {
+																															"FileName": "*file*",
+																															"line": 38,
+																															"column": 4
+																														}
+																													},
+																													"Location": {
+																														"FileName": "*file*",
+																														"line": 37,
+																														"column": 57
+																													}
+																												},
+																												"Location": {
+																													"FileName": "*file*",
+																													"line": 36,
+																													"column": 60
+																												}
+																											},
+																											"Location": {
+																												"FileName": "*file*",
+																												"line": 35,
+																												"column": 49
+																											}
+																										},
+																										"Location": {
+																											"FileName": "*file*",
+																											"line": 34,
+																											"column": 52
+																										}
+																									},
+																									"Location": {
+																										"FileName": "*file*",
+																										"line": 33,
+																										"column": 44
+																									}
+																								},
+																								"Location": {
+																									"FileName": "*file*",
+																									"line": 32,
+																									"column": 40
+																								}
+																							},
+																							"Location": {
+																								"FileName": "*file*",
+																								"line": 31,
+																								"column": 52
+																							}
+																						},
+																						"Location": {
+																							"FileName": "*file*",
+																							"line": 29,
+																							"column": 14
+																						}
+																					},
+																					"Location": {
+																						"FileName": "*file*",
+																						"line": 28,
+																						"column": 29
+																					}
+																				},
+																				"Location": {
+																					"FileName": "*file*",
+																					"line": 27,
+																					"column": 30
+																				}
+																			},
+																			"Location": {
+																				"FileName": "*file*",
+																				"line": 25,
+																				"column": 11
+																			}
+																		},
+																		"Location": {
+																			"FileName": "*file*",
+																			"line": 24,
+																			"column": 11
+																		}
+																	},
+																	"Location": {
+																		"FileName": "*file*",
+																		"line": 22,
+																		"column": 16
+																	}
+																},
+																"Location": {
+																	"FileName": "*file*",
+																	"line": 21,
+																	"column": 17
+																}
+															},
+															"Location": {
+																"FileName": "*file*",
+																"line": 20,
+																"column": 13
+															}
+														},
+														"Location": {
+															"FileName": "*file*",
+															"line": 19,
+															"column": 31
+														}
+													},
+													"Location": {
+														"FileName": "*file*",
+														"line": 18,
+														"column": 18
+													}
+												},
+												"Location": {
+													"FileName": "*file*",
+													"line": 16,
+													"column": 13
+												}
+											},
+											"Location": {
+												"FileName": "*file*",
+												"line": 15,
+												"column": 27
+											}
+										},
+										"Location": {
+											"FileName": "*file*",
+											"line": 13,
+											"column": 17
+										}
+									},
+									"Location": {
+										"FileName": "*file*",
+										"line": 12,
+										"column": 20
+									}
+								},
+								"Location": {
+									"FileName": "*file*",
+									"line": 11,
+									"column": 21
+								}
+							},
+							"Location": {
+								"FileName": "*file*",
+								"line": 9,
+								"column": 15
+							}
+						},
 						"Location": {
 							"FileName": "*file*",
-							"Start": 23,
-							"End": 12
+							"line": 8,
+							"column": 15
 						}
 					},
 					"Location": {
 						"FileName": "*file*",
-						"Start": 23,
-						"End": 13
+						"line": 7,
+						"column": 15
 					}
 				},
 				"Location": {
 					"FileName": "*file*",
-					"Start": 23,
-					"End": 8
+					"line": 5,
+					"column": 3
 				}
+			},
+			"Location": {
+				"FileName": "*file*",
+				"line": 1,
+				"column": 24
 			}
+		},
+		"Location": {
+			"FileName": "*file*",
+			"line": 0,
+			"column": 7
 		}
-	],
+	},
 	"Location": {
 		"FileName": "*file*",
-		"Start": 1,
-		"End": 1
+		"line": 1,
+		"column": 1
 	}
 }
