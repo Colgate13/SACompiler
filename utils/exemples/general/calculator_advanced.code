@@ -1,0 +1,97 @@
+program
+  // === MINI CALCULADORA AVANÇADA ===
+  
+  var float num1;
+  var float num2;
+  var float result;
+  var string operation;
+  var int choice;
+  
+  // Input simulado
+  num1 = 15;
+  num2 = 4;
+  choice = 1;
+  
+  print("=== CALCULADORA SACOMPILER ===");
+  print("Número 1:");
+  print(num1);
+  print("Número 2:");
+  print(num2);
+  
+  // Operações básicas
+  if (choice == 1) {
+    operation = "Adição";
+    result = num1 + num2;
+  }
+  
+  if (choice == 2) {
+    operation = "Subtração";
+    result = num1 - num2;
+  }
+  
+  if (choice == 3) {
+    operation = "Multiplicação";
+    result = num1 * num2;
+  }
+  
+  if (choice == 4) {
+    operation = "Divisão";
+    result = num1 / num2;
+  }
+  
+  print("Operação:");
+  print(operation);
+  print("Resultado:");
+  print(result);
+  
+  // Cálculos científicos
+  var float area_circle;
+  var float perimeter_circle;
+  var float radius;
+  var float pi;
+  
+  radius = 7;
+  pi = 3;
+  
+  area_circle = pi * radius * radius;
+  perimeter_circle = 2 * pi * radius;
+  
+  print("=== CÁLCULOS CIENTÍFICOS ===");
+  print("Raio:");
+  print(radius);
+  print("Área do círculo:");
+  print(area_circle);
+  print("Perímetro do círculo:");
+  print(perimeter_circle);
+  
+  // Equações matemáticas
+  var float a;
+  var float b;
+  var float c;
+  var float discriminant;
+  
+  a = 1;
+  b = 5;
+  c = 6;
+  
+  discriminant = (b * b) - (4 * a * c);
+  
+  print("=== EQUAÇÃO QUADRÁTICA ===");
+  print("a:");
+  print(a);
+  print("b:");
+  print(b);
+  print("c:");
+  print(c);
+  print("Discriminante:");
+  print(discriminant);
+  
+  if (discriminant >= 0) {
+    print("Tem raízes reais!");
+  }
+  
+  if (discriminant < 0) {
+    print("Não tem raízes reais!");
+  }
+  
+end;

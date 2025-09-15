@@ -1,0 +1,12 @@
+program
+  var float a;
+  var float b;
+  var float result;
+  
+  a = 3.14;
+  b = 2.5;
+  result = a * b;
+  
+  print(result);
+  
+end;

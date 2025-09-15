@@ -1,0 +1,9 @@
+program
+  var int score;
+  score = 85;
+  
+  if ((score * 2) > 150) {
+    print("Test passed");
+  }
+  
+end;

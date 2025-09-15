@@ -4,7 +4,7 @@
 #pragma once
 
 #include "../../Lexical/includes/lexicalAnalyzer.h"
-#define LOGS 0
+#define LOGS 1
 
 enum EKeywords { PROGRAM = 0, END, VAR, PRINT, IF, INT, FLOAT, STRING };
 

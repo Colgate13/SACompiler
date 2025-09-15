@@ -43,6 +43,18 @@ void controlNextToken(Parser *parser) {
     parser->token = nextToken(parser->lexicalAnalyzer);
 }
 
+void controlNextTokenToIgnoreEndLine(Parser *parser) {
+  unsigned int currentLine = parser->lexicalAnalyzer->lineCount;
+
+  while (currentLine == parser->lexicalAnalyzer->lineCount)
+  {
+    printf("Ignoring token: %s, currentLine: %d, lineCOunt: %d\n", parser->token.value, currentLine, parser->lexicalAnalyzer->lineCount);
+    parser->token = nextToken(parser->lexicalAnalyzer);
+  };
+
+  // Back to previous line TODO: Need retorn to the previous token
+}
+
 /**
  * @details Implements <program>
  *
@@ -50,7 +62,7 @@ void controlNextToken(Parser *parser) {
  *       -> Non-terminals initialize with uppercase
  */
 void ParserProgram(Parser *parser) {
-  parser->ast->program = createProgram(createLocation("*file*", 1, 1));
+  parser->ast->program = createProgram(createLocation(parser->lexicalAnalyzer->filePath, 1, 1));
   parser->token = nextToken(parser->lexicalAnalyzer);
 
   if (checkToken(parser, "TOKEN_TYPE_IDENTIFIER") == 0 &&
@@ -123,15 +135,27 @@ Statement *ParserStatement(Parser *parser) {
 
   if (strcmp(parser->token.value, keywords[IF]) == 0) {
     return createStatement_IfStatement(cl(parser), ParserIfStatement(parser));
-  } else if (strcmp(parser->token.value, keywords[PRINT]) == 0) {
-    return createStatement_PrintStatement(cl(parser),
-                                          ParserPrintStatement(parser));
-  } else if (strcmp(parser->token.value, keywords[VAR]) == 0) {
-    return createStatement_VariableDeclaration(
-        cl(parser), ParserVariableDeclaration(parser));
-  } else if (checkToken(parser, "TOKEN_TYPE_IDENTIFIER") == 0) {
+  }
+
+  else if (strcmp(parser->token.value, keywords[PRINT]) == 0) {
+    return createStatement_PrintStatement(cl(parser), ParserPrintStatement(parser));
+  }
+
+  else if (strcmp(parser->token.value, keywords[VAR]) == 0) {
+    return createStatement_VariableDeclaration(cl(parser), ParserVariableDeclaration(parser));
+  }
+
+  else if (checkToken(parser, "TOKEN_TYPE_IDENTIFIER") == 0) {
     return createStatement_Assignment(cl(parser), ParserAssignment(parser));
-  } else {
+  }
+
+  else if (checkToken(parser, "TOKEN_TYPE_OPERATOR") == 0 && strcmp(parser->token.value, "//") == 0) {
+    // Skip comment
+    controlNextTokenToIgnoreEndLine(parser);
+    logToken(parser);
+    return ParserStatement(parser);
+  }
+  else {
     throwParserError(
         1, "Expected print_statement , variable_declaration or assignment\n",
         parser->lexicalAnalyzer->lineCount,

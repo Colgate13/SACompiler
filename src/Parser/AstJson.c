@@ -80,7 +80,12 @@ cJSON *AstConsumerTermTail(TermTail *tt) {
     exit(1);
   }
 
+  cJSON_AddItemToObject(jsonTt, "MultOperator", cJSON_CreateNumber(tt->mult_operator));
   cJSON_AddItemToObject(jsonTt, "Factor", AstConsumerFactor(tt->factor));
+  if (tt->next != NULL) {
+    cJSON_AddItemToObject(jsonTt, "TermTail", AstConsumerTermTail(tt->next));
+  }
+
   cJSON_AddItemToObject(jsonTt, "Location", checkLocation(tt->location));
 
   return jsonTt;
@@ -146,11 +151,15 @@ cJSON *AstConsumerArithmeticExpression(ArithmeticExpression *ae) {
   }
 
   cJSON *jsonAe = cJSON_CreateObject();
+
   cJSON_AddItemToObject(jsonAe, "Term", AstConsumerTerm(ae->term));
-  if (ae->arithmetic_expression_tail != NULL)
+  
+  if (ae->arithmetic_expression_tail != NULL) {
     cJSON_AddItemToObject(
         jsonAe, "ArithmeticExpressionTail",
         AstConsumerArithmeticExpressionTail(ae->arithmetic_expression_tail));
+  }
+
   cJSON_AddItemToObject(jsonAe, "Location", checkLocation(ae->location));
 
   return jsonAe;

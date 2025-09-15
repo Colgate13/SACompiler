@@ -1,0 +1,96 @@
+program
+  // === MASTER CLASS DE CONDICIONAIS E OPERADORES RELACIONAIS ===
+  
+  var int age;
+  var int score;
+  var string name;
+  var string grade;
+  var float temperature;
+  var int speed;
+  
+  age = 25;
+  score = 85;
+  name = "Gabriel";
+  temperature = 37;
+  speed = 120;
+  
+  // Testes de igualdade com diferentes tipos
+  if (age == 25) {
+    print("Idade correta!");
+  }
+  
+  if (name == "Gabriel") {
+    print("Nome encontrado!");
+  }
+  
+  // Comparações numéricas avançadas
+  if (score > 80) {
+    print("Nota alta!");
+  }
+  
+  if (score >= 85) {
+    print("Excelente!");
+  }
+  
+  if (temperature < 40) {
+    print("Temperatura normal");
+  }
+  
+  if (speed <= 120) {
+    print("Velocidade permitida");
+  }
+  
+  // Operador de diferença
+  if (age != 30) {
+    print("Não tem 30 anos");
+  }
+  
+  // Condicionais com expressões aritméticas complexas
+  if ((score * 2) > 150) {
+    print("Score dobrado é alto!");
+  }
+  
+  if ((age + 5) <= 30) {
+    print("Em 5 anos terá no máximo 30");
+  }
+  
+  // Comparação de resultados de cálculos
+  var int calc1;
+  var int calc2;
+  calc1 = age * 2;
+  calc2 = score - 35;
+  
+  if (calc1 == calc2) {
+    print("Cálculos iguais!");
+  }
+  
+  if (calc1 > calc2) {
+    print("Calc1 maior que Calc2");
+  }
+  
+  // Condicionais aninhados
+  if (age > 18) {
+    if (score > 70) {
+      print("Adulto aprovado!");
+    }
+  }
+  
+  // Testando limites e casos extremos
+  var int zero;
+  var int negative;
+  zero = 0;
+  negative = -5;
+  
+  if (zero == 0) {
+    print("Zero é zero!");
+  }
+  
+  if (negative < 0) {
+    print("Número negativo detectado");
+  }
+  
+  if (negative != zero) {
+    print("Negativo diferente de zero");
+  }
+  
+end;

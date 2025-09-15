@@ -9,6 +9,7 @@
 #define MAX_TERM_SIZE 1000
 
 typedef struct {
+  char *filePath;
   FILE *file;
   char *line;
   short int globalTokensCount;

@@ -1,0 +1,7 @@
+program
+  var int negative;
+  negative = -5;
+  
+  print(negative);
+  
+end;

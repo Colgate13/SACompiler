@@ -1,0 +1,12 @@
+program
+  var int a;
+  var int b;
+  var int result;
+  
+  a = 10;
+  b = 5;
+  
+  result = (a + b) * 2;
+  print(result);
+  
+end;

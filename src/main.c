@@ -33,8 +33,8 @@ int main(int argc, char *argv[]) {
   Semantic *semantic = createSemantic(parser);
   SemanticAnalysis(semantic);
 
-  // Generate code
-  CodeGen(parser->ast, "./out-code.c", CODE_GEN_STRATEGY_C);
+  // // Generate code
+  // CodeGen(parser->ast, "./out-code.c", CODE_GEN_STRATEGY_C);
 
   // Create output file only for test and debug
   if (LOGS == 1) {
