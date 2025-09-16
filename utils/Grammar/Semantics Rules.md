@@ -48,8 +48,8 @@ Este arquivo documenta as **regras semânticas** da linguagem SA, separadas da g
 **Gramática**: `<operator_relational> ::= <relational_operator> <arithmetic_expression>`
 
 - ✅ Verifica compatibilidade de tipos nos dois lados
-  - ❌ `string == int`, `float != string`, etc. → erro
-  - ✅ `int == float` → permitido
+  - ❌ `string == int`, `double != string`, etc. → erro
+  - ✅ `int == double` → permitido
 - ✅ Resultado da operação: `int`
 
 ---
@@ -59,9 +59,9 @@ Este arquivo documenta as **regras semânticas** da linguagem SA, separadas da g
 
 - ✅ Valida combinações de tipo:
   - `int + int → int`
-  - `int + float → float`
+  - `int + double → double`
   - ⚠️ `string + string → string` (caso suportado)
-  - ❌ `%` com `float` → erro
+  - ❌ `%` com `double` → erro
 - ✅ Tipo resultante: mais abrangente
 
 ---

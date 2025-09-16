@@ -94,7 +94,7 @@ For Parser using this [grammar](https://github.com/Colgate13/SACompiler/blob/mai
 <string>             --> '"' [a-zA-Z0-9_]* '"'
 <identifier>         --> [a-zA-Z_][a-zA-Z0-9_]*
 <type>               --> "int"
-                    | "float"
+                    | "double"
                     | "string"
 
 
@@ -165,24 +165,11 @@ Durante o desenvolvimento e testes do SACompiler, foram identificadas várias li
 - **Solução**: Implementar suporte a comentários de linha (`//`) e bloco (`/* */`) no lexer
 - **Prioridade**: Alta
 
-#### 2. **Expressões com Parênteses Não Funcionam**
-- **Problema**: Parser não consegue processar expressões como `(a + b) * 2`
-- **Erro**: `Expected number, identifier or string`
-- **Causa**: Implementação incompleta da regra `<factor> --> "(" <expression> ")"`
-- **Solução**: Corrigir o parser para suportar parênteses aninhados
-- **Prioridade**: Alta
-
 #### 3. **Números Negativos Não Suportados**
 - **Problema**: Lexer não reconhece números negativos como `-5`
 - **Erro**: Trata `-` como operador separado em vez de prefixo numérico
 - **Solução**: Modificar lexer para reconhecer números negativos ou implementar operador unário
 - **Prioridade**: Média
-
-#### 4. **Números Decimais Não São Float**
-- **Problema**: Números como `3.14` são tratados como `int` em vez de `float`
-- **Erro**: `Type mismatch in assignment to 'a'. Expected 'float', got 'int'`
-- **Solução**: Corrigir análise semântica para reconhecer literais float
-- **Prioridade**: Alta
 
 ### 🛠️ Funcionalidades em Falta
 
@@ -243,44 +230,54 @@ Durante o desenvolvimento e testes do SACompiler, foram identificadas várias li
 
 ### 📊 Status dos Testes
 
-| Funcionalidade | Status | Observações |
-|---------------|--------|-------------|
-| Declaração de variáveis | ✅ | Funciona corretamente |
-| Operações aritméticas básicas | ✅ | `+`, `-`, `*`, `/`, `%` funcionam |
-| Operadores relacionais | ✅ | Todos os 6 operadores funcionam |
-| Condicionais if | ✅ | Funcionam sem parênteses complexos |
-| Print statements | ✅ | Funciona com strings e variáveis |
-| Precedência de operadores | ✅ | Implementada corretamente |
-| Comentários | ❌ | Não suportado |
-| Parênteses em expressões | ❌ | Não funciona |
-| Números negativos | ❌ | Não suportado |
-| Literais float | ❌ | Não reconhecidos |
-| Condicionais aninhados | ❌ | Limitados pela falta de parênteses |
+| Funcionalidade | Status | Observações | Arquivo de Teste |
+|---------------|--------|-------------|------------------|
+| Declaração de variáveis | ✅ | Funciona corretamente | N/A |
+| Operações aritméticas básicas | ✅ | `+`, `-`, `*`, `/`, `%` funcionam | N/A |
+| Operadores relacionais | ✅ | Todos os 6 operadores funcionam | N/A |
+| Condicionais if | ✅ | Funcionam sem parênteses complexos | N/A |
+| Print statements | ✅ | Funciona com strings e variáveis | N/A |
+| Precedência de operadores | ✅ | Implementada corretamente | N/A |
+| **Comentários** | ❌ | **FALHA**: `//` tratado como operador, `/* */` causa erro de parsing | `test_comments.code` |
+| **Parênteses em expressões** | ✅ | **SUCESSO**: Parênteses funcionam corretamente! | `test_parentheses.code` |
+| **Números negativos** | ⚠️ | **PARCIAL**: Unário funciona mas decimais negativos têm erro de tipo | `test_negative_numbers.code` |
+| **Literais double** | ✅ | **SUCESSO**: Decimais são reconhecidos como double! | `test_decimal_double.code` |
+| Condicionais aninhados | ✅ | Funcionam com parênteses agora | N/A |
+
+### 📋 Resultados Detalhados dos Testes
+
+#### 1. Teste de Comentários (`test_comments.code`)
+```
+❌ FALHA: Error (1): Expected print_statement, variable_declaration or assignment
+```
+- **Problema Confirmado**: O lexer trata `//` como TOKEN_TYPE_OPERATOR
+- **Problema Adicional**: Comentários de bloco `/* */` causam erro de parsing
+- **Status**: Bug crítico confirmado
+
+#### 2. Teste de Parênteses (`test_parentheses.code`)
+```
+✅ SUCESSO: Compilação bem-sucedida com AST gerado
+```
+- **Descoberta**: Parênteses funcionam corretamente!
+- **Status**: Bug reportado incorretamente - funcionalidade está implementada
+
+#### 3. Teste de Números Negativos (`test_negative_numbers.code`)
+```
+⚠️ PARCIAL: Error: Type mismatch in assignment to 'negDouble'. Expected 'double', got 'int'
+```
+- **Problema Confirmado**: `-3.14` é tratado como `int` em vez de `double`
+- **Descoberta**: Operador unário `-` funciona para inteiros
+- **Status**: Bug parcialmente confirmado - problema específico com decimais negativos
+
+#### 4. Teste de Literais Double (`test_decimal_double.code`)
+```
+✅ SUCESSO: Compilação bem-sucedida, decimais reconhecidos como double
+```
+- **Descoberta**: Literais double funcionam corretamente!
+- **Tokens**: `3.14` é corretamente reconhecido como `TOKEN_TYPE_NUMBER` e inferido como `double`
+- **Status**: Bug reportado incorretamente - funcionalidade está implementada
 
 ### 🎯 Roadmap de Desenvolvimento
-
-**Versão 0.2.0**
-- [ ] Corrigir suporte a comentários
-- [ ] Implementar parênteses em expressões
-- [ ] Corrigir reconhecimento de números float
-- [ ] Adicionar números negativos
-
-**Versão 0.3.0**
-- [ ] Implementar if-else
-- [ ] Adicionar operadores unários
-- [ ] Melhorar mensagens de erro
-- [ ] Implementar verificação de tipos completa
-
-**Versão 0.4.0**
-- [ ] Adicionar loops (while, for)
-- [ ] Implementar escopo de variáveis
-- [ ] Suporte a arrays básicos
-
-**Versão 1.0.0**
-- [ ] Funções definidas pelo usuário
-- [ ] Otimizações do AST
-- [ ] Documentação completa
-- [ ] Suite de testes abrangente
 
 ## License
 

@@ -366,6 +366,9 @@ Factor *createFactor_Expression(Location *location, Expression *expression) {
   factor->number = NULL;
   factor->identifier = NULL;
   factor->string = NULL;
+  factor->unary_operator = NULL;
+  factor->factor = NULL;
+
   return factor;
 }
 
@@ -385,6 +388,9 @@ Factor *createFactor_Number(Location *location, Number *number) {
   factor->number = number;
   factor->identifier = NULL;
   factor->string = NULL;
+  factor->unary_operator = NULL;
+  factor->factor = NULL;
+
   return factor;
 }
 
@@ -404,6 +410,9 @@ Factor *createFactor_Identifier(Location *location, Identifier *identifier) {
   factor->number = NULL;
   factor->identifier = identifier;
   factor->string = NULL;
+  factor->unary_operator = NULL;
+  factor->factor = NULL;
+
   return factor;
 }
 
@@ -423,7 +432,30 @@ Factor *createFactor_String(Location *location, String *string) {
   factor->number = NULL;
   factor->identifier = NULL;
   factor->string = string;
+  factor->unary_operator = NULL;
+  factor->factor = NULL;
+
   return factor;
+}
+
+Factor *createFactor_UnaryOperator(Location *location, char *unary_operator, Factor *factor) {
+  Factor *f = malloc(sizeof(Factor));
+
+  if (f == NULL) {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
+
+  f->location = location;
+  f->expression = NULL;
+  f->number = NULL;
+  f->identifier = NULL;
+  f->string = NULL;
+  f->unary_operator = strdup(unary_operator);
+  f->factor = factor;
+
+  return f;
 }
 
 /**
@@ -476,7 +508,7 @@ String *createString(Location *location, char *value) {
 /**
  * @Number
  */
-Number *createNumber(Location *location, int value) {
+Number *createNumber(Location *location, char *value) {
   Number *number = malloc(sizeof(Number));
 
   if (number == NULL) {
@@ -486,7 +518,14 @@ Number *createNumber(Location *location, int value) {
 
   number->location = location;
 
-  number->value = value;
+  if (strchr(value, '.') != NULL) {
+    number->type = TYPE_DOUBLE;
+    number->double_value = atof(value);
+  } else {
+    number->type = TYPE_INT;
+    number->int_value = atoi(value);
+  }
+
   return number;
 }
 
@@ -513,8 +552,8 @@ Identifier *createIdentifier(Location *location, char *name) {
 Type getLiteralType(char *searchType) {
   if (strcmp(searchType, "int") == 0) {
     return TYPE_INT;
-  } else if (strcmp(searchType, "float") == 0) {
-    return TYPE_FLOAT;
+  } else if (strcmp(searchType, "double") == 0) {
+    return TYPE_DOUBLE;
   } else if (strcmp(searchType, "string") == 0) {
     return TYPE_STRING;
   } else {

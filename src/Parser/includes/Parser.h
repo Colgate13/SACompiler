@@ -6,7 +6,7 @@
 #include "../../Lexical/includes/lexicalAnalyzer.h"
 #define LOGS 1
 
-enum EKeywords { PROGRAM = 0, END, VAR, PRINT, IF, INT, FLOAT, STRING };
+enum EKeywords { PROGRAM = 0, END, VAR, PRINT, IF, INT, DOUBLE, STRING };
 
 enum EStatementsType {
   PRINT_STATEMENT = 0,
@@ -15,7 +15,7 @@ enum EStatementsType {
   IF_STATEMENT
 };
 
-typedef enum { TYPE_INT = 0, TYPE_FLOAT, TYPE_STRING } Type;
+typedef enum { TYPE_INT = 0, TYPE_DOUBLE, TYPE_STRING } Type;
 
 // <add_operator> --> "+" | "-"
 typedef enum {
@@ -80,9 +80,13 @@ typedef struct Identifier {
   Location *location;
 } Identifier;
 
-// <number> --> [0-9]+
+// <number> --> <int_literal> | <double_literal>
 typedef struct Number {
-  int value;
+  Type type;
+  union {
+    int int_value;
+    double double_value;
+  };
   Location *location;
 } Number;
 
@@ -101,6 +105,10 @@ typedef struct Factor {
   Identifier *identifier;
   // |
   String *string;
+  // |
+  char *unary_operator;
+  Factor *factor;
+
   Location *location;
 } Factor;
 

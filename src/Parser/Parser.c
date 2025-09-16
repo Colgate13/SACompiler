@@ -10,7 +10,7 @@
 #include "./includes/Utils.h"
 
 const char *keywords[] = {"program", "end", "var",   "print",
-                          "if",      "int", "float", "string"};
+                          "if",      "int", "double", "string"};
 
 Parser *createParser(LexicalAnalyzer *lexicalAnalyzer) {
   Parser *parser = (Parser *)malloc(sizeof(Parser));
@@ -48,7 +48,13 @@ void controlNextTokenToIgnoreEndLine(Parser *parser) {
 
   while (currentLine == parser->lexicalAnalyzer->lineCount)
   {
-    // printf("Ignoring token: %s, currentLine: %d, lineCOunt: %d\n", parser->token.value, currentLine, parser->lexicalAnalyzer->lineCount);
+    parser->token = nextToken(parser->lexicalAnalyzer);
+  };
+}
+
+void controlNextTokenToIgnoreToNextMatch(Parser *parser, char *match) {
+  while (strcmp(parser->token.value, match) != 0)
+  {
     parser->token = nextToken(parser->lexicalAnalyzer);
   };
 }
@@ -154,6 +160,11 @@ Statement *ParserStatement(Parser *parser, unsigned int notNextToken) {
     controlNextTokenToIgnoreEndLine(parser);
     logToken(parser);
     return ParserStatement(parser, 1);
+  } if (checkToken(parser, "TOKEN_TYPE_OPERATOR") == 0 && strcmp(parser->token.value, "/*") == 0) {
+    // Skip comment
+    controlNextTokenToIgnoreToNextMatch(parser, "*/");
+    logToken(parser);
+    return ParserStatement(parser, 0);
   }
   else {
     throwParserError(
@@ -204,8 +215,8 @@ VariableDeclaration *ParserVariableDeclaration(Parser *parser) {
   unsigned short int type;
   if (strcmp(parser->token.value, keywords[INT]) == 0) {
     type = TYPE_INT;
-  } else if (strcmp(parser->token.value, keywords[FLOAT]) == 0) {
-    type = TYPE_FLOAT;
+  } else if (strcmp(parser->token.value, keywords[DOUBLE]) == 0) {
+    type = TYPE_DOUBLE;
   } else if (strcmp(parser->token.value, keywords[STRING]) == 0) {
     type = TYPE_STRING;
   } else {
@@ -341,9 +352,6 @@ Term *ParserTerm(Parser *parser) {
 Factor *ParserFactor(Parser *parser) {
   // "(" <expression> ")"
   if (checkToken(parser, "TOKEN_TYPE_LEFT_PARENTHESIS") == 0) {
-    controlNextToken(parser);
-    logToken(parser);
-
     Expression *expr = ParserExpression(parser);
 
     if (checkToken(parser, "TOKEN_TYPE_RIGHT_PARENTHESIS") == 0) {
@@ -360,14 +368,7 @@ Factor *ParserFactor(Parser *parser) {
   }
   // <number>
   else if (checkToken(parser, "TOKEN_TYPE_NUMBER") == 0) {
-    /**
-     * @important
-     *
-     * The atoi() function converts a string to an integer.
-     *
-     * Floating point numbers are truncated to integer.
-     */
-    Number *number = createNumber(cl(parser), atoi(parser->token.value));
+    Number *number = createNumber(cl(parser), parser->token.value);
 
     controlNextToken(parser);
     logToken(parser);
@@ -386,12 +387,19 @@ Factor *ParserFactor(Parser *parser) {
   // <string>
   else if (checkToken(parser, "TOKEN_TYPE_STRING") == 0) {
     String *string = createString(cl(parser), parser->token.value);
-
     controlNextToken(parser);
     logToken(parser);
 
     return createFactor_String(cl(parser), string);
-  } else {
+  } else if (checkToken(parser, "TOKEN_TYPE_OPERATOR") == 0 && (strcmp(parser->token.value, "+") == 0 || strcmp(parser->token.value, "-") == 0)) { 
+    char *unary_operator = strdup(parser->token.value);
+    controlNextToken(parser);
+    logToken(parser);
+
+    return createFactor_UnaryOperator(cl(parser), unary_operator, ParserFactor(parser));
+  } 
+  // Error
+  else {
     throwParserError(1, "Expected number, identifier or string\n",
                      parser->lexicalAnalyzer->lineCount,
                      parser->lexicalAnalyzer->positionCount,

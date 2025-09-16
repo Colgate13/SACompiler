@@ -48,15 +48,25 @@ cJSON *AstConsumerFactor(Factor *factor) {
     cJSON_AddItemToObject(jsonFactor, "Expression",
                           AstConsumerExpression(factor->expression));
   } else if (factor->number != NULL) {
-    cJSON_AddItemToObject(jsonFactor, "Number",
-                          cJSON_CreateNumber(factor->number->value));
+    if (factor->number->type == TYPE_INT) cJSON_AddItemToObject(jsonFactor, "Number", cJSON_CreateNumber(factor->number->int_value));
+    else if (factor->number->type == TYPE_DOUBLE) cJSON_AddItemToObject(jsonFactor, "Number", cJSON_CreateNumber(factor->number->double_value));
+    else {
+      printf("Factor with number of unknown type\n");
+      exit(1);
+    }
   } else if (factor->identifier != NULL) {
     cJSON_AddItemToObject(jsonFactor, "Identifier",
                           AstConsumerIdentifier(factor->identifier));
   } else if (factor->string != NULL) {
     cJSON_AddItemToObject(jsonFactor, "String",
                           cJSON_CreateString(factor->string->value));
-  } else {
+  } else if (factor->unary_operator != NULL && factor->factor != NULL) {
+    cJSON_AddItemToObject(jsonFactor, "UnaryOperator",
+                          cJSON_CreateString(factor->unary_operator));
+    cJSON_AddItemToObject(jsonFactor, "Factor",
+                          AstConsumerFactor(factor->factor));
+  }
+   else {
     printf("Factor without factor\n");
     exit(1);
   }
@@ -369,7 +379,7 @@ void createOutputFile(cJSON *json, char *fileOutputAst) {
 
   fprintf(file, "%s", cJSON_Print(json));
   fclose(file);
-  printf("File output: %s", fileOutputAst);
+  printf("File output: %s\n", fileOutputAst);
 }
 
 void AstJsonConsumer(Program program, char *fileOutputAst) {

@@ -1,0 +1,14 @@
+program
+    // This is a single line comment
+    var int x;
+    x = 5; // Inline comment
+
+    /* This is a
+       multi-line comment */
+    var double y;
+    y = 3.14;
+
+    // Testing comment at end of program
+    print(x);
+    print(y);
+end;

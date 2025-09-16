@@ -46,11 +46,13 @@ Factor *createFactor_Expression(Location *location, Expression *expression);
 Factor *createFactor_Number(Location *location, Number *number);
 Factor *createFactor_Identifier(Location *location, Identifier *identifier);
 Factor *createFactor_String(Location *location, String *string);
+Factor *createFactor_UnaryOperator(Location *location, char *unary_operator, Factor *factor);
+
 TermTail *createTermTail(Location *location, char *op, Factor *factor,
                          TermTail *tail);
 
 String *createString(Location *location, char *value);
-Number *createNumber(Location *location, int value);
+Number *createNumber(Location *location, char *value);
 Identifier *createIdentifier(Location *location, char *name);
 Type getLiteralType(char *searchType);
 
