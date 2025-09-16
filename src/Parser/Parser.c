@@ -48,11 +48,9 @@ void controlNextTokenToIgnoreEndLine(Parser *parser) {
 
   while (currentLine == parser->lexicalAnalyzer->lineCount)
   {
-    printf("Ignoring token: %s, currentLine: %d, lineCOunt: %d\n", parser->token.value, currentLine, parser->lexicalAnalyzer->lineCount);
+    // printf("Ignoring token: %s, currentLine: %d, lineCOunt: %d\n", parser->token.value, currentLine, parser->lexicalAnalyzer->lineCount);
     parser->token = nextToken(parser->lexicalAnalyzer);
   };
-
-  // Back to previous line TODO: Need retorn to the previous token
 }
 
 /**
@@ -81,7 +79,7 @@ void ParserProgram(Parser *parser) {
  */
 StatementTail *ParserStatementTail(Parser *parser) {
   StatementTail *statementTail =
-      createStatementTail(cl(parser), ParserStatement(parser));
+      createStatementTail(cl(parser), ParserStatement(parser, 0));
 
   if (statementTail->statement == NULL) {
     return statementTail;
@@ -117,9 +115,11 @@ Block *ParserBlock(Parser *parser) {
 /**
  * @details Implements <statement>
  */
-Statement *ParserStatement(Parser *parser) {
-  controlNextToken(parser);
-  logToken(parser);
+Statement *ParserStatement(Parser *parser, unsigned int notNextToken) {
+  if (!notNextToken) {
+    controlNextToken(parser);
+    logToken(parser);
+  }
 
   // Exit condition for <statement_tail> if the token is "end"
   if ((parser->token.value &&
@@ -153,7 +153,7 @@ Statement *ParserStatement(Parser *parser) {
     // Skip comment
     controlNextTokenToIgnoreEndLine(parser);
     logToken(parser);
-    return ParserStatement(parser);
+    return ParserStatement(parser, 1);
   }
   else {
     throwParserError(

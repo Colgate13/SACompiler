@@ -224,7 +224,7 @@ void destroyParser(Parser *parser);
 
 Block *ParserBlock(Parser *parser);
 StatementTail *ParserStatementTail(Parser *parser);
-Statement *ParserStatement(Parser *parser);
+Statement *ParserStatement(Parser *parser, unsigned int notNextToken);
 IfStatement *ParserIfStatement(Parser *parser);
 PrintStatement *ParserPrintStatement(Parser *parser);
 VariableDeclaration *ParserVariableDeclaration(Parser *parser);
