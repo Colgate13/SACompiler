@@ -159,6 +159,16 @@ Durante o desenvolvimento e testes do SACompiler, foram identificadas várias li
 
 ### 🛠️ Funcionalidades em Falta
 
+#### **Mensagens de Erro Mais Detalhadas**
+- **Problema**: Mensagens de erro são genéricas
+- **Melhoria**: Fornecer contexto mais específico sobre o erro
+- **Prioridade**: Baixa
+
+#### **Otimização do AST**
+- **Problema**: AST pode ser otimizado para melhor performance
+- **Melhoria**: Implementar folding de constantes e outras otimizações
+- **Prioridade**: Baixa
+
 #### **Suporte a Else em Condicionais**
 - **Funcionalidade**: Implementar `if-else` statements
 - **Gramática Necessária**: `<if_statement> --> "if" "(" <expression> ")" <block> ["else" <block>]`
@@ -179,31 +189,6 @@ Durante o desenvolvimento e testes do SACompiler, foram identificadas várias li
 #### **Arrays/Vetores**
 - **Funcionalidade**: Suporte a estruturas de dados indexadas
 - **Gramática Necessária**: `<array_declaration> --> "var" <type> <identifier> "[" <number> "]"`
-- **Prioridade**: Baixa
-
-#### **Operadores Unários Não Suportados**
-- **Problema**: Não há suporte para `!`, `-`, `+` como operadores unários
-- **Exemplo**: `!condition`, `-variable`
-- **Prioridade**: Média
-
-#### **Verificação de Tipos Incompleta**
-- **Problema**: Mistura de tipos em operações não é adequadamente verificada
-- **Exemplo**: `int + string` deveria gerar erro
-- **Prioridade**: Média
-
-#### **Escopo de Variáveis Não Implementado**
-- **Problema**: Todas as variáveis são globais
-- **Impacto**: Variáveis declaradas em blocos não têm escopo local
-- **Prioridade**: Baixa
-
-#### **Mensagens de Erro Mais Detalhadas**
-- **Problema**: Mensagens de erro são genéricas
-- **Melhoria**: Fornecer contexto mais específico sobre o erro
-- **Prioridade**: Baixa
-
-#### **Otimização do AST**
-- **Problema**: AST pode ser otimizado para melhor performance
-- **Melhoria**: Implementar folding de constantes e outras otimizações
 - **Prioridade**: Baixa
 
 ## License

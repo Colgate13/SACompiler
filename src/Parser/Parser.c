@@ -391,7 +391,13 @@ Factor *ParserFactor(Parser *parser) {
     logToken(parser);
 
     return createFactor_String(cl(parser), string);
-  } else if (checkToken(parser, "TOKEN_TYPE_OPERATOR") == 0 && (strcmp(parser->token.value, "+") == 0 || strcmp(parser->token.value, "-") == 0)) { 
+  } else if (checkToken(parser, "TOKEN_TYPE_OPERATOR") == 0 && 
+    (
+      strcmp(parser->token.value, "+") == 0 ||
+      strcmp(parser->token.value, "-") == 0 ||
+      strcmp(parser->token.value, "!") == 0
+    )
+  ) { 
     char *unary_operator = strdup(parser->token.value);
     controlNextToken(parser);
     logToken(parser);

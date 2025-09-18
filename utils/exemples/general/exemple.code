@@ -1,8 +1,11 @@
 program
-  var double num1;
-  num1 = - 1 + -(1 * 1.1 - 1) - (4 / 2) * 1;
+  var int controler;
+  controler = 1;
 
- /* if(!num1) {
-    print(num1);
-  }*/
+  if(controler) {
+    var int test;
+    test = 1;
+  print(test);
+  }
+
 end;

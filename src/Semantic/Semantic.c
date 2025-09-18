@@ -314,7 +314,6 @@ Type inferFactorType(SymbolTable *stack, Factor *factor) {
 
   if (factor->unary_operator != NULL && factor->factor != NULL) {
     return inferFactorType(stack, factor->factor);
-    // return TYPE_INT; // TODO: FIX for double, string and identifier
   }
 
   fprintf(stderr, "Error: unable to infer factor type\n");
