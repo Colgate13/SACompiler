@@ -1,6 +1,8 @@
 program
   var double num1;
-  num1 = 10.1;
+  num1 = - 1 + -(1 * 1.1 - 1) - (4 / 2) * 1;
 
-  print(num1);
+ /* if(!num1) {
+    print(num1);
+  }*/
 end;
