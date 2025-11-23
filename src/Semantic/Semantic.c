@@ -161,6 +161,12 @@ void analyzeIfStatement(SymbolTable *stack, IfStatement *ifStatement) {
   analyzeStatement(stack, ifStatement->then_statement);
   popScope(&stack);
 
+  if (ifStatement->else_statement != NULL) {
+    pushScope(&stack);
+    analyzeStatement(stack, ifStatement->else_statement);
+    popScope(&stack);
+  }
+
   logSemantic("SEM#003 - If statement: type '%s'", typeToString(conditionType));
 }
 
