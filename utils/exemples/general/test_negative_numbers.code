@@ -1,0 +1,34 @@
+program
+    var int negInt;
+    var double negDouble;
+    var int result;
+
+    // Test direct negative number assignment
+    negInt = -5;
+    print(negInt);
+
+    negDouble = -3.14;
+    print(negDouble);
+
+    // Test negative numbers in expressions
+    result = -10 + 5;
+    print(result);
+
+    // Test unary minus operator
+    var int positive;
+    positive = 7;
+    result = -positive;
+    print(result);
+
+    // Test negative number in multiplication
+    result = -2 * 3;
+    print(result);
+
+    // Test double negative (should be positive)
+    result = -(-5);
+    print(result);
+
+    // Test mixed operations with negative numbers
+    result = -10 + -5;
+    print(result);
+end;

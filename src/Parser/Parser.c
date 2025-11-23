@@ -9,8 +9,17 @@
 #include "./includes/Parser.h"
 #include "./includes/Utils.h"
 
-const char *keywords[] = {"program", "end", "var",   "print",
-                          "if",      "int", "float", "string"};
+const char *keywords[] = {
+  "program",
+  "end",
+  "var",
+  "print",
+  "if",
+  "int",
+  "double",
+  "string",
+  "else"
+};
 
 Parser *createParser(LexicalAnalyzer *lexicalAnalyzer) {
   Parser *parser = (Parser *)malloc(sizeof(Parser));
@@ -22,6 +31,7 @@ Parser *createParser(LexicalAnalyzer *lexicalAnalyzer) {
 
   parser->lexicalAnalyzer = lexicalAnalyzer;
   parser->ast = (Ast *)malloc(sizeof(Ast));
+  parser->hasSavedToken = 0;
 
   if (parser->ast == NULL) {
     fprintf(stderr, "Memory allocation error\n");
@@ -37,10 +47,54 @@ void destroyParser(Parser *parser) {
 }
 
 void controlNextToken(Parser *parser) {
+  // Check if there is a saved token. Restore it if exists. **LOOKAHEAD**
+  if (parser->hasSavedToken) {
+    parser->token = parser->savedToken;
+    parser->hasSavedToken = 0;
+    return;
+  }
+
   parser->token = nextToken(parser->lexicalAnalyzer);
 
   if (checkToken(parser, "TOKEN_TYPE_END_LINE") == 0)
     parser->token = nextToken(parser->lexicalAnalyzer);
+}
+
+void lookaheadNextToken(Parser *parser) {
+  if (parser->hasSavedToken) {
+    throwParserError(
+        1, "Lookahead error: cannot perform lookahead because there is an unconsumed saved token.\n", parser->lexicalAnalyzer->lineCount,
+        parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
+    exit(1);
+  }
+
+  parser->token = nextToken(parser->lexicalAnalyzer);
+
+  if (checkToken(parser, "TOKEN_TYPE_END_LINE") == 0)
+    parser->token = nextToken(parser->lexicalAnalyzer);
+
+  parser->savedToken = parser->token;
+  parser->hasSavedToken = 1;
+}
+
+void lookaheadClear(Parser *parser) {
+  parser->hasSavedToken = 0;
+}
+
+void controlNextTokenToIgnoreEndLine(Parser *parser) {
+  unsigned int currentLine = parser->lexicalAnalyzer->lineCount;
+
+  while (currentLine == parser->lexicalAnalyzer->lineCount)
+  {
+    parser->token = nextToken(parser->lexicalAnalyzer);
+  };
+}
+
+void controlNextTokenToIgnoreToNextMatch(Parser *parser, char *match) {
+  while (strcmp(parser->token.value, match) != 0)
+  {
+    parser->token = nextToken(parser->lexicalAnalyzer);
+  };
 }
 
 /**
@@ -50,7 +104,7 @@ void controlNextToken(Parser *parser) {
  *       -> Non-terminals initialize with uppercase
  */
 void ParserProgram(Parser *parser) {
-  parser->ast->program = createProgram(createLocation("*file*", 1, 1));
+  parser->ast->program = createProgram(createLocation(parser->lexicalAnalyzer->filePath, 1, 1));
   parser->token = nextToken(parser->lexicalAnalyzer);
 
   if (checkToken(parser, "TOKEN_TYPE_IDENTIFIER") == 0 &&
@@ -69,7 +123,7 @@ void ParserProgram(Parser *parser) {
  */
 StatementTail *ParserStatementTail(Parser *parser) {
   StatementTail *statementTail =
-      createStatementTail(cl(parser), ParserStatement(parser));
+      createStatementTail(cl(parser), ParserStatement(parser, 0));
 
   if (statementTail->statement == NULL) {
     return statementTail;
@@ -105,9 +159,11 @@ Block *ParserBlock(Parser *parser) {
 /**
  * @details Implements <statement>
  */
-Statement *ParserStatement(Parser *parser) {
-  controlNextToken(parser);
-  logToken(parser);
+Statement *ParserStatement(Parser *parser, unsigned int notNextToken) {
+  if (!notNextToken) {
+    controlNextToken(parser);
+    logToken(parser);
+  }
 
   // Exit condition for <statement_tail> if the token is "end"
   if ((parser->token.value &&
@@ -123,15 +179,36 @@ Statement *ParserStatement(Parser *parser) {
 
   if (strcmp(parser->token.value, keywords[IF]) == 0) {
     return createStatement_IfStatement(cl(parser), ParserIfStatement(parser));
-  } else if (strcmp(parser->token.value, keywords[PRINT]) == 0) {
-    return createStatement_PrintStatement(cl(parser),
-                                          ParserPrintStatement(parser));
-  } else if (strcmp(parser->token.value, keywords[VAR]) == 0) {
-    return createStatement_VariableDeclaration(
-        cl(parser), ParserVariableDeclaration(parser));
-  } else if (checkToken(parser, "TOKEN_TYPE_IDENTIFIER") == 0) {
+  }
+
+  else if (strcmp(parser->token.value, keywords[PRINT]) == 0) {
+    return createStatement_PrintStatement(cl(parser), ParserPrintStatement(parser));
+  }
+
+  else if (strcmp(parser->token.value, keywords[VAR]) == 0) {
+    return createStatement_VariableDeclaration(cl(parser), ParserVariableDeclaration(parser));
+  }
+
+  else if (checkToken(parser, "TOKEN_TYPE_IDENTIFIER") == 0) {
     return createStatement_Assignment(cl(parser), ParserAssignment(parser));
-  } else {
+  }
+
+  else if (checkToken(parser, "TOKEN_TYPE_LEFT_BRACES") == 0) {
+    return createStatement_BlockStatement(cl(parser), ParserBlock(parser));
+  }
+
+  else if (checkToken(parser, "TOKEN_TYPE_OPERATOR") == 0 && strcmp(parser->token.value, "//") == 0) {
+    // Skip comment
+    controlNextTokenToIgnoreEndLine(parser);
+    logToken(parser);
+    return ParserStatement(parser, 1);
+  } if (checkToken(parser, "TOKEN_TYPE_OPERATOR") == 0 && strcmp(parser->token.value, "/*") == 0) {
+    // Skip comment
+    controlNextTokenToIgnoreToNextMatch(parser, "*/");
+    logToken(parser);
+    return ParserStatement(parser, 0);
+  }
+  else {
     throwParserError(
         1, "Expected print_statement , variable_declaration or assignment\n",
         parser->lexicalAnalyzer->lineCount,
@@ -180,8 +257,8 @@ VariableDeclaration *ParserVariableDeclaration(Parser *parser) {
   unsigned short int type;
   if (strcmp(parser->token.value, keywords[INT]) == 0) {
     type = TYPE_INT;
-  } else if (strcmp(parser->token.value, keywords[FLOAT]) == 0) {
-    type = TYPE_FLOAT;
+  } else if (strcmp(parser->token.value, keywords[DOUBLE]) == 0) {
+    type = TYPE_DOUBLE;
   } else if (strcmp(parser->token.value, keywords[STRING]) == 0) {
     type = TYPE_STRING;
   } else {
@@ -243,9 +320,22 @@ IfStatement *ParserIfStatement(Parser *parser) {
       controlNextToken(parser);
       logToken(parser);
 
-      Block *block = ParserBlock(parser);
+      Statement *statement = ParserStatement(parser, 1);
 
-      return createIfStatement(cl(parser), expr, block);
+      lookaheadNextToken(parser);
+      logToken(parser);
+
+      if (strcmp(parser->token.value, keywords[ELSE]) == 0) {
+        lookaheadClear(parser);
+        controlNextToken(parser);
+        logToken(parser);
+
+        Statement *elseStatement = ParserStatement(parser, 1);
+
+        return createIfStatement(cl(parser), expr, statement, elseStatement);
+      }
+
+      return createIfStatement(cl(parser), expr, statement, NULL);
     } else {
       throwParserError(1, "Expected )\n", parser->lexicalAnalyzer->lineCount,
                        parser->lexicalAnalyzer->positionCount,
@@ -317,9 +407,6 @@ Term *ParserTerm(Parser *parser) {
 Factor *ParserFactor(Parser *parser) {
   // "(" <expression> ")"
   if (checkToken(parser, "TOKEN_TYPE_LEFT_PARENTHESIS") == 0) {
-    controlNextToken(parser);
-    logToken(parser);
-
     Expression *expr = ParserExpression(parser);
 
     if (checkToken(parser, "TOKEN_TYPE_RIGHT_PARENTHESIS") == 0) {
@@ -336,14 +423,7 @@ Factor *ParserFactor(Parser *parser) {
   }
   // <number>
   else if (checkToken(parser, "TOKEN_TYPE_NUMBER") == 0) {
-    /**
-     * @important
-     *
-     * The atoi() function converts a string to an integer.
-     *
-     * Floating point numbers are truncated to integer.
-     */
-    Number *number = createNumber(cl(parser), atoi(parser->token.value));
+    Number *number = createNumber(cl(parser), parser->token.value);
 
     controlNextToken(parser);
     logToken(parser);
@@ -362,12 +442,25 @@ Factor *ParserFactor(Parser *parser) {
   // <string>
   else if (checkToken(parser, "TOKEN_TYPE_STRING") == 0) {
     String *string = createString(cl(parser), parser->token.value);
-
     controlNextToken(parser);
     logToken(parser);
 
     return createFactor_String(cl(parser), string);
-  } else {
+  } else if (checkToken(parser, "TOKEN_TYPE_OPERATOR") == 0 && 
+    (
+      strcmp(parser->token.value, "+") == 0 ||
+      strcmp(parser->token.value, "-") == 0 ||
+      strcmp(parser->token.value, "!") == 0
+    )
+  ) { 
+    char *unary_operator = strdup(parser->token.value);
+    controlNextToken(parser);
+    logToken(parser);
+
+    return createFactor_UnaryOperator(cl(parser), unary_operator, ParserFactor(parser));
+  } 
+  // Error
+  else {
     throwParserError(1, "Expected number, identifier or string\n",
                      parser->lexicalAnalyzer->lineCount,
                      parser->lexicalAnalyzer->positionCount,

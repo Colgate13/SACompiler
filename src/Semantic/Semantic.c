@@ -87,6 +87,12 @@ void analyzeStatement(SymbolTable *stack, Statement *statement) {
     // Handle print statement
     analyzePrintStatement(stack, statement->print_statement);
     break;
+  case BLOCK:
+    // Handle block statement
+    pushScope(&stack);
+    analyzeStatement(stack, statement->block->statement_tail->statement);
+    popScope(&stack);
+    break;
   default:
     fprintf(stderr, "Semantic > Unknown statement type\n");
     exit(1);
@@ -121,6 +127,10 @@ void analyzeAssignment(SymbolTable *stack, Assignment *assignment) {
   {
     Type expressionType = inferExpressionType(stack, assignment->expression);
 
+    printf("Inferred expression type: %s\n", typeToString(expressionType));
+    printf("Variable '%s' type: %s\n", symbol->name,
+           typeToString(symbol->type));
+
     if (symbol->type != expressionType) {
       fprintf(stderr,
               "Error: Type mismatch in assignment to '%s'. Expected '%s', got "
@@ -148,14 +158,15 @@ void analyzeIfStatement(SymbolTable *stack, IfStatement *ifStatement) {
   }
 
   pushScope(&stack);
-  StatementTail *body = ifStatement->block->statement_tail;
+  analyzeStatement(stack, ifStatement->then_statement);
+  popScope(&stack);
 
-  while (body != NULL) {
-    analyzeStatement(stack, body->statement);
-    body = body->next;
+  if (ifStatement->else_statement != NULL) {
+    pushScope(&stack);
+    analyzeStatement(stack, ifStatement->else_statement);
+    popScope(&stack);
   }
 
-  popScope(&stack);
   logSemantic("SEM#003 - If statement: type '%s'", typeToString(conditionType));
 }
 
@@ -193,8 +204,8 @@ Type inferRelationalExpressionType(SymbolTable *stack, Expression *expr) {
     }
   }
 
-  // int vs float, float vs int é ok (implicit conversion)
-  // int vs int, float vs float => ok
+  // int vs double, double vs int é ok (implicit conversion)
+  // int vs int, double vs double => ok
 
   return TYPE_INT; // Expression type is always int for relational expressions
 }
@@ -220,8 +231,8 @@ Type inferExpressionType(SymbolTable *stack, Expression *expr) {
         exit(1);
       }
       base = TYPE_STRING;
-    } else if (base == TYPE_FLOAT || right == TYPE_FLOAT) {
-      base = TYPE_FLOAT;
+    } else if (base == TYPE_DOUBLE || right == TYPE_DOUBLE) {
+      base = TYPE_DOUBLE;
     } else {
       base = TYPE_INT;
     }
@@ -253,14 +264,14 @@ Type inferTermType(SymbolTable *stack, Term *term) {
     }
 
     if (tail->mult_operator == MOD &&
-        (base == TYPE_FLOAT || right == TYPE_FLOAT)) {
+        (base == TYPE_DOUBLE || right == TYPE_DOUBLE)) {
       fprintf(stderr,
-              "Error: modulo operator '%%' cannot be used with float\n");
+              "Error: modulo operator '%%' cannot be used with double\n");
       exit(1);
     }
 
-    if (base == TYPE_FLOAT || right == TYPE_FLOAT) {
-      base = TYPE_FLOAT;
+    if (base == TYPE_DOUBLE || right == TYPE_DOUBLE) {
+      base = TYPE_DOUBLE;
     } else {
       base = TYPE_INT;
     }
@@ -279,7 +290,14 @@ Type inferFactorType(SymbolTable *stack, Factor *factor) {
   }
 
   if (factor->number != NULL) {
-    return TYPE_INT;
+    if (factor->number->type == TYPE_INT) {
+      return TYPE_INT;
+    } else if (factor->number->type == TYPE_DOUBLE) {
+      return TYPE_DOUBLE;
+    } else {
+      fprintf(stderr, "Error: unknown number type\n");
+      exit(1);
+    }
   }
 
   if (factor->string != NULL) {
@@ -299,6 +317,10 @@ Type inferFactorType(SymbolTable *stack, Factor *factor) {
 
   if (factor->expression != NULL) {
     return inferExpressionType(stack, factor->expression);
+  }
+
+  if (factor->unary_operator != NULL && factor->factor != NULL) {
+    return inferFactorType(stack, factor->factor);
   }
 
   fprintf(stderr, "Error: unable to infer factor type\n");
@@ -326,8 +348,8 @@ const char *typeToString(Type type) {
   switch (type) {
   case TYPE_INT:
     return "int";
-  case TYPE_FLOAT:
-    return "float";
+  case TYPE_DOUBLE:
+    return "double";
   case TYPE_STRING:
     return "string";
   default:

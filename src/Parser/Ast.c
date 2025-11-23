@@ -85,6 +85,8 @@ Statement *createStatement_Assignment(Location *location,
   s->assignment = assignment;
   s->variable_declaration = NULL;
   s->print_statement = NULL;
+  s->if_statement = NULL;
+  s->block = NULL;
   s->next = NULL;
   return s;
 }
@@ -107,6 +109,8 @@ Statement *createStatement_VariableDeclaration(Location *Location,
   s->assignment = NULL;
   s->variable_declaration = vd;
   s->print_statement = NULL;
+  s->if_statement = NULL;
+  s->block = NULL;
   s->next = NULL;
   return s;
 }
@@ -129,6 +133,8 @@ Statement *createStatement_PrintStatement(Location *location,
   s->assignment = NULL;
   s->variable_declaration = NULL;
   s->print_statement = ps;
+  s->if_statement = NULL;
+  s->block = NULL;
   s->next = NULL;
   return s;
 }
@@ -151,6 +157,30 @@ Statement *createStatement_IfStatement(Location *location, IfStatement *is) {
   s->variable_declaration = NULL;
   s->print_statement = NULL;
   s->if_statement = is;
+  s->block = NULL;
+  s->next = NULL;
+  return s;
+}
+
+/**
+ * @Statement
+ */
+Statement *createStatement_BlockStatement(Location *location, Block *block) {
+  Statement *s = malloc(sizeof(Statement));
+
+  if (s == NULL) {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
+  s->location = location;
+  s->type = BLOCK;
+
+  s->assignment = NULL;
+  s->variable_declaration = NULL;
+  s->print_statement = NULL;
+  s->if_statement = NULL;
+  s->block = block;
   s->next = NULL;
   return s;
 }
@@ -197,7 +227,7 @@ Assignment *createAssignment(Location *location, Identifier *identifier,
  * @IfStatement
  */
 IfStatement *createIfStatement(Location *location, Expression *expression,
-                               Block *block) {
+                               Statement *statement, Statement *elseStatement) {
   IfStatement *is = malloc(sizeof(IfStatement));
 
   if (is == NULL) {
@@ -207,7 +237,8 @@ IfStatement *createIfStatement(Location *location, Expression *expression,
 
   is->location = location;
   is->expression = expression;
-  is->block = block;
+  is->then_statement = statement;
+  is->else_statement = elseStatement;
 
   return is;
 }
@@ -366,6 +397,9 @@ Factor *createFactor_Expression(Location *location, Expression *expression) {
   factor->number = NULL;
   factor->identifier = NULL;
   factor->string = NULL;
+  factor->unary_operator = NULL;
+  factor->factor = NULL;
+
   return factor;
 }
 
@@ -385,6 +419,9 @@ Factor *createFactor_Number(Location *location, Number *number) {
   factor->number = number;
   factor->identifier = NULL;
   factor->string = NULL;
+  factor->unary_operator = NULL;
+  factor->factor = NULL;
+
   return factor;
 }
 
@@ -404,6 +441,9 @@ Factor *createFactor_Identifier(Location *location, Identifier *identifier) {
   factor->number = NULL;
   factor->identifier = identifier;
   factor->string = NULL;
+  factor->unary_operator = NULL;
+  factor->factor = NULL;
+
   return factor;
 }
 
@@ -423,7 +463,30 @@ Factor *createFactor_String(Location *location, String *string) {
   factor->number = NULL;
   factor->identifier = NULL;
   factor->string = string;
+  factor->unary_operator = NULL;
+  factor->factor = NULL;
+
   return factor;
+}
+
+Factor *createFactor_UnaryOperator(Location *location, char *unary_operator, Factor *factor) {
+  Factor *f = malloc(sizeof(Factor));
+
+  if (f == NULL) {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
+
+  f->location = location;
+  f->expression = NULL;
+  f->number = NULL;
+  f->identifier = NULL;
+  f->string = NULL;
+  f->unary_operator = strdup(unary_operator);
+  f->factor = factor;
+
+  return f;
 }
 
 /**
@@ -476,7 +539,7 @@ String *createString(Location *location, char *value) {
 /**
  * @Number
  */
-Number *createNumber(Location *location, int value) {
+Number *createNumber(Location *location, char *value) {
   Number *number = malloc(sizeof(Number));
 
   if (number == NULL) {
@@ -486,7 +549,14 @@ Number *createNumber(Location *location, int value) {
 
   number->location = location;
 
-  number->value = value;
+  if (strchr(value, '.') != NULL) {
+    number->type = TYPE_DOUBLE;
+    number->double_value = atof(value);
+  } else {
+    number->type = TYPE_INT;
+    number->int_value = atoi(value);
+  }
+
   return number;
 }
 
@@ -513,8 +583,8 @@ Identifier *createIdentifier(Location *location, char *name) {
 Type getLiteralType(char *searchType) {
   if (strcmp(searchType, "int") == 0) {
     return TYPE_INT;
-  } else if (strcmp(searchType, "float") == 0) {
-    return TYPE_FLOAT;
+  } else if (strcmp(searchType, "double") == 0) {
+    return TYPE_DOUBLE;
   } else if (strcmp(searchType, "string") == 0) {
     return TYPE_STRING;
   } else {

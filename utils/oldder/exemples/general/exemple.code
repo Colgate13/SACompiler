@@ -4,7 +4,7 @@ program
   var int num3;
 
   var string message;
-  var float points;
+  var double points;
 
   message = "Hello World!";
   points = 1.5;

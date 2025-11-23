@@ -210,6 +210,7 @@ LexicalAnalyzer *createLexicalAnalyzer(const char *filePath) {
     exit(1);
   }
 
+  lexicalAnalyzer->filePath = strdup(filePath);
   lexicalAnalyzer->file = attachFile;
   lexicalAnalyzer->newLine = 0;
   lexicalAnalyzer->globalTokensCount = 0;

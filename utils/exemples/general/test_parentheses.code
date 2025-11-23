@@ -1,0 +1,28 @@
+program
+    var int a;
+    var int b;
+    var int result;
+
+    a = 5;
+    b = 3;
+
+    // Test simple parentheses
+    result = (a + b);
+    print(result);
+
+    // Test complex expression with parentheses
+    result = (a + b) * 2;
+    print(result);
+
+    // Test nested parentheses
+    result = ((a + b) * 2) + 1;
+    print(result);
+
+    // Test parentheses in different positions
+    result = 10 - (a + b);
+    print(result);
+
+    // Test multiple operations with parentheses
+    result = (a * b) + (a - b);
+    print(result);
+end;

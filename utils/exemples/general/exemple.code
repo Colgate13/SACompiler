@@ -37,4 +37,15 @@ program
   if (num1 >= 0) { print("num1 is greater or equal to 0"); }
   if (num1 <= 0) { print("num1 is less or equal to 0"); }
   if (num1 != 0) { print("num1 is different from 0"); }
+
+  // Scope Test
+  var int controller;
+  controller = 1;
+
+  if (controller) {
+    var int test;
+    test = 2;
+    print(test);
+  }
+
 end;

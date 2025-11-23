@@ -48,15 +48,25 @@ cJSON *AstConsumerFactor(Factor *factor) {
     cJSON_AddItemToObject(jsonFactor, "Expression",
                           AstConsumerExpression(factor->expression));
   } else if (factor->number != NULL) {
-    cJSON_AddItemToObject(jsonFactor, "Number",
-                          cJSON_CreateNumber(factor->number->value));
+    if (factor->number->type == TYPE_INT) cJSON_AddItemToObject(jsonFactor, "Number", cJSON_CreateNumber(factor->number->int_value));
+    else if (factor->number->type == TYPE_DOUBLE) cJSON_AddItemToObject(jsonFactor, "Number", cJSON_CreateNumber(factor->number->double_value));
+    else {
+      printf("Factor with number of unknown type\n");
+      exit(1);
+    }
   } else if (factor->identifier != NULL) {
     cJSON_AddItemToObject(jsonFactor, "Identifier",
                           AstConsumerIdentifier(factor->identifier));
   } else if (factor->string != NULL) {
     cJSON_AddItemToObject(jsonFactor, "String",
                           cJSON_CreateString(factor->string->value));
-  } else {
+  } else if (factor->unary_operator != NULL && factor->factor != NULL) {
+    cJSON_AddItemToObject(jsonFactor, "UnaryOperator",
+                          cJSON_CreateString(factor->unary_operator));
+    cJSON_AddItemToObject(jsonFactor, "Factor",
+                          AstConsumerFactor(factor->factor));
+  }
+   else {
     printf("Factor without factor\n");
     exit(1);
   }
@@ -80,7 +90,12 @@ cJSON *AstConsumerTermTail(TermTail *tt) {
     exit(1);
   }
 
+  cJSON_AddItemToObject(jsonTt, "MultOperator", cJSON_CreateNumber(tt->mult_operator));
   cJSON_AddItemToObject(jsonTt, "Factor", AstConsumerFactor(tt->factor));
+  if (tt->next != NULL) {
+    cJSON_AddItemToObject(jsonTt, "TermTail", AstConsumerTermTail(tt->next));
+  }
+
   cJSON_AddItemToObject(jsonTt, "Location", checkLocation(tt->location));
 
   return jsonTt;
@@ -146,11 +161,15 @@ cJSON *AstConsumerArithmeticExpression(ArithmeticExpression *ae) {
   }
 
   cJSON *jsonAe = cJSON_CreateObject();
+
   cJSON_AddItemToObject(jsonAe, "Term", AstConsumerTerm(ae->term));
-  if (ae->arithmetic_expression_tail != NULL)
+  
+  if (ae->arithmetic_expression_tail != NULL) {
     cJSON_AddItemToObject(
         jsonAe, "ArithmeticExpressionTail",
         AstConsumerArithmeticExpressionTail(ae->arithmetic_expression_tail));
+  }
+
   cJSON_AddItemToObject(jsonAe, "Location", checkLocation(ae->location));
 
   return jsonAe;
@@ -246,7 +265,8 @@ cJSON *AstConsumerIfStatement(IfStatement *is) {
   cJSON *jsonIs = cJSON_CreateObject();
   cJSON_AddItemToObject(jsonIs, "Expression",
                         AstConsumerExpression(is->expression));
-  cJSON_AddItemToObject(jsonIs, "Block", AstConsumerBlock(is->block));
+  cJSON_AddItemToObject(jsonIs, "ThenStatement", AstConsumerStatement(is->then_statement));
+  cJSON_AddItemToObject(jsonIs, "ElseStatement", AstConsumerStatement(is->else_statement));
   cJSON_AddItemToObject(jsonIs, "Location", checkLocation(is->location));
 
   return jsonIs;
@@ -300,6 +320,15 @@ cJSON *AstConsumerStatement(Statement *st) {
 
     cJSON *jsonIfStatement = AstConsumerIfStatement(st->if_statement);
     cJSON_AddItemToObject(jsonSt, "IfStatement", jsonIfStatement);
+    break;
+  case BLOCK:
+    if (st->block == NULL) {
+      printf("BlockStatement without block\n");
+      exit(1);
+    }
+
+    cJSON *jsonBlock = AstConsumerBlock(st->block);
+    cJSON_AddItemToObject(jsonSt, "Block", jsonBlock);
     break;
   default:
     printf("Statement type unknow: %d\n", st->type);
@@ -360,7 +389,7 @@ void createOutputFile(cJSON *json, char *fileOutputAst) {
 
   fprintf(file, "%s", cJSON_Print(json));
   fclose(file);
-  printf("File output: %s", fileOutputAst);
+  printf("File output: %s\n", fileOutputAst);
 }
 
 void AstJsonConsumer(Program program, char *fileOutputAst) {

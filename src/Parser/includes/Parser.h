@@ -4,18 +4,19 @@
 #pragma once
 
 #include "../../Lexical/includes/lexicalAnalyzer.h"
-#define LOGS 0
+#define LOGS 1
 
-enum EKeywords { PROGRAM = 0, END, VAR, PRINT, IF, INT, FLOAT, STRING };
+enum EKeywords { PROGRAM = 0, END, VAR, PRINT, IF, INT, DOUBLE, STRING, ELSE };
 
 enum EStatementsType {
   PRINT_STATEMENT = 0,
   ASSIGNMENT_STATEMENT,
   VARIABLE_DECLARATION_STATEMENT,
-  IF_STATEMENT
+  IF_STATEMENT,
+  BLOCK
 };
 
-typedef enum { TYPE_INT = 0, TYPE_FLOAT, TYPE_STRING } Type;
+typedef enum { TYPE_INT = 0, TYPE_DOUBLE, TYPE_STRING } Type;
 
 // <add_operator> --> "+" | "-"
 typedef enum {
@@ -80,9 +81,13 @@ typedef struct Identifier {
   Location *location;
 } Identifier;
 
-// <number> --> [0-9]+
+// <number> --> <int_literal> | <double_literal>
 typedef struct Number {
-  int value;
+  Type type;
+  union {
+    int int_value;
+    double double_value;
+  };
   Location *location;
 } Number;
 
@@ -101,6 +106,10 @@ typedef struct Factor {
   Identifier *identifier;
   // |
   String *string;
+  // |
+  char *unary_operator;
+  Factor *factor;
+
   Location *location;
 } Factor;
 
@@ -149,12 +158,15 @@ typedef struct Expression {
   Location *location;
 } Expression;
 
-// <if_statement> --> "if" "(" <expression> ")" <block>
+// <if_statement>      --> "if" "(" <expression> ")" <statement> | "if" "(" <expression> ")" <statement> "else" <statement>
 typedef struct IfStatement {
   Expression *expression;
-  Block *block;
+  Statement *then_statement;
+  Statement *else_statement; // (for else branch)
+
   Location *location;
 } IfStatement;
+
 
 // <print_statement> --> "print(" <expression> ");"
 typedef struct PrintStatement {
@@ -186,6 +198,8 @@ typedef struct Statement {
   PrintStatement *print_statement;
   // |
   IfStatement *if_statement;
+  // |
+  Block *block;
 
   struct Statement *next;
   Location *location;
@@ -213,6 +227,8 @@ typedef struct Parser {
   LexicalAnalyzer *lexicalAnalyzer;
   Ast *ast;
   Token token;
+  Token savedToken;
+  unsigned short int hasSavedToken;
 } Parser;
 
 // FUNCTIONS DECLARATIONS
@@ -224,7 +240,7 @@ void destroyParser(Parser *parser);
 
 Block *ParserBlock(Parser *parser);
 StatementTail *ParserStatementTail(Parser *parser);
-Statement *ParserStatement(Parser *parser);
+Statement *ParserStatement(Parser *parser, unsigned int notNextToken);
 IfStatement *ParserIfStatement(Parser *parser);
 PrintStatement *ParserPrintStatement(Parser *parser);
 VariableDeclaration *ParserVariableDeclaration(Parser *parser);

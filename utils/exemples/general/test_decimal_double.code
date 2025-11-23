@@ -1,0 +1,42 @@
+program
+    var double a;
+    var double b;
+    var double result;
+    var int intVar;
+
+    // Test direct decimal assignment
+    a = 3.14;
+    print(a);
+
+    b = 2.5;
+    print(b);
+
+    // Test decimal operations
+    result = a + b;
+    print(result);
+
+    result = a * b;
+    print(result);
+
+    // Test decimal division
+    result = 10.0 / 3.0;
+    print(result);
+
+    // Test mixed integer and decimal operations
+    intVar = 5;
+    result = a + intVar;
+    print(result);
+
+    // Test very small decimals
+    a = 0.001;
+    print(a);
+
+    // Test larger decimals
+    b = 123.456789;
+    print(b);
+
+    // Test decimal comparison
+    if (a > 0.0) {
+        print("a is positive");
+    }
+end;

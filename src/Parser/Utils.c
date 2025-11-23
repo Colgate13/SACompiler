@@ -27,6 +27,6 @@ void logToken(Parser *parser) {
 }
 
 Location *cl(Parser *parser) {
-  return createLocation("*file*", parser->lexicalAnalyzer->lineCount,
+  return createLocation(parser->lexicalAnalyzer->filePath, parser->lexicalAnalyzer->lineCount,
                         parser->lexicalAnalyzer->positionCount);
 }

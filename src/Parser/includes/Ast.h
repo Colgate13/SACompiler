@@ -14,6 +14,7 @@ StatementTail *createStatementTail(Location *location, Statement *statement);
 Block *createBlock(Location *location, StatementTail *statementTail);
 Statement *createStatement_IfStatement(Location *location,
                                        IfStatement *ifStatement);
+Statement *createStatement_BlockStatement(Location *location, Block *block);
 Statement *createStatement_PrintStatement(Location *location,
                                           PrintStatement *ps);
 Statement *createStatement_VariableDeclaration(Location *Location,
@@ -26,8 +27,7 @@ Assignment *createAssignment(Location *location, Identifier *identifier,
                              Expression *expression);
 PrintStatement *createPrintStatement(Location *location,
                                      Expression *expression);
-IfStatement *createIfStatement(Location *location, Expression *expression,
-                               Block *block);
+IfStatement *createIfStatement(Location *location, Expression *expression, Statement *statement, Statement *elseStatement);
 
 Expression *createExpression(Location *location,
                              ArithmeticExpression *arithmeticExpression,
@@ -46,11 +46,13 @@ Factor *createFactor_Expression(Location *location, Expression *expression);
 Factor *createFactor_Number(Location *location, Number *number);
 Factor *createFactor_Identifier(Location *location, Identifier *identifier);
 Factor *createFactor_String(Location *location, String *string);
+Factor *createFactor_UnaryOperator(Location *location, char *unary_operator, Factor *factor);
+
 TermTail *createTermTail(Location *location, char *op, Factor *factor,
                          TermTail *tail);
 
 String *createString(Location *location, char *value);
-Number *createNumber(Location *location, int value);
+Number *createNumber(Location *location, char *value);
 Identifier *createIdentifier(Location *location, char *name);
 Type getLiteralType(char *searchType);
 
