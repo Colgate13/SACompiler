@@ -6,13 +6,14 @@
 #include "../../Lexical/includes/lexicalAnalyzer.h"
 #define LOGS 1
 
-enum EKeywords { PROGRAM = 0, END, VAR, PRINT, IF, INT, DOUBLE, STRING };
+enum EKeywords { PROGRAM = 0, END, VAR, PRINT, IF, INT, DOUBLE, STRING, ELSE };
 
 enum EStatementsType {
   PRINT_STATEMENT = 0,
   ASSIGNMENT_STATEMENT,
   VARIABLE_DECLARATION_STATEMENT,
-  IF_STATEMENT
+  IF_STATEMENT,
+  BLOCK
 };
 
 typedef enum { TYPE_INT = 0, TYPE_DOUBLE, TYPE_STRING } Type;
@@ -157,12 +158,15 @@ typedef struct Expression {
   Location *location;
 } Expression;
 
-// <if_statement> --> "if" "(" <expression> ")" <block>
+// <if_statement>      --> "if" "(" <expression> ")" <statement> | "if" "(" <expression> ")" <statement> "else" <statement>
 typedef struct IfStatement {
   Expression *expression;
-  Block *block;
+  Statement *then_statement;
+  Statement *else_statement; // (for else branch)
+
   Location *location;
 } IfStatement;
+
 
 // <print_statement> --> "print(" <expression> ");"
 typedef struct PrintStatement {
@@ -194,6 +198,8 @@ typedef struct Statement {
   PrintStatement *print_statement;
   // |
   IfStatement *if_statement;
+  // |
+  Block *block;
 
   struct Statement *next;
   Location *location;
@@ -221,6 +227,8 @@ typedef struct Parser {
   LexicalAnalyzer *lexicalAnalyzer;
   Ast *ast;
   Token token;
+  Token savedToken;
+  unsigned short int hasSavedToken;
 } Parser;
 
 // FUNCTIONS DECLARATIONS

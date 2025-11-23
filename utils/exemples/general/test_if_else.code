@@ -1,0 +1,67 @@
+program
+    var int a;
+    var int b;
+    a = 1;
+    b = 0;
+
+    // Case 1 - simple inline if
+    if (a == 1) print("case 1 - if inline");
+
+    // Case 2 - two inline ifs in sequence
+    if (a == 1) print("case 2a - first if");
+    if (b == 0) print("case 2b - second if");
+
+    // Case 3 - if with block without else
+    if (a == 1) {
+        print("case 3 - if with block");
+    }
+
+    // Case 4 - if with block and else with block
+    if (a == 1) {
+        print("case 4 - if branch");
+    } else {
+        print("case 4 - else branch");
+    }
+
+    // Case 5 - inline if with inline else
+    if (a == 1) print("case 5 - if inline");
+    else print("case 5 - else inline");
+
+    // Case 6 - inline if with else block
+    if (a == 1) print("case 6 - if inline");
+    else {
+        print("case 6 - else block");
+    }
+
+    // Case 7 - if block with inline else
+    if (a == 1) {
+        print("case 7 - if block");
+    } else print("case 7 - else inline");
+
+    // Case 8 - nested ifs
+    if (a == 1) {
+        if (b == 0) {
+            print("case 8 - nested if");
+        }
+    }
+
+    // Case 9 - nested if-else
+    if (a == 1) {
+        if (b == 0) {
+            print("case 9 - inner if");
+        } else {
+            print("case 9 - inner else");
+        }
+    }
+
+    // Case 10 - multiple statements inside if
+    if (a == 1) {
+        var int c;
+        c = 10;
+        print("case 10 - multiple statements");
+    }
+
+    // Case 11 - statement after all ifs
+    print("case 11 - end of program");
+
+end;

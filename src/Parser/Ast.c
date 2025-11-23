@@ -85,6 +85,8 @@ Statement *createStatement_Assignment(Location *location,
   s->assignment = assignment;
   s->variable_declaration = NULL;
   s->print_statement = NULL;
+  s->if_statement = NULL;
+  s->block = NULL;
   s->next = NULL;
   return s;
 }
@@ -107,6 +109,8 @@ Statement *createStatement_VariableDeclaration(Location *Location,
   s->assignment = NULL;
   s->variable_declaration = vd;
   s->print_statement = NULL;
+  s->if_statement = NULL;
+  s->block = NULL;
   s->next = NULL;
   return s;
 }
@@ -129,6 +133,8 @@ Statement *createStatement_PrintStatement(Location *location,
   s->assignment = NULL;
   s->variable_declaration = NULL;
   s->print_statement = ps;
+  s->if_statement = NULL;
+  s->block = NULL;
   s->next = NULL;
   return s;
 }
@@ -151,6 +157,30 @@ Statement *createStatement_IfStatement(Location *location, IfStatement *is) {
   s->variable_declaration = NULL;
   s->print_statement = NULL;
   s->if_statement = is;
+  s->block = NULL;
+  s->next = NULL;
+  return s;
+}
+
+/**
+ * @Statement
+ */
+Statement *createStatement_BlockStatement(Location *location, Block *block) {
+  Statement *s = malloc(sizeof(Statement));
+
+  if (s == NULL) {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
+  s->location = location;
+  s->type = BLOCK;
+
+  s->assignment = NULL;
+  s->variable_declaration = NULL;
+  s->print_statement = NULL;
+  s->if_statement = NULL;
+  s->block = block;
   s->next = NULL;
   return s;
 }
@@ -197,7 +227,7 @@ Assignment *createAssignment(Location *location, Identifier *identifier,
  * @IfStatement
  */
 IfStatement *createIfStatement(Location *location, Expression *expression,
-                               Block *block) {
+                               Statement *statement, Statement *elseStatement) {
   IfStatement *is = malloc(sizeof(IfStatement));
 
   if (is == NULL) {
@@ -207,7 +237,8 @@ IfStatement *createIfStatement(Location *location, Expression *expression,
 
   is->location = location;
   is->expression = expression;
-  is->block = block;
+  is->then_statement = statement;
+  is->else_statement = elseStatement;
 
   return is;
 }

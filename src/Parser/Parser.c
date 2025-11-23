@@ -9,8 +9,17 @@
 #include "./includes/Parser.h"
 #include "./includes/Utils.h"
 
-const char *keywords[] = {"program", "end", "var",   "print",
-                          "if",      "int", "double", "string"};
+const char *keywords[] = {
+  "program",
+  "end",
+  "var",
+  "print",
+  "if",
+  "int",
+  "double",
+  "string",
+  "else"
+};
 
 Parser *createParser(LexicalAnalyzer *lexicalAnalyzer) {
   Parser *parser = (Parser *)malloc(sizeof(Parser));
@@ -22,6 +31,7 @@ Parser *createParser(LexicalAnalyzer *lexicalAnalyzer) {
 
   parser->lexicalAnalyzer = lexicalAnalyzer;
   parser->ast = (Ast *)malloc(sizeof(Ast));
+  parser->hasSavedToken = 0;
 
   if (parser->ast == NULL) {
     fprintf(stderr, "Memory allocation error\n");
@@ -37,10 +47,38 @@ void destroyParser(Parser *parser) {
 }
 
 void controlNextToken(Parser *parser) {
+  // Check if there is a saved token. Restore it if exists. **LOOKAHEAD**
+  if (parser->hasSavedToken) {
+    parser->token = parser->savedToken;
+    parser->hasSavedToken = 0;
+    return;
+  }
+
   parser->token = nextToken(parser->lexicalAnalyzer);
 
   if (checkToken(parser, "TOKEN_TYPE_END_LINE") == 0)
     parser->token = nextToken(parser->lexicalAnalyzer);
+}
+
+void lookaheadNextToken(Parser *parser) {
+  if (parser->hasSavedToken) {
+    throwParserError(
+        1, "Lookahead error: cannot perform lookahead because there is an unconsumed saved token.\n", parser->lexicalAnalyzer->lineCount,
+        parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
+    exit(1);
+  }
+
+  parser->token = nextToken(parser->lexicalAnalyzer);
+
+  if (checkToken(parser, "TOKEN_TYPE_END_LINE") == 0)
+    parser->token = nextToken(parser->lexicalAnalyzer);
+
+  parser->savedToken = parser->token;
+  parser->hasSavedToken = 1;
+}
+
+void lookaheadClear(Parser *parser) {
+  parser->hasSavedToken = 0;
 }
 
 void controlNextTokenToIgnoreEndLine(Parser *parser) {
@@ -153,6 +191,10 @@ Statement *ParserStatement(Parser *parser, unsigned int notNextToken) {
 
   else if (checkToken(parser, "TOKEN_TYPE_IDENTIFIER") == 0) {
     return createStatement_Assignment(cl(parser), ParserAssignment(parser));
+  }
+
+  else if (checkToken(parser, "TOKEN_TYPE_LEFT_BRACES") == 0) {
+    return createStatement_BlockStatement(cl(parser), ParserBlock(parser));
   }
 
   else if (checkToken(parser, "TOKEN_TYPE_OPERATOR") == 0 && strcmp(parser->token.value, "//") == 0) {
@@ -278,9 +320,22 @@ IfStatement *ParserIfStatement(Parser *parser) {
       controlNextToken(parser);
       logToken(parser);
 
-      Block *block = ParserBlock(parser);
+      Statement *statement = ParserStatement(parser, 1);
 
-      return createIfStatement(cl(parser), expr, block);
+      lookaheadNextToken(parser);
+      logToken(parser);
+
+      if (strcmp(parser->token.value, keywords[ELSE]) == 0) {
+        lookaheadClear(parser);
+        controlNextToken(parser);
+        logToken(parser);
+
+        Statement *elseStatement = ParserStatement(parser, 1);
+
+        return createIfStatement(cl(parser), expr, statement, elseStatement);
+      }
+
+      return createIfStatement(cl(parser), expr, statement, NULL);
     } else {
       throwParserError(1, "Expected )\n", parser->lexicalAnalyzer->lineCount,
                        parser->lexicalAnalyzer->positionCount,

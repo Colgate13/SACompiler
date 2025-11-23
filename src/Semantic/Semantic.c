@@ -87,6 +87,12 @@ void analyzeStatement(SymbolTable *stack, Statement *statement) {
     // Handle print statement
     analyzePrintStatement(stack, statement->print_statement);
     break;
+  case BLOCK:
+    // Handle block statement
+    pushScope(&stack);
+    analyzeStatement(stack, statement->block->statement_tail->statement);
+    popScope(&stack);
+    break;
   default:
     fprintf(stderr, "Semantic > Unknown statement type\n");
     exit(1);
@@ -152,14 +158,9 @@ void analyzeIfStatement(SymbolTable *stack, IfStatement *ifStatement) {
   }
 
   pushScope(&stack);
-  StatementTail *body = ifStatement->block->statement_tail;
-
-  while (body != NULL) {
-    analyzeStatement(stack, body->statement);
-    body = body->next;
-  }
-
+  analyzeStatement(stack, ifStatement->then_statement);
   popScope(&stack);
+
   logSemantic("SEM#003 - If statement: type '%s'", typeToString(conditionType));
 }
 

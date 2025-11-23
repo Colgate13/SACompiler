@@ -14,6 +14,7 @@ StatementTail *createStatementTail(Location *location, Statement *statement);
 Block *createBlock(Location *location, StatementTail *statementTail);
 Statement *createStatement_IfStatement(Location *location,
                                        IfStatement *ifStatement);
+Statement *createStatement_BlockStatement(Location *location, Block *block);
 Statement *createStatement_PrintStatement(Location *location,
                                           PrintStatement *ps);
 Statement *createStatement_VariableDeclaration(Location *Location,
@@ -26,8 +27,7 @@ Assignment *createAssignment(Location *location, Identifier *identifier,
                              Expression *expression);
 PrintStatement *createPrintStatement(Location *location,
                                      Expression *expression);
-IfStatement *createIfStatement(Location *location, Expression *expression,
-                               Block *block);
+IfStatement *createIfStatement(Location *location, Expression *expression, Statement *statement, Statement *elseStatement);
 
 Expression *createExpression(Location *location,
                              ArithmeticExpression *arithmeticExpression,

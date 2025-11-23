@@ -265,7 +265,8 @@ cJSON *AstConsumerIfStatement(IfStatement *is) {
   cJSON *jsonIs = cJSON_CreateObject();
   cJSON_AddItemToObject(jsonIs, "Expression",
                         AstConsumerExpression(is->expression));
-  cJSON_AddItemToObject(jsonIs, "Block", AstConsumerBlock(is->block));
+  cJSON_AddItemToObject(jsonIs, "ThenStatement", AstConsumerStatement(is->then_statement));
+  cJSON_AddItemToObject(jsonIs, "ElseStatement", AstConsumerStatement(is->else_statement));
   cJSON_AddItemToObject(jsonIs, "Location", checkLocation(is->location));
 
   return jsonIs;
@@ -319,6 +320,15 @@ cJSON *AstConsumerStatement(Statement *st) {
 
     cJSON *jsonIfStatement = AstConsumerIfStatement(st->if_statement);
     cJSON_AddItemToObject(jsonSt, "IfStatement", jsonIfStatement);
+    break;
+  case BLOCK:
+    if (st->block == NULL) {
+      printf("BlockStatement without block\n");
+      exit(1);
+    }
+
+    cJSON *jsonBlock = AstConsumerBlock(st->block);
+    cJSON_AddItemToObject(jsonSt, "Block", jsonBlock);
     break;
   default:
     printf("Statement type unknow: %d\n", st->type);

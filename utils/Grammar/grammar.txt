@@ -7,6 +7,7 @@
                     | <variable_declaration>
                     | <assignment>
                     | <if_statement>
+                    | <block>
 
 <block>             --> "{" <statement_tail> "}"
 
@@ -14,7 +15,10 @@
 <variable_declaration> --> "var" <type> <identifier> ";"
 <assignment>         --> <identifier> "=" <expression> ";"
 <print_statement>    --> "print(" <expression> ");"
-<if_statement>      --> "if" "(" <expression> ")" <block>
+
+<if_statement>      --> "if" "(" <expression> ")" <statement>
+                        | "if" "(" <expression> ")" <statement> "else" <statement>
+
 
 // Expression Grammar (Contais the arithmetic operations and the relational operators)
 <expression>         --> <arithmetic_expression> <operator_relational>
