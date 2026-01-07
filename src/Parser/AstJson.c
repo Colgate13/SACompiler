@@ -272,6 +272,39 @@ cJSON *AstConsumerIfStatement(IfStatement *is) {
   return jsonIs;
 }
 
+cJSON *AstConsumerReturnStatement(Return *rn) {
+  if (rn == NULL) {
+    printf("AstConsumerReturnStatement without return\n");
+    exit(1);
+  }
+
+  cJSON *jsonRn = cJSON_CreateObject();
+  cJSON_AddItemToObject(jsonRn, "Expression", AstConsumerExpression(rn->expression));
+  cJSON_AddItemToObject(jsonRn, "Location", checkLocation(rn->location));
+
+  return jsonRn;
+}
+
+cJSON *AstConsumeFunctionDeclarationStatement(FunctionDeclarationStatement *fn) {
+  if (fn == NULL) {
+    printf("AstConsumeFunctionDeclarationStatement without function\n");
+    exit(1);
+  }
+
+  cJSON *jsonFn = cJSON_CreateObject();
+  cJSON_AddNumberToObject(jsonFn, "Type", fn->type);
+  cJSON_AddItemToObject(jsonFn, "Identifier", AstConsumerIdentifier(fn->identifier));
+
+  if (fn->parameter_tail != NULL) {
+    cJSON_AddItemToObject(jsonFn, "ParameterTail", AstConsumerParameterTail(fn->parameter_tail));
+  }
+
+  cJSON_AddItemToObject(jsonFn, "Block", AstConsumerBlock(fn->block));
+  cJSON_AddItemToObject(jsonFn, "Location", checkLocation(fn->location));
+
+  return jsonFn;
+}
+
 cJSON *AstConsumerStatement(Statement *st) {
   if (st == NULL) {
     return NULL;
@@ -330,6 +363,24 @@ cJSON *AstConsumerStatement(Statement *st) {
     cJSON *jsonBlock = AstConsumerBlock(st->block);
     cJSON_AddItemToObject(jsonSt, "Block", jsonBlock);
     break;
+  case FUNCTION_DECLARATION_STATEMENT:
+    if (st->function_declaration == NULL) {
+      printf("FunctionDeclarationStatement without function_declaration\n");
+      exit(1);
+    }
+
+    cJSON *jsonFunctionDeclaration = AstConsumeFunctionDeclarationStatement(st->function_declaration);
+    cJSON_AddItemToObject(jsonSt, "FunctionDeclarationStatement", jsonFunctionDeclaration);
+    break;
+  case RETURN_STATEMENT:
+    if (st->return_statement == NULL) {
+      printf("ReturnStatement without return_statement\n");
+      exit(1);
+    }
+
+    cJSON *jsonReturnStatement = AstConsumerReturnStatement(st->return_statement);
+    cJSON_AddItemToObject(jsonSt, "ReturnStatement", jsonReturnStatement);
+    break;
   default:
     printf("Statement type unknow: %d\n", st->type);
     exit(1);
@@ -364,6 +415,38 @@ cJSON *AstConsumerStatementTail(StatementTail *st) {
   cJSON_AddItemToObject(jsonSt, "Location", checkLocation(st->location));
 
   return jsonSt;
+}
+
+cJSON *AstConsumerParameter(Parameter *param) {
+  if (param == NULL) {
+    printf("Parameter without parameter\n");
+    exit(1);
+  }
+
+  cJSON *jsonParam = cJSON_CreateObject();
+  cJSON_AddNumberToObject(jsonParam, "Type", param->type);
+  cJSON_AddItemToObject(jsonParam, "Identifier",
+                        AstConsumerIdentifier(param->identifier));
+  cJSON_AddItemToObject(jsonParam, "Location", checkLocation(param->location));
+
+  return jsonParam;
+}
+
+cJSON *AstConsumerParameterTail(ParameterTail *pt) {
+  if (pt == NULL) {
+    printf("ParameterTail without parameter_tail\n");
+    exit(1);
+  }
+
+  cJSON *jsonPt = cJSON_CreateObject();
+  cJSON_AddItemToObject(jsonPt, "Parameter", AstConsumerParameter(pt->parameter));
+  if (pt->next != NULL) {
+    cJSON_AddItemToObject(jsonPt, "ParameterTail", AstConsumerParameterTail(pt->next));
+  }
+
+  cJSON_AddItemToObject(jsonPt, "Location", checkLocation(pt->location));
+
+  return jsonPt;
 }
 
 cJSON *AstConsumerBlock(Block *block) {

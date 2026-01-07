@@ -30,5 +30,6 @@ unsigned short int isOperator(char c) {
 }
 
 unsigned short int isSemicolon(char c) { return c == ';'; }
+unsigned short int isComma(char c) { return c == ','; }
 
 unsigned short int isEOF(char c) { return c == '\0'; }

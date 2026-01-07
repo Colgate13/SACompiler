@@ -1,4 +1,4 @@
-<program>            --> "program" <statement_tail> "end;"
+<program> --> <statement_tail>
 
 <statement_tail>    --> <statement> <statement_tail>
                      | ε
@@ -8,6 +8,8 @@
                     | <assignment>
                     | <if_statement>
                     | <block>
+                    | <function_declaration>
+                    | <return>
 
 <block>             --> "{" <statement_tail> "}"
 
@@ -15,13 +17,27 @@
 <variable_declaration> --> "var" <type> <identifier> ";"
 <assignment>         --> <identifier> "=" <expression> ";"
 <print_statement>    --> "print(" <expression> ");"
-
+<function_declaration> --> "fn" <type> <identifier> "(" <parameter_tail> ")" <block>
 <if_statement>      --> "if" "(" <expression> ")" <statement>
                         | "if" "(" <expression> ")" <statement> "else" <statement>
+<return>            --> "return" <expression> ";"
+
+<parameter_tail>    --> <parameter> 
+                        | <parameter_tail> "," <parameter>
+                        | ε
+
+<parameter>         --> <type> <identifier>
 
 
 // Expression Grammar (Contais the arithmetic operations and the relational operators)
 <expression>         --> <arithmetic_expression> <operator_relational>
+                          | <function_call>
+
+<function_call>      --> <identifier> "(" <argument_tail> ")"
+<argument_tail>     --> <argument>
+                    | <argument_tail> "," <argument>
+                    | ε
+<argument>          --> <expression>
 
 // Relational Operator Grammar
 <operator_relational> --> <relational_operator> <arithmetic_expression>
@@ -61,18 +77,3 @@
 <type>               --> "int"
                     | "double"
                     | "string"
-
-
-// Exemples of code that can be parsed by this grammar
-if (identifier1 == identifier2) {
-  print("They are equal");
-}
-
-// if (<expression>) { <block> }
-  // -> if ({<arithmetic_expression>} {<operator_relational>}) { <block> }
-    // -> if ({<term> <arithmetic_expression_tail>} {<relational_operator> <arithmetic_expression>}) { <block> }
-      // -> if ({<factor> <term_tail>} {"=" <arithmetic_expression>}) { <block> }
-        // -> if ({<identifier>} {"=" {<term> <arithmetic_expression_tail>}}) { <block> }
-          // -> if ({<identifier>} {"=" {<factor> <term_tail>}}) { <block> }
-            // -> if ({<identifier>} {"=" {<identifier>}}) { <block> }
-              // -> if (<identifier> "=" <identifier>) { <block> } // This is a valid statement

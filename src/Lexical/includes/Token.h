@@ -16,6 +16,7 @@
 #define TOKEN_TYPE_LEFT_PARENTHESIS 8
 #define TOKEN_TYPE_LEFT_BRACES 9
 #define TOKEN_TYPE_RIGHT_BRACES 10
+#define TOKEN_TYPE_COMMA 11
 
 typedef struct {
   unsigned short int type;

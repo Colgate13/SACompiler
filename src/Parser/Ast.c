@@ -87,6 +87,9 @@ Statement *createStatement_Assignment(Location *location,
   s->print_statement = NULL;
   s->if_statement = NULL;
   s->block = NULL;
+  s->function_declaration = NULL;
+  s->return_statement = NULL;
+
   s->next = NULL;
   return s;
 }
@@ -111,6 +114,9 @@ Statement *createStatement_VariableDeclaration(Location *Location,
   s->print_statement = NULL;
   s->if_statement = NULL;
   s->block = NULL;
+  s->function_declaration = NULL;
+  s->return_statement = NULL;
+
   s->next = NULL;
   return s;
 }
@@ -135,6 +141,9 @@ Statement *createStatement_PrintStatement(Location *location,
   s->print_statement = ps;
   s->if_statement = NULL;
   s->block = NULL;
+  s->function_declaration = NULL;
+  s->return_statement = NULL;
+
   s->next = NULL;
   return s;
 }
@@ -158,6 +167,9 @@ Statement *createStatement_IfStatement(Location *location, IfStatement *is) {
   s->print_statement = NULL;
   s->if_statement = is;
   s->block = NULL;
+  s->function_declaration = NULL;
+  s->return_statement = NULL;
+
   s->next = NULL;
   return s;
 }
@@ -181,8 +193,105 @@ Statement *createStatement_BlockStatement(Location *location, Block *block) {
   s->print_statement = NULL;
   s->if_statement = NULL;
   s->block = block;
+  s->function_declaration = NULL;
+  s->return_statement = NULL;
+
   s->next = NULL;
   return s;
+}
+
+/**
+ * @Statement
+ */
+Statement *createStatement_FunctionDeclarationStatement(Location *location, FunctionStatement *fn) {
+  Statement *s = malloc(sizeof(Statement));
+
+  if (fn == NULL) {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
+  s->location = location;
+  s->type = FUNCTION_DECLARATION_STATEMENT;
+
+  s->assignment = NULL;
+  s->variable_declaration = NULL;
+  s->print_statement = NULL;
+  s->if_statement = NULL;
+  s->block = NULL;
+  s->function_declaration = fn;
+  s->return_statement = NULL;
+
+  s->next = NULL;
+
+  return s;
+}
+
+/**
+ * @Statement
+ */
+Statement *createStatement_ReturnStatement(Location *location, Return *rn) {
+  Statement *s = malloc(sizeof(Statement));
+
+  if (rn == NULL) {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
+  s->location = location;
+  s->type = RETURN_STATEMENT;
+
+  s->assignment = NULL;
+  s->variable_declaration = NULL;
+  s->print_statement = NULL;
+  s->if_statement = NULL;
+  s->block = NULL;
+  s->function_declaration = NULL;
+  s->return_statement = rn;
+
+  s->next = NULL;
+
+  return s;
+}
+
+/**
+ * @FunctionDeclaration
+ */
+FunctionDeclarationStatement *createFunctionDeclaration(Location *location, Type type,
+                                               Identifier *identifier, ParameterTail *parameterTail,
+                                               Block *block) {
+  FunctionDeclarationStatement *fn = malloc(sizeof(FunctionDeclarationStatement));
+
+  if (fn == NULL) {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
+  fn->location = location;
+
+  fn->type = type;
+  fn->identifier = identifier;
+  fn->parameter_tail = parameterTail;
+  fn->block = block;
+
+  return fn;
+}
+
+/**
+ * @Return
+ */
+Return *createReturn(Location *location, Expression *expression) {
+  Return *rn = malloc(sizeof(Return));
+
+  if (rn == NULL) {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
+  rn->location = location;
+  rn->expression = expression;
+
+  return rn;
 }
 
 /**
@@ -258,6 +367,44 @@ PrintStatement *createPrintStatement(Location *location,
   ps->location = location;
   ps->expression = expression;
   return ps;
+}
+
+/**
+ * @Parameter
+ */
+Parameter *createParameter(Location *location, Type type,
+                                               Identifier *identifier) {
+  Parameter *parameter = malloc(sizeof(Parameter));
+
+  if (parameter == NULL) {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
+  parameter->location = location;
+  parameter->type = type;
+  parameter->identifier = identifier;
+
+  return parameter;
+}
+
+
+/**
+ * @ParameterTail
+ */
+ParameterTail *createParameterTail(Location *location, Parameter *parameter, ParameterTail *tail) {
+  ParameterTail *parameterTail = malloc(sizeof(ParameterTail));
+
+  if (parameterTail == NULL) {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
+  parameterTail->location = location;
+  parameterTail->parameter = parameter;
+  parameterTail->next = tail;
+
+  return parameterTail;
 }
 
 /**

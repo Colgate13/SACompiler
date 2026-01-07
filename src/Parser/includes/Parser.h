@@ -6,14 +6,16 @@
 #include "../../Lexical/includes/lexicalAnalyzer.h"
 #define LOGS 1
 
-enum EKeywords { PROGRAM = 0, END, VAR, PRINT, IF, INT, DOUBLE, STRING, ELSE };
+enum EKeywords { PROGRAM = 0, END, VAR, PRINT, IF, INT, DOUBLE, STRING, ELSE, FN, RETURN };
 
 enum EStatementsType {
   PRINT_STATEMENT = 0,
   ASSIGNMENT_STATEMENT,
   VARIABLE_DECLARATION_STATEMENT,
   IF_STATEMENT,
-  BLOCK
+  BLOCK,
+  FUNCTION_DECLARATION_STATEMENT,
+  RETURN_STATEMENT
 };
 
 typedef enum { TYPE_INT = 0, TYPE_DOUBLE, TYPE_STRING } Type;
@@ -51,11 +53,15 @@ typedef struct ArithmeticExpressionTail ArithmeticExpressionTail;
 typedef struct Term Term;
 typedef struct TermTail TermTail;
 typedef struct Factor Factor;
+typedef struct ParameterTail ParameterTail;
+typedef struct Parameter Parameter;
 typedef struct Block Block;
 typedef struct IfStatement IfStatement;
 typedef struct PrintStatement PrintStatement;
 typedef struct VariableDeclaration VariableDeclaration;
 typedef struct Assignment Assignment;
+typedef struct FunctionDeclarationStatement FunctionDeclarationStatement;
+typedef struct Return Return;
 typedef struct Program Program;
 typedef struct Ast Ast;
 typedef struct Parser Parser;
@@ -128,6 +134,20 @@ typedef struct Term {
   Location *location;
 } Term;
 
+// <parameter>         --> <type> <identifier>
+typedef struct Parameter {
+  Type type;
+  Identifier *identifier;
+  Location *location;
+} Parameter;
+
+// <parameter_tail>    --> <parameter> | <parameter_tail> "," <parameter> | ε
+typedef struct ParameterTail {
+  Parameter *parameter;
+  struct ParameterTail *next;
+  Location *location;
+} ParameterTail;
+
 // <arithmetic_expression_tail> --> <add_operator> <term>
 // <arithmetic_expression_tail> | ε
 typedef struct ArithmeticExpressionTail {
@@ -188,6 +208,21 @@ typedef struct Assignment {
   Location *location;
 } Assignment;
 
+typedef struct FunctionDeclarationStatement {
+  Type type;
+  Identifier *identifier;
+  ParameterTail *parameter_tail;
+
+  Block *block;
+  
+  Location *location;
+} FunctionStatement;
+
+typedef struct Return {
+  Expression *expression;
+  Location *location;
+} Return;
+
 // <statement> -> <assignment> | <variable_declaration> | <print_statement> |
 // <if_statement>
 typedef struct Statement {
@@ -200,6 +235,10 @@ typedef struct Statement {
   IfStatement *if_statement;
   // |
   Block *block;
+  // |
+  FunctionDeclarationStatement *function_declaration;
+  // |
+  Return *return_statement;
 
   struct Statement *next;
   Location *location;
@@ -242,10 +281,14 @@ Block *ParserBlock(Parser *parser);
 StatementTail *ParserStatementTail(Parser *parser);
 Statement *ParserStatement(Parser *parser, unsigned int notNextToken);
 IfStatement *ParserIfStatement(Parser *parser);
+IfStatement *ParserFunctionDeclarationStatement(Parser *parser);
 PrintStatement *ParserPrintStatement(Parser *parser);
 VariableDeclaration *ParserVariableDeclaration(Parser *parser);
 Assignment *ParserAssignment(Parser *parser);
 
+Parameter *ParserParameter(Parser *parser);
+Return *ParserReturnStatement(Parser *parser);
+ParameterTail *ParserParameterTail(Parser *parser);
 Expression *ParserExpression(Parser *parser);
 ArithmeticExpression *ParserArithmeticExpression(Parser *parser);
 Term *ParserTerm(Parser *parser);

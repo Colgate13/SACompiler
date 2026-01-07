@@ -18,7 +18,9 @@ const char *keywords[] = {
   "int",
   "double",
   "string",
-  "else"
+  "else",
+  "fn",
+  "return"
 };
 
 Parser *createParser(LexicalAnalyzer *lexicalAnalyzer) {
@@ -105,17 +107,14 @@ void controlNextTokenToIgnoreToNextMatch(Parser *parser, char *match) {
  */
 void ParserProgram(Parser *parser) {
   parser->ast->program = createProgram(createLocation(parser->lexicalAnalyzer->filePath, 1, 1));
-  parser->token = nextToken(parser->lexicalAnalyzer);
 
-  if (checkToken(parser, "TOKEN_TYPE_IDENTIFIER") == 0 &&
-      strcmp(parser->token.value, keywords[PROGRAM]) == 0) {
-    parser->ast->program->statement_tail = ParserStatementTail(parser);
-  } else {
-    throwParserError(
-        1, "Expected program\n", parser->lexicalAnalyzer->lineCount,
-        parser->lexicalAnalyzer->positionCount, parser->lexicalAnalyzer->line);
-    exit(1);
-  }
+  /**
+   * @note Using LookHead to get the first token without consuming it. I can found other easy ways to do it.
+   */
+  // parser->token = nextToken(parser->lexicalAnalyzer);
+  lookaheadNextToken(parser);
+  logToken(parser);
+  parser->ast->program->statement_tail = ParserStatementTail(parser);
 }
 
 /**
@@ -166,15 +165,17 @@ Statement *ParserStatement(Parser *parser, unsigned int notNextToken) {
   }
 
   // Exit condition for <statement_tail> if the token is "end"
-  if ((parser->token.value &&
-       strcmp(parser->token.value, keywords[END]) == 0) ||
-      checkToken(parser, "TOKEN_TYPE_END") == 0) {
+  if ((parser->token.value && strcmp(parser->token.value, keywords[END]) == 0) || checkToken(parser, "TOKEN_TYPE_END") == 0) {
     return NULL;
   }
 
   // Exit condition for <statement_tail> if the token is "}"
   if (checkToken(parser, "TOKEN_TYPE_RIGHT_BRACES") == 0) {
     return NULL;
+  }
+
+  if (strcmp(parser->token.value, keywords[FN]) == 0) {
+    return createStatement_FunctionDeclarationStatement(cl(parser), ParserFunctionDeclarationStatement(parser));
   }
 
   if (strcmp(parser->token.value, keywords[IF]) == 0) {
@@ -187,6 +188,10 @@ Statement *ParserStatement(Parser *parser, unsigned int notNextToken) {
 
   else if (strcmp(parser->token.value, keywords[VAR]) == 0) {
     return createStatement_VariableDeclaration(cl(parser), ParserVariableDeclaration(parser));
+  }
+
+  else if (strcmp(parser->token.value, keywords[RETURN]) == 0) {
+    return createStatement_ReturnStatement(cl(parser), ParserReturnStatement(parser));
   }
 
   else if (checkToken(parser, "TOKEN_TYPE_IDENTIFIER") == 0) {
@@ -325,7 +330,7 @@ IfStatement *ParserIfStatement(Parser *parser) {
       lookaheadNextToken(parser);
       logToken(parser);
 
-      if (strcmp(parser->token.value, keywords[ELSE]) == 0) {
+      if (checkToken(parser, "TOKEN_TYPE_IDENTIFIER") == 0 && strcmp(parser->token.value, keywords[ELSE]) == 0) {
         lookaheadClear(parser);
         controlNextToken(parser);
         logToken(parser);
@@ -348,6 +353,78 @@ IfStatement *ParserIfStatement(Parser *parser) {
                      parser->lexicalAnalyzer->line);
     exit(1);
   }
+}
+
+/**
+ * @details Implements <function_declaration>
+ */
+IfStatement *ParserFunctionDeclarationStatement(Parser *parser) {
+  controlNextToken(parser);
+  logToken(parser);
+
+  unsigned short int type;
+  if (strcmp(parser->token.value, keywords[INT]) == 0) {
+    type = TYPE_INT;
+  } else if (strcmp(parser->token.value, keywords[DOUBLE]) == 0) {
+    type = TYPE_DOUBLE;
+  } else if (strcmp(parser->token.value, keywords[STRING]) == 0) {
+    type = TYPE_STRING;
+  } else {
+    throwParserError(1, "Expected type on ParserFunctionDeclarationStatement\n", parser->lexicalAnalyzer->lineCount,
+                     parser->lexicalAnalyzer->positionCount,
+                     parser->lexicalAnalyzer->line);
+    exit(1);
+  }
+
+  controlNextToken(parser);
+  logToken(parser);
+
+  if (checkToken(parser, "TOKEN_TYPE_IDENTIFIER") == 0) {
+    Identifier *identifier = createIdentifier(cl(parser), parser->token.value);
+
+    controlNextToken(parser);
+    logToken(parser);
+
+    if (checkToken(parser, "TOKEN_TYPE_LEFT_PARENTHESIS") == 0) {
+      controlNextToken(parser);
+      logToken(parser);
+
+      ParameterTail *parameterTail = ParserParameterTail(parser);
+
+      if (checkToken(parser, "TOKEN_TYPE_RIGHT_PARENTHESIS") == 0) {
+        controlNextToken(parser);
+        logToken(parser);
+      } else {
+        throwParserError(1, "Expected ) on ParserFunctionDeclarationStatement\n", parser->lexicalAnalyzer->lineCount,
+                        parser->lexicalAnalyzer->positionCount,
+                        parser->lexicalAnalyzer->line);
+        exit(1);
+      }
+
+      if (checkToken(parser, "TOKEN_TYPE_LEFT_BRACES") == 0) {
+        // GET Function Body (Block)
+        Block *functionBody = ParserBlock(parser);
+
+        return createFunctionDeclaration(cl(parser), type, identifier, parameterTail, functionBody);
+      } else {
+        throwParserError(1, "Expected { on ParserFunctionDeclarationStatement\n", parser->lexicalAnalyzer->lineCount,
+                        parser->lexicalAnalyzer->positionCount,
+                        parser->lexicalAnalyzer->line);
+        exit(1);
+      }
+    } else {
+      throwParserError(1, "Expected ( on ParserFunctionDeclarationStatement\n", parser->lexicalAnalyzer->lineCount,
+                      parser->lexicalAnalyzer->positionCount,
+                      parser->lexicalAnalyzer->line);
+      exit(1);
+    }
+  }
+}
+
+Return *ParserReturnStatement(Parser *parser) {
+  Expression *expr = ParserExpression(parser);
+
+  return createReturn(cl(parser), expr);
 }
 
 Expression *ParserExpression(Parser *parser) {
@@ -481,6 +558,57 @@ TermTail *ParserTermTail(Parser *parser) {
 
     return createTermTail(cl(parser), operator, ParserFactor(parser),
                           ParserTermTail(parser));
+  }
+
+  return NULL;
+}
+
+Parameter *ParserParameter(Parser *parser) {
+  unsigned short int type;
+  if (strcmp(parser->token.value, keywords[INT]) == 0) {
+    type = TYPE_INT;
+  } else if (strcmp(parser->token.value, keywords[DOUBLE]) == 0) {
+    type = TYPE_DOUBLE;
+  } else if (strcmp(parser->token.value, keywords[STRING]) == 0) {
+    type = TYPE_STRING;
+  } else {
+    throwParserError(1, "Expected type on ParserParameter\n", parser->lexicalAnalyzer->lineCount,
+                     parser->lexicalAnalyzer->positionCount,
+                     parser->lexicalAnalyzer->line);
+    exit(1);
+  }
+  
+  printf("Parameter type: %d\n", type);
+
+  controlNextToken(parser);
+  logToken(parser);
+
+  Identifier *identifier = createIdentifier(cl(parser), parser->token.value);
+
+  printf("Parameter name: %s\n", identifier->name);
+
+  return createParameter(cl(parser), type, identifier);
+}
+
+ParameterTail *ParserParameterTail(Parser *parser) {
+  printf("value of token in ParameterTail: %s\n", parser->token.value);
+  if (checkToken(parser, "TOKEN_TYPE_IDENTIFIER") == 0) {
+    Parameter *parameter = ParserParameter(parser);
+
+    printf("Parameter parsed in ParameterTail: %s\n", parameter->identifier->name);
+    printf("Parameter parsed in ParameterTail: %s\n", parameter->type == TYPE_INT ? "int" : parameter->type == TYPE_DOUBLE ? "double" : "string");
+
+    controlNextToken(parser);
+    logToken(parser);
+
+    if (checkToken(parser, "TOKEN_TYPE_COMMA") == 0) {
+      controlNextToken(parser);
+      logToken(parser);
+      return createParameterTail(cl(parser), parameter, ParserParameterTail(parser));
+    } else {
+      // If there is no comma, we assume the parameter list has ended.
+      return createParameterTail(cl(parser), parameter, NULL);
+    }
   }
 
   return NULL;
