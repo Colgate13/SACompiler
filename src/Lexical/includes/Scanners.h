@@ -14,6 +14,7 @@ unsigned short int isLeftBrace(char c);
 unsigned short int isRightBrace(char c);
 unsigned short int isOperator(char c);
 unsigned short int isSemicolon(char c);
+unsigned short int isComma(char c);
 unsigned short int isEOF(char c);
 
 #endif

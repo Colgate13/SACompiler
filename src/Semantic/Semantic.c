@@ -1,5 +1,8 @@
 #include "./includes/Semantic.h"
 
+// Global context to track current function during analysis
+static FunctionContext *currentFunctionContext = NULL;
+
 void logSemantic(const char *messageKey, const char *messageValue) {
   if (LOGS_SEMANTIC == 1) {
     printf("Semantic<[%s]> %s\n", messageKey, messageValue);
@@ -15,6 +18,7 @@ Semantic *createSemantic(Parser *parser) {
   }
 
   semantic->parser = parser;
+  semantic->currentFunction = NULL;
   return semantic;
 }
 
@@ -92,6 +96,14 @@ void analyzeStatement(SymbolTable *stack, Statement *statement) {
     pushScope(&stack);
     analyzeStatement(stack, statement->block->statement_tail->statement);
     popScope(&stack);
+    break;
+  case FUNCTION_DECLARATION_STATEMENT:
+    // Handle function declaration statement
+    analyzeFunctionDeclarationStatement(stack, statement->function_declaration);
+    break;
+  case RETURN_STATEMENT:
+    // Handle return statement
+    analyzeReturnStatement(stack, statement->return_statement);
     break;
   default:
     fprintf(stderr, "Semantic > Unknown statement type\n");
@@ -178,6 +190,201 @@ void analyzePrintStatement(SymbolTable *stack, PrintStatement *printStatement) {
 
   logSemantic("SEM#007 - Print statement: expression type is",
               typeToString(expressionType));
+}
+
+FunctionContext *createFunctionContext(char *functionName, Type returnType) {
+  FunctionContext *context = (FunctionContext *)malloc(sizeof(FunctionContext));
+
+  if (context == NULL) {
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+  }
+
+  context->functionName = strdup(functionName);
+  context->returnType = returnType;
+  context->hasReturn = 0;
+  context->parent = currentFunctionContext;
+
+  return context;
+}
+
+void destroyFunctionContext(FunctionContext *context) {
+  if (context == NULL) {
+    return;
+  }
+
+  if (context->functionName) {
+    free(context->functionName);
+  }
+
+  free(context);
+}
+
+void analyzeReturnStatement(SymbolTable *stack, Return *returnStmt) {
+  logSemantic("SEM#011 - Return statement", "return");
+
+  // SEM#011: Check if we are inside a function
+  if (currentFunctionContext == NULL) {
+    fprintf(stderr, "Error: Return statement outside of function at %s:%zu:%zu\n",
+            returnStmt->location->fileName,
+            returnStmt->location->line,
+            returnStmt->location->column);
+    exit(1);
+  }
+
+  // Mark that this function has a return statement
+  currentFunctionContext->hasReturn = 1;
+
+  // SEM#011: Check if return expression type matches function return type
+  if (returnStmt->expression != NULL) {
+    Type returnExprType = inferExpressionType(stack, returnStmt->expression);
+
+    if (returnExprType != currentFunctionContext->returnType) {
+      fprintf(stderr,
+              "Error: Return type mismatch in function '%s'. Expected '%s', got '%s' at %s:%zu:%zu\n",
+              currentFunctionContext->functionName,
+              typeToString(currentFunctionContext->returnType),
+              typeToString(returnExprType),
+              returnStmt->location->fileName,
+              returnStmt->location->line,
+              returnStmt->location->column);
+      exit(1);
+    }
+
+    logSemantic("SEM#011 - Return statement: type matches function return type",
+                typeToString(returnExprType));
+  } else {
+    // Return without expression - this would be for void functions if we support them
+    fprintf(stderr,
+            "Error: Return statement without expression in function '%s' at %s:%zu:%zu\n",
+            currentFunctionContext->functionName,
+            returnStmt->location->fileName,
+            returnStmt->location->line,
+            returnStmt->location->column);
+    exit(1);
+  }
+
+  logSemantic("SEM#011 - Return statement validated", currentFunctionContext->functionName);
+}
+
+void analyzeFunctionParameters(SymbolTable *stack, ParameterTail *paramTail, char *functionName) {
+  logSemantic("SEM#009 - Analyzing function parameters", functionName);
+
+  if (paramTail == NULL) {
+    logSemantic("SEM#009 - No parameters for function", functionName);
+    return;
+  }
+
+  // Track parameter names to detect duplicates
+  int paramCount = 0;
+  ParameterTail *current = paramTail;
+
+  while (current != NULL) {
+    if (current->parameter != NULL) {
+      paramCount++;
+
+      // SEM#009: Check for duplicate parameter names within the same function
+      ParameterTail *checker = paramTail;
+      int duplicateCount = 0;
+
+      while (checker != current) {
+        if (checker->parameter != NULL &&
+            strcmp(checker->parameter->identifier->name,
+                   current->parameter->identifier->name) == 0) {
+          fprintf(stderr,
+                  "Error: Duplicate parameter name '%s' in function '%s' at %s:%zu:%zu\n",
+                  current->parameter->identifier->name,
+                  functionName,
+                  current->parameter->location->fileName,
+                  current->parameter->location->line,
+                  current->parameter->location->column);
+          exit(1);
+        }
+        checker = checker->next;
+      }
+
+      logSemantic("SEM#009 - Parameter validated",
+                  current->parameter->identifier->name);
+    }
+    current = current->next;
+  }
+
+  logSemantic("SEM#009 - All parameters validated", functionName);
+}
+
+void analyzeFunctionDeclarationStatement(SymbolTable *stack, FunctionDeclarationStatement *function) {
+  logSemantic("SEM#008 - Function declaration", function->identifier->name);
+
+  // SEM#008: Check if function name is already declared in current scope
+  if (lookupSymbol(stack, function->identifier->name) != NULL) {
+    fprintf(stderr, "Error: Function '%s' already declared in this scope at %s:%zu:%zu\n",
+            function->identifier->name,
+            function->location->fileName,
+            function->location->line,
+            function->location->column);
+    exit(1);
+  }
+
+  // Insert function symbol in current scope
+  insertSymbol(stack, function->identifier->name, SYMBOL_FUNCTION_DECLARATION, function->type, function->location);
+  logSemantic("SEM#008 - Function declaration: Function '%s' declared with return type",
+              function->identifier->name);
+
+  // SEM#009: Analyze function parameters
+  analyzeFunctionParameters(stack, function->parameter_tail, function->identifier->name);
+
+  // Create function context for return statement analysis
+  FunctionContext *previousContext = currentFunctionContext;
+  currentFunctionContext = createFunctionContext(function->identifier->name, function->type);
+
+  // SEM#010: Analyze function body in its own scope
+  pushScope(&stack);
+
+  // Add parameters to function scope
+  ParameterTail *paramTail = function->parameter_tail;
+  while (paramTail != NULL) {
+    if (paramTail->parameter != NULL) {
+      insertSymbol(stack, paramTail->parameter->identifier->name,
+                   SYMBOL_VARIABLE, paramTail->parameter->type,
+                   paramTail->parameter->location);
+      logSemantic("SEM#009 - Parameter added to function scope",
+                  paramTail->parameter->identifier->name);
+    }
+    paramTail = paramTail->next;
+  }
+
+  // Analyze function body statements
+  if (function->block != NULL && function->block->statement_tail != NULL) {
+    StatementTail *stmtTail = function->block->statement_tail;
+    while (stmtTail != NULL) {
+      if (stmtTail->statement != NULL) {
+        analyzeStatement(stack, stmtTail->statement);
+      }
+      if (stmtTail->next == NULL) {
+        break;
+      }
+      stmtTail = stmtTail->next;
+    }
+  }
+
+  // SEM#011: Check if function has a return statement (required for non-void functions)
+  if (!currentFunctionContext->hasReturn) {
+    fprintf(stderr,
+            "Warning: Function '%s' with return type '%s' may not have a return statement at %s:%zu:%zu\n",
+            function->identifier->name,
+            typeToString(function->type),
+            function->location->fileName,
+            function->location->line,
+            function->location->column);
+  }
+
+  popScope(&stack);
+
+  // Restore previous function context
+  destroyFunctionContext(currentFunctionContext);
+  currentFunctionContext = previousContext;
+
+  logSemantic("SEM#010 - Function body analyzed", function->identifier->name);
 }
 
 Type inferRelationalExpressionType(SymbolTable *stack, Expression *expr) {

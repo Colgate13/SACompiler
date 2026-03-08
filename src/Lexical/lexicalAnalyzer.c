@@ -40,6 +40,9 @@ Token nextStageState(LexicalAnalyzer *lexicalAnalyzer) {
       } else if (isSemicolon(currentChar)) {
         strncat(term, &currentChar, 1);
         currentState = 8;
+      } else if (isComma(currentChar)) {
+        strncat(term, &currentChar, 1);
+        currentState = 17;
       } else if (isSpace(currentChar)) {
         currentState = 0;
       } else if (isNewLine(currentChar)) {
@@ -140,6 +143,9 @@ Token nextStageState(LexicalAnalyzer *lexicalAnalyzer) {
       break;
     case 16:
       return constructToken(TOKEN_TYPE_LEFT_BRACES, term);
+      break;
+    case 17:
+      return constructToken(TOKEN_TYPE_COMMA, term);
       break;
     default:
       throwLexicalError(1, "Error: Invalid character",

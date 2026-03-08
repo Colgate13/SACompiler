@@ -1,51 +1,376 @@
-program
-  print("Hello World!");
+// ===================================
+// SACompiler - Example Code
+// ===================================
 
-  if (1 == 1) {
-    print("Yes");
+print("Hello World!");
+
+// --- Basic If-Else ---
+if (1 == 1) {
+  print("Yes");
+} else {
+  print("No");
+}
+
+// --- Variable Declarations ---
+var int num1;
+var int num2;
+var int num3;
+var string message;
+var string output;
+var int points;
+
+message = "Hello World!";
+points = 5;
+
+print("Start!");
+print(1 + 2 - 3 * 4 / 5 % 6);
+print(123);
+print(message);
+print(points);
+
+num1 = 1;
+num2 = 2;
+
+num3 = num1 + num2 * points;
+output = "Result: " + num3;
+print(num3);
+
+// --- Comparison Operators ---
+if (message == "Hello World!") { print("Hello"); }
+if (num1 == 1) { print("num1 is 1"); }
+if (points == 1) { print("points is 1"); }
+if (num1 > 0) { print("num1 is greater than 0"); }
+if (num1 < 0) { print("num1 is less than 0"); }
+if (num1 >= 0) { print("num1 is greater or equal to 0"); }
+if (num1 <= 0) { print("num1 is less or equal to 0"); }
+if (num1 != 0) { print("num1 is different from 0"); }
+
+// --- Scope Test ---
+var int controller;
+controller = 1;
+
+if (controller) {
+  var int test;
+  test = 2;
+} else if (controller == 2) {
+  var int test;
+  test = 3;
+} else {
+  var int test;
+  test = 4;
+}
+
+{
+  // Inner Scope Test
+  var int controllerInner;
+  controllerInner = 1;
+  print(controller);
+  print(controllerInner);
+}
+
+// --- Double/Decimal Numbers ---
+var double decimalA;
+var double decimalB;
+var double decimalResult;
+
+decimalA = 3.14;
+decimalB = 2.5;
+print(decimalA);
+print(decimalB);
+
+decimalResult = decimalA + decimalB;
+print(decimalResult);
+
+decimalResult = decimalA * decimalB;
+print(decimalResult);
+
+decimalResult = 10.0 / 3.0;
+print(decimalResult);
+
+// Mixed int and double
+decimalResult = decimalA + num1;
+print(decimalResult);
+
+// Small and large decimals
+decimalA = 0.001;
+decimalB = 123.456789;
+print(decimalA);
+print(decimalB);
+
+if (decimalA > 0.0) {
+  print("decimalA is positive");
+}
+
+// --- Negative Numbers ---
+var int negInt;
+var double negDouble;
+
+negInt = -5;
+print(negInt);
+
+negDouble = -3.14;
+print(negDouble);
+
+var int negResult;
+negResult = -10 + 5;
+print(negResult);
+
+var int positive;
+positive = 7;
+negResult = -positive;
+print(negResult);
+
+negResult = -2 * 3;
+print(negResult);
+
+negResult = -(-5);
+print(negResult);
+
+negResult = -10 + -5;
+print(negResult);
+
+// --- Parentheses in Expressions ---
+var int parenResult;
+var int a;
+var int b;
+a = 5;
+b = 3;
+
+parenResult = (a + b);
+print(parenResult);
+
+parenResult = (a + b) * 2;
+print(parenResult);
+
+parenResult = ((a + b) * 2) + 1;
+print(parenResult);
+
+parenResult = 10 - (a + b);
+print(parenResult);
+
+parenResult = (a * b) + (a - b);
+print(parenResult);
+
+// --- If-Else Variations ---
+
+// Inline if
+if (a == 5) print("inline if works");
+
+// Two inline ifs in sequence
+if (a == 5) print("first inline if");
+if (b == 3) print("second inline if");
+
+// Inline if with inline else
+if (a == 5) print("if branch inline");
+else print("else branch inline");
+
+// Inline if with else block
+if (a == 5) print("if inline");
+else {
+  print("else block");
+}
+
+// If block with inline else
+if (a == 5) {
+  print("if block");
+} else print("else inline");
+
+// Nested ifs
+if (a == 5) {
+  if (b == 3) {
+    print("nested if success");
   }
+}
 
-  var int num1;
-  var int num2;
-  var int num3;
-
-  var string message;
-  var string output;
-  var int points;
-
-  message = "Hello World!";
-  points = 5;
-
-  print("Start!");
-  print(1 + 2 - 3 * 4 / 5 % 6);
-  print(123);
-  print(message);
-  print(points);
-
-  num1 = 1;
-  num2 = 2;
-
-  num3 = num1 + num2 * points;
-  output = "Result: " + num3;
-  print(num3);
-
-  if (message == "Hello World!") { print("Hello"); }
-  if (num1 == 1) { print("num1 is 1"); }
-  if (points == 1) { print("points is 1"); }
-  if (num1 > 0) { print("num1 is greater than 0"); }
-  if (num1 < 0) { print("num1 is less than 0"); }
-  if (num1 >= 0) { print("num1 is greater or equal to 0"); }
-  if (num1 <= 0) { print("num1 is less or equal to 0"); }
-  if (num1 != 0) { print("num1 is different from 0"); }
-
-  // Scope Test
-  var int controller;
-  controller = 1;
-
-  if (controller) {
-    var int test;
-    test = 2;
-    print(test);
+// Nested if-else
+if (a == 5) {
+  if (b == 0) {
+    print("inner if");
+  } else {
+    print("inner else");
   }
+}
 
-end;
+// Multiple statements inside if
+if (a == 5) {
+  var int localVar;
+  localVar = 100;
+  print("multiple statements in if");
+  print(localVar);
+}
+
+/*
+  This is a multi-line comment
+  Testing block comments
+*/
+
+print("End of example!");
+
+// ===================================
+// --- Function Declarations Examples ---
+// ===================================
+
+// Basic functions
+fn int add1(int x) {
+  return x + 1;
+}
+
+fn int add(int x, int y) {
+  return x + y;
+}
+
+// Function with no parameters
+fn int getDefaultValue() {
+  return 42;
+}
+
+// Function with double return type
+fn double multiply(double x, double y) {
+  return x * y;
+}
+
+// Function with string return type
+fn string greet(string name) {
+  return "Hello, " + name;
+}
+
+// Function with multiple operations
+fn int calculate(int a, int b, int c) {
+  var int temp;
+  temp = a + b;
+  return temp * c;
+}
+
+// Functions for composition
+fn int square(int n) {
+  return n * n;
+}
+
+fn int sumOfSquares(int x, int y) {
+  var int sqX;
+  var int sqY;
+  // sqX = square(x);
+  // sqY = square(y);
+  sqX = x * x;
+  sqY = y * y;
+  return sqX + sqY;
+}
+
+// Function with if-else logic
+fn int max(int a, int b) {
+  if (a > b) {
+    return a;
+  } else {
+    return b;
+  }
+}
+
+// Function with recursive logic (declaration only)
+fn int fibonacci(int n) {
+  if (n == 0) {
+    return 0;
+  } else if (n == 1) {
+    return 1;
+  } else {
+    var int result;
+    // result = fibonacci(n - 1) + fibonacci(n - 2);
+    result = 0;
+    return result;
+  }
+}
+
+// Function with multiple parameters and complex logic
+fn double average(int a, int b, int c) {
+  var int sum;
+  var double result;
+  sum = a + b + c;
+  result = sum / 3.0;
+  return result;
+}
+
+// Function for testing
+fn int triple(int x) {
+  return x * 3;
+}
+
+// Function with negative numbers
+fn int negate(int x) {
+  return -x;
+}
+
+// Function using parentheses in expression
+fn int complexCalc(int x, int y) {
+  return (x + y) * (x - y);
+}
+
+/*
+// ===================================
+// --- Function Calls (NOT IMPLEMENTED YET) ---
+// ===================================
+
+// Testing basic function calls
+var int resultAdd;
+resultAdd = add(5, 3);
+print("5 + 3 =");
+print(resultAdd);
+
+resultAdd = add1(10);
+print("10 + 1 =");
+print(resultAdd);
+
+var int defaultVal;
+defaultVal = getDefaultValue();
+print("Default value:");
+print(defaultVal);
+
+var double multiplyResult;
+multiplyResult = multiply(3.5, 2.0);
+print("3.5 * 2.0 =");
+print(multiplyResult);
+
+var string greeting;
+greeting = greet("World");
+print(greeting);
+
+var int calcResult;
+calcResult = calculate(2, 3, 4);
+print("(2 + 3) * 4 =");
+print(calcResult);
+
+var int sosResult;
+sosResult = sumOfSquares(3, 4);
+print("3^2 + 4^2 =");
+print(sosResult);
+
+var int maxValue;
+maxValue = max(10, 20);
+print("Max of 10 and 20:");
+print(maxValue);
+
+var int fibResult;
+fibResult = fibonacci(5);
+print("Fibonacci(5):");
+print(fibResult);
+
+var double avgResult;
+avgResult = average(10, 20, 30);
+print("Average of 10, 20, 30:");
+print(avgResult);
+
+var int nestedResult;
+nestedResult = add(triple(2), triple(3));
+print("triple(2) + triple(3) =");
+print(nestedResult);
+
+var int negateResult;
+negateResult = negate(42);
+print("Negate 42:");
+print(negateResult);
+
+var int complexResult;
+complexResult = complexCalc(5, 3);
+print("(5 + 3) * (5 - 3) =");
+print(complexResult);
+
+print("Functions test complete!");
+*/

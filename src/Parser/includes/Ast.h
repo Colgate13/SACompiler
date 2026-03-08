@@ -14,6 +14,8 @@ StatementTail *createStatementTail(Location *location, Statement *statement);
 Block *createBlock(Location *location, StatementTail *statementTail);
 Statement *createStatement_IfStatement(Location *location,
                                        IfStatement *ifStatement);
+Statement *createStatement_FunctionDeclarationStatement(Location *location, FunctionStatement *fn);
+Statement *createStatement_ReturnStatement(Location *location, Return *rn);
 Statement *createStatement_BlockStatement(Location *location, Block *block);
 Statement *createStatement_PrintStatement(Location *location,
                                           PrintStatement *ps);
@@ -29,9 +31,15 @@ PrintStatement *createPrintStatement(Location *location,
                                      Expression *expression);
 IfStatement *createIfStatement(Location *location, Expression *expression, Statement *statement, Statement *elseStatement);
 
+Parameter *createParameter(Location *location, Type type, Identifier *identifier);
+ParameterTail *createParameterTail(Location *location, Parameter *parameter, ParameterTail *tail);
 Expression *createExpression(Location *location,
                              ArithmeticExpression *arithmeticExpression,
                              OperatorRelational *operatorRelational);
+FunctionDeclarationStatement *createFunctionDeclaration(Location *location, Type type,
+                                                        Identifier *identifier, ParameterTail *parameterTail,
+                                                        Block *block);
+Return *createReturn(Location *location, Expression *expression);
 OperatorRelational *createOperatorRelational(Location *location, char *operator,
                                              ArithmeticExpression *
                                              arithmeticExpression);

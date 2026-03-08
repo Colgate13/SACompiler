@@ -12,6 +12,7 @@ typedef enum
 {
   SYMBOL_VARIABLE,
   SYMBOL_CONSTANT,
+  SYMBOL_FUNCTION_DECLARATION
 } SymbolKind;
 
 typedef struct Symbol
@@ -35,9 +36,18 @@ typedef struct SymbolTable
   struct SymbolTable *next;      // next symbol table (for nested scopes)
 } SymbolTable;
 
+typedef struct FunctionContext
+{
+  char *functionName;           // name of the current function being analyzed
+  Type returnType;              // expected return type of the function
+  unsigned short int hasReturn; // flag to track if function has a return statement
+  struct FunctionContext *parent; // parent function context (for nested functions if supported)
+} FunctionContext;
+
 typedef struct
 {
   Parser *parser;
+  FunctionContext *currentFunction; // current function context during analysis
 } Semantic;
 
 void logSemantic(const char *messageKey, const char *messageValue);
@@ -47,6 +57,12 @@ void analyzeVariableDeclaration(SymbolTable *stack, VariableDeclaration *vd);
 void analyzeAssignment(SymbolTable *stack, Assignment *assignment);
 void analyzeIfStatement(SymbolTable *stack, IfStatement *ifStatement);
 void analyzePrintStatement(SymbolTable *stack, PrintStatement *printStatement);
+void analyzeFunctionDeclarationStatement(SymbolTable *stack, FunctionDeclarationStatement *function);
+void analyzeFunctionParameters(SymbolTable *stack, ParameterTail *paramTail, char *functionName);
+void analyzeReturnStatement(SymbolTable *stack, Return *returnStmt);
+
+FunctionContext *createFunctionContext(char *functionName, Type returnType);
+void destroyFunctionContext(FunctionContext *context);
 
 SymbolTable *createSymbolTable();
 Symbol *lookupSymbol(SymbolTable *stack, char *name);

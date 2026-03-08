@@ -1,0 +1,183 @@
+///////////////////////
+// PROGRAM
+///////////////////////
+
+<program> → <statement_tail>
+
+
+///////////////////////
+// STATEMENTS
+///////////////////////
+
+<statement_tail> → <statement> <statement_tail>
+                 | ε
+
+<statement> → <variable_declaration>
+            | <assignment>
+            | <if_statement>
+            | <block>
+            | <function_declaration>
+            | <return_statement>
+            | <print_statement>
+            | <expression_statement>
+
+<expression_statement> → <expression> ";"
+
+
+///////////////////////
+// BLOCK
+///////////////////////
+
+<block> → "{"
+           <statement_tail>
+           <expression_opt>
+         "}"
+
+<expression_opt> → <expression>
+                 | ε
+
+
+///////////////////////
+// VARIABLES
+///////////////////////
+
+<variable_declaration> → "var" <type> <identifier> ";"
+
+
+///////////////////////
+// ASSIGNMENT
+///////////////////////
+
+<assignment> → <identifier> "=" <expression> ";"
+
+
+///////////////////////
+// RETURN
+///////////////////////
+
+<return_statement> → "return" <expression> ";"
+
+
+///////////////////////
+// FUNCTION DECLARATION
+///////////////////////
+
+<function_declaration> →
+    "func" <type> <identifier> "(" <parameter_list_opt> ")" <block>
+
+<parameter_list_opt> → <parameter_list> | ε
+
+<parameter_list> → <parameter>
+                 | <parameter> "," <parameter_list>
+
+<parameter> → <type> <identifier>
+
+
+///////////////////////
+// FUNCTION LITERAL (ANON)
+///////////////////////
+
+<function_literal> →
+    "func" <type> "(" <parameter_list_opt> ")" <block>
+
+
+///////////////////////
+// FUNCTION CALL
+///////////////////////
+
+<function_call> → <identifier> "(" <argument_list_opt> ")"
+
+<argument_list_opt> → <argument_list> | ε
+
+<argument_list> → <expression>
+                | <expression> "," <argument_list>
+
+
+///////////////////////
+// IF STATEMENT
+///////////////////////
+
+<if_statement> → "if" "(" <expression> ")" <statement>
+               | "if" "(" <expression> ")" <statement> "else" <statement>
+
+
+///////////////////////
+// EXPRESSION
+///////////////////////
+
+<expression> → <arithmetic_expression> <operator_relational>
+             | <function_literal>
+             | <function_call>
+
+<operator_relational> → <relational_operator> <arithmetic_expression>
+                      | ε
+
+
+///////////////////////
+// RELATIONAL OPERATORS
+///////////////////////
+
+<relational_operator> → "==" | "!=" | "<" | "<=" | ">" | ">="
+
+
+///////////////////////
+// ARITHMETIC EXPRESSIONS
+///////////////////////
+
+<arithmetic_expression> → <term> <arithmetic_expression_tail>
+
+<arithmetic_expression_tail> → <add_operator> <term> <arithmetic_expression_tail>
+                             | ε
+
+<term> → <factor> <term_tail>
+
+<term_tail> → <mult_operator> <factor> <term_tail>
+            | ε
+
+<factor> → <number>
+         | <identifier>
+         | <string>
+         | "(" <expression> ")"
+         | <unary_operator> <factor>
+
+
+///////////////////////
+// OPERATORS
+///////////////////////
+
+<add_operator> → "+" | "-"
+<mult_operator> → "*" | "/" | "%"
+<unary_operator> → "+" | "-"
+
+
+///////////////////////
+// TYPES
+///////////////////////
+
+<type> → "int"
+       | "double"
+       | "string"
+       | <function_type>          // para retornar funções
+
+<function_type> →
+    "func" "(" <type_list_opt> ")" "->" <type>
+
+<type_list_opt> → <type_list> | ε
+
+<type_list> → <type>
+            | <type> "," <type_list>
+
+
+///////////////////////
+// TOKENS
+///////////////////////
+
+<number> → <int_literal> | <double_literal>
+
+<int_literal> → [0-9]+
+<double_literal> → [0-9]+"."[0-9]+
+
+<string> → '"' [a-zA-Z0-9_]* '"'
+
+<identifier> → [a-zA-Z_][a-zA-Z0-9_]*
+

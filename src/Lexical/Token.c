@@ -43,6 +43,9 @@ char *tokenTypeName(unsigned short int typeId) {
   case 10:
     return "TOKEN_TYPE_RIGHT_BRACES";
     break;
+  case 11:
+    return "TOKEN_TYPE_COMMA";
+    break;
   case 1000:
     return "TOKEN_TYPE_INITIALIZE";
     break;
